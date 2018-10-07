@@ -1,5 +1,4 @@
 #wensong
-#unfinish!!!!!!
 #2018.10.6
 #this is a function that can take the atom informention out from the pdb file into a pandas dataframe
 from docutils.parsers import null
@@ -17,7 +16,7 @@ def change_the_pdb_file_into_dataframe(pdb_file):
             L = line.split(' ')
             L = [item for item in filter(lambda x: x != '', L)]
             if (is_number(L[1])) == True:
-                if len(L)>=6:
+                if len(L)>=12:
                     if (is_number(L[5])) == True:
                         print (L[1])
                         Halogen_bond_atom_label[0] = [L[1], L[4], L[5], L[6], L[7], L[8], L[11]]
