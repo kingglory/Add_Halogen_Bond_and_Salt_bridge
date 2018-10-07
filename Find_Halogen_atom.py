@@ -12,7 +12,6 @@ print "hello phenix"
 def find_halogen_atoms(pdb_file):
     pdb_in = hierarchy.input(file_name=pdb_file)
     for chain in pdb_in.hierarchy.only_model().chains() :
-
         for residue_group in chain.residue_groups() :
           for atom_group in residue_group.atom_groups() :
             for atom in atom_group.atoms() :
