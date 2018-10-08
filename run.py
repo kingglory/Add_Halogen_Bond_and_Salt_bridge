@@ -11,15 +11,17 @@ def distance(s1, s2):
     (s1[1]-s2[1])**2 + 
     (s1[2]-s2[2])**2)
 
-def run(hierarchy, vdwr):
+def get_halogen_bond_pairs(hierarchy, vdwr):
   halogens = ["CL","BR","I","F"] 
   for atom_1 in hierarchy.atoms():
     e = atom_1.element.strip().upper()
     if(e in halogens):
       print e, vdwr[e]
       for atom_2 in hierarchy.atoms():
-        d = distance(atom_1.xyz, atom_2.xyz)
-        print d
+        #d = distance(atom_1.xyz, atom_2.xyz)
+        d = atom_1.distance(atom_2)
+        #a = atom_1.angle(atom_1=b, atom_3=b, deg=True)
+        print d, a
         
 if __name__ == '__main__':
   pdb_file = "5v7d.pdb"
@@ -29,7 +31,8 @@ if __name__ == '__main__':
     process_input = True,
     log           = null_out())
   vdwr = model.get_vdw_radii()
-  run(hierarchy = model.get_hierarchy(),
-      vdwr      = vdwr)
+  get_halogen_bond_pairs(
+    hierarchy = model.get_hierarchy(),
+    vdwr      = vdwr)
 
 
