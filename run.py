@@ -17,9 +17,9 @@ def run(hierarchy, vdwr):
     e = atom_1.element.strip().upper()
     if(e in halogens):
       print e, vdwr[e]
-      #for atom_2 in hierarchy.atoms():
-      #  d = distance(atom_1.xyz, atom_2.xyz)
-      #  print d
+      for atom_2 in hierarchy.atoms():
+        d = distance(atom_1.xyz, atom_2.xyz)
+        print d
         
 if __name__ == '__main__':
   pdb_file = "5v7d.pdb"
