@@ -17,6 +17,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
     halogens = ["CL", "BR", "I", "F"]
     halogen_bond_pairs_atom = ["O","N"]
     #print dir(mmtbx.model.atom)
+
     for atom_1 in hierarchy.atoms():
         e1 = atom_1.element.strip().upper()
         if (e1 in halogens):
@@ -38,7 +39,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
 
 
 if __name__ == '__main__':
-    pdb_file = "2ito.pdb"
+    pdb_file = "5v7d.pdb"
     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
     model = mmtbx.model.manager(
         model_input=pdb_inp,
