@@ -38,7 +38,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
 
 
 if __name__ == '__main__':
-    pdb_file = "5v7d.pdb"
+    pdb_file = "2ito.pdb"
     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
     model = mmtbx.model.manager(
         model_input=pdb_inp,
