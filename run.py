@@ -87,7 +87,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
 #one of the angle (that the halogen atom is at side)is near 120 degrees
 # another angle (that the halogen atom is in the middle)is near 180 degrees
 
-def get_the_angleing_atoms(hierarchy):
+def find_the_atoms_makeing_up_halogen_bond(hierarchy):
     (atom_1,atom_2) = get_halogen_bond_pairs(
                           hierarchy=model.get_hierarchy(),
                           vdwr=vdwr)
@@ -128,9 +128,9 @@ if __name__ == '__main__':
         log=null_out())
     vdwr = model.get_vdw_radii()
     #print vdwr.keys()
-    get_halogen_bond_pairs(
-        hierarchy=model.get_hierarchy(),
-        vdwr=vdwr)
+    #get_halogen_bond_pairs(
+    #   hierarchy=model.get_hierarchy(),
+    #   vdwr=vdwr)
 
-    get_the_angleing_atoms(
+    find_the_atoms_makeing_up_halogen_bond(
         hierarchy=model.get_hierarchy())
