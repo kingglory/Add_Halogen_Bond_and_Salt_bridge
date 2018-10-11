@@ -4,8 +4,8 @@ from scitbx.array_family import flex
 import math
 import mmtbx.model
 from libtbx.utils import null_out
-
-
+import os
+# first step write codes to find halogen bond in one pdb file
 def distance(s1, s2):
     return math.sqrt(
         (s1[0] - s2[0]) ** 2 +
@@ -17,16 +17,16 @@ def get_rid_of_no_bonding_situations(atom1,atom2):
     if (len(atom1[1]) == 4):
         if (len(atom2[1]) == 4):
             if (((atom1[1])[0]) != ((atom2[1])[0])):
-                if (((atom1[1])[1:4]) == ((atom2[1])[1:4])):
-                  return 0
-    #if it can't make the halogen bond between the same residue,then we can use the followinf "elif" sentences
+                #f (((atom1[1])[1:4]) == ((atom2[1])[1:4])):
+              return 0
+    #if it can't make the halogen bond between the same residue,
             elif((atom1[2:4]==atom2[2:4])and(((atom1[1])[0]) == ((atom2[1])[0]))):
               return 0
-    if (len(atom1)==3):
-      if(len(atom2)==3):
+    if (len(atom1[1])==3):
+      if(len(atom2[1])==3):
          if(atom1[1:4]==atom2[1:4]):
              return 0
-    # The cut-off line for the if statement above
+    # The cut-off line for elif statement above
     elif(len(atom1[1])!=len(atom2[1])):
         return 1
     else:
@@ -111,6 +111,32 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy):
                         print (list_ai3_no_space ,list_ai1_no_space,list_ai2_no_space,list_ai4_no_space)
                         return list_ai3_no_space ,list_ai1_no_space,list_ai2_no_space,list_ai4_no_space
                   #print (atom_1,atom_2,atom_3,atom_4)
+
+
+
+
+
+# Second step,find salt bridge in one pdb file
+def add_H_atoms_into_pad_files(pdbfile):
+    os.system("phenix.reduce %s > %s " % (pdb_file,+ 'h' + '.pdb'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
