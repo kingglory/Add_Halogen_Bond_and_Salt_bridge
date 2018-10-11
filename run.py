@@ -1,5 +1,6 @@
 from __future__ import division
 import iotbx.pdb
+from iotbx.pdb import hierarchy
 from scitbx.array_family import flex
 import math
 import mmtbx.model
@@ -42,7 +43,17 @@ def atom_to_list_of_atom_id_str(atom):
     #print list_ai_no_space
     return list_ai_no_space
 
-
+def find_altloc(pdb_file):
+    pdb_in = hierarchy.input(file_name=pdb_file)
+    for chain in pdb_in.hierarchy.only_model().chains():
+        for residue_group in chain.residue_groups():
+            print (residue_group.resid())
+            for atom_group in residue_group.atom_groups():
+                #print (atom_group.id_str().split(' ')[3])
+                for atom in atom_group.atoms():
+                    print (atom.parent().resname)
+                    print (atom.i_seq)
+                    #print dir(atom.parent())
 
 
 
@@ -160,3 +171,5 @@ if __name__ == '__main__':
 
     find_the_atoms_makeing_up_halogen_bond(
         hierarchy=model.get_hierarchy())
+
+    find_altloc(pdb_file)
