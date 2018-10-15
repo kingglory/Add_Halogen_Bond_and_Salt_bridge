@@ -24,7 +24,10 @@ def get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2):
 
 
 def find_atom_information(atom):
-    return ( (atom.id_str()[9]),(atom.parent().resname),(atom.parent().parent().resid()) )
+    return ( (atom.id_str()[9]),
+             (atom.parent().resname),
+             (atom.parent().parent().resid())
+             )
     #print (atom.i_seq)
 
 
@@ -42,14 +45,15 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
         e2 = atom_2.element.strip().upper()
         if (e2 in halogen_bond_pairs_atom):
           (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
-          (result) = (get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2))
+          result = get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2)
           if  ((result) ==1 ):
             d = atom_1.distance(atom_2)
             sum_vdwr = vdwr[e1] + vdwr[e2]
             sum_vdwr_min = sum_vdwr*0.6
             if (sum_vdwr_min < d < sum_vdwr):
               print  "hello"
-              return (atom_1,atom_2, copy_ID_1, resname_1, resid_1,copy_ID_2, resname_2, resid_2)
+              return (atom_1,atom_2, copy_ID_1, resname_1, resid_1,
+                      copy_ID_2, resname_2, resid_2)
 
 
 # define a function trying to find the third atoms that can make up the angles
@@ -59,9 +63,11 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
 # another angle (that the halogen atom is in the middle)is near 180 degrees
 
 def find_the_atoms_makeing_up_halogen_bond(hierarchy):
-    (atom_1,atom_2,copy_ID_1, resname_1, resid_1, copy_ID_2, resname_2, resid_2) = get_halogen_bond_pairs(
-                                                             hierarchy=model.get_hierarchy(),
-                                                             vdwr=vdwr)
+    (atom_1,atom_2,
+     copy_ID_1, resname_1, resid_1,
+     copy_ID_2, resname_2, resid_2) = get_halogen_bond_pairs(
+                                          hierarchy=model.get_hierarchy(),
+                                          vdwr=vdwr)
     for atom_3 in hierarchy.atoms():
       (copy_ID_3, resname_3, resid_3) = find_atom_information(atom_3)
       if (copy_ID_3 == copy_ID_1):
@@ -76,8 +82,10 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy):
                     if (1 < atom_2.distance(atom_4) < 3):
                       angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
                       if (90 < angle_2 < 140):
-                        print "find halogen bond,the information of the four atoms is :"
-                        print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
+                        print "find halogen bond," \
+                              "the information of the four atoms is :"
+                        print atom_1.id_str(),atom_2.id_str(),\
+                            atom_3.id_str(),atom_4.id_str()
 
 
 
