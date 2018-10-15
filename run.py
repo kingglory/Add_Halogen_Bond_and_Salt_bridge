@@ -2,7 +2,6 @@ from __future__ import division
 import iotbx.pdb
 from iotbx.pdb import hierarchy
 from scitbx.array_family import flex
-import math
 import mmtbx.model
 from libtbx.utils import null_out
 import os
@@ -26,8 +25,8 @@ def get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2):
 
 def find_atom_information(atom):
     return ( (atom.id_str()[9]),(atom.parent().resname),(atom.parent().parent().resid()) )
-                    #print (atom.i_seq)
-                    #print dir(atom.parent())k
+    #print (atom.i_seq)
+
 
 
 
@@ -43,27 +42,16 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
         e2 = atom_2.element.strip().upper()
         if (e2 in halogen_bond_pairs_atom):
           (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
-
-
-
-
-          #list_ai1_no_space = atom_to_list_of_atom_id_str(atom_1)
-          #list_ai2_no_space = atom_to_list_of_atom_id_str(atom_2)
           (result) = (get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2))
           if  ((result) ==1 ):
-            #print [(copy_ID_2), resid_2, (copy_ID_1), resid_1]
             d = atom_1.distance(atom_2)
             sum_vdwr = vdwr[e1] + vdwr[e2]
             sum_vdwr_min = sum_vdwr*0.6
             if (sum_vdwr_min < d < sum_vdwr):
-              #print (d, e1, e2,list_ai1_no_space,list_ai2_no_space,vdwr[e2],vdwr[e1])
               print  "hello"
               return (atom_1,atom_2, copy_ID_1, resname_1, resid_1,copy_ID_2, resname_2, resid_2)
 
-             #ai1 = atom_1.id_str().replace("pdb=","")
-             #ai2 = atom_2.id_str().replace("pdb=","")
-             # a = atom_1.angle(atom_1=b, atom_3=b, deg=True)
-            #print d
+
 # define a function trying to find the third atoms that can make up the angles
 #the third atoms make up covalent bond with the knowed atoms
 #the distance of covalent bond is near from 1 angstrom to 3 angstrom!!!
@@ -90,8 +78,8 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy):
                       if (90 < angle_2 < 140):
                         print "find halogen bond,the information of the four atoms is :"
                         print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
-                        #return list_ai3_no_space ,list_ai1_no_space,list_ai2_no_space,list_ai4_no_space
-                  #print (atom_1,atom_2,atom_3,atom_4)
+
+
 
 
 
