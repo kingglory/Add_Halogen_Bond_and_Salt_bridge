@@ -19,19 +19,12 @@ def get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2):
       if copy_ID_2 == " ":
         return 1
 
-
-
-
-
 def find_atom_information(atom):
     return ( (atom.id_str()[9]),
              (atom.parent().resname),
              (atom.parent().parent().resid())
              )
     #print (atom.i_seq)
-
-
-
 
 # define a function to try finding the halogen bond pairs
 def get_halogen_bond_pairs(hierarchy, vdwr):
@@ -54,7 +47,6 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
               print  "hello"
               return (atom_1,atom_2, copy_ID_1, resname_1, resid_1,
                       copy_ID_2, resname_2, resid_2)
-
 
 # define a function trying to find the third atoms that can make up the angles
 #the third atoms make up covalent bond with the knowed atoms
@@ -86,10 +78,6 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy):
                               "the information of the four atoms is :"
                         print atom_1.id_str(),atom_2.id_str(),\
                             atom_3.id_str(),atom_4.id_str()
-
-
-
-
 
 
 
