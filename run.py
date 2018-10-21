@@ -81,9 +81,21 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy):
 
 
 
-# Second step,find salt bridge in one pdb file
-def add_H_atoms_into_pad_files(pdbfile):
-    os.system("phenix.reduce %s > %s " % (pdb_file,+ 'h' + '.pdb'))
+# Second step,find salt bridge in one pdb filess'3
+def creat_new_filename(pdb_file):
+  new_pdb_file = pdb_file[0:4] + 'h.pdb'
+  return new_pdb_file
+
+
+def add_H_atoms_into_pad_files(pdb_file):
+  new_pdb_file = creat_new_filename(pdb_file)
+  os.system("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
+
+
+def get_iron_bond_atom_pairs():
+  positive_acide = ["ARG" , "HIS", "LYS"]
+  negative_acids = ["ASP" , "GLU"]
+
 
 
 
@@ -126,3 +138,4 @@ if __name__ == '__main__':
     find_the_atoms_makeing_up_halogen_bond(
        hierarchy=model.get_hierarchy())
 
+    add_H_atoms_into_pad_files(pdb_file)
