@@ -92,9 +92,21 @@ def add_H_atoms_into_pad_files(pdb_file):
   os.system("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
 
 
-def get_iron_bond_atom_pairs():
+def get_iron_bond_atom_pairs(hierarchy):
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
+  for atom_1 in hierarchy.atoms():
+    if (atom_1.parent().resname in positive_acide):
+      (copy_ID_1,resname_1,resid_1) = find_atom_information(atom_1)
+      e1 = atom_1.name.strip().upper()
+      if e1 == "N" :
+        for atom_2 in hierarchy.atoms():
+          if (atom_2.parent().resname in negative_acids):
+            (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
+            e2 = atom_2.name.strip().upper()
+            if e2 == "O" :
+              if(1.3 < atom_1.distance(atom_2) < 2.3):
+                print atom_1.id_str(),atom_2.id_str()
 
 
 
@@ -139,3 +151,6 @@ if __name__ == '__main__':
        hierarchy=model.get_hierarchy())
 
     add_H_atoms_into_pad_files(pdb_file)
+
+    get_iron_bond_atom_pairs(
+        hierarchy=model.get_hierarchy())
