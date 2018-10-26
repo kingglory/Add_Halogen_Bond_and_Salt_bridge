@@ -101,25 +101,29 @@ def get_salt_bridge_atom_pairs(hierarchy):
      if (atom_3.parent().resname in positive_acide):
       (copy_ID_1, resname_1, resid_1) = find_atom_information(atom_1)
       (copy_ID_3, resname_3, resid_3) = find_atom_information(atom_3)
-      e1 = atom_1.name.strip().upper()
-      e3 = atom_3.name.strip().upper()
-      if e1 == "N" :
-       if e3 == "H":
-        if (0.95 < atom_1.distance(atom_3) <1.05):
-         for atom_2 in hierarchy.atoms():
-          for atom_4 in hierarchy.atoms():
-           if (atom_2.parent().resname in negative_acids):
-            if (atom_4.parent().resname in negative_acids):
-             (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
-             (copy_ID_4, resname_4, resid_4) = find_atom_information(atom_4)
-             e2 = atom_2.name.strip().upper()
-             e4 = atom_2.name.strip().upper()
-             if e2 == "O" :
-              if e4 == "C" :
-               if(1.3 < atom_1.distance(atom_2) < 2.3):
-                if (1.3 < atom_2.distance(atom_3) <2.4):
-                 if (170 < atom_2.angle(atom_3 ,atom_4) ):
-                  print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
+      if copy_ID_1 == copy_ID_3 :
+       if resid_1 == resid_3 :
+        e1 = atom_1.name.strip().upper()
+        e3 = atom_3.name.strip().upper()
+        if e1 == "N" :
+         if e3 == "H":
+          if (0.95 < atom_1.distance(atom_3) <1.05):
+           for atom_2 in hierarchy.atoms():
+            for atom_4 in hierarchy.atoms():
+             if (atom_2.parent().resname in negative_acids):
+              if (atom_4.parent().resname in negative_acids):
+               (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
+               (copy_ID_4, resname_4, resid_4) = find_atom_information(atom_4)
+               if copy_ID_2 == copy_ID_4 :
+                if resid_2 == resid_4 :
+                 e2 = atom_2.name.strip().upper()
+                 e4 = atom_2.name.strip().upper()
+                 if e2 == "O" :
+                  if e4 == "C" :
+                   if(1.3 < atom_1.distance(atom_2) < 2.3):
+                    if (1.3 < atom_2.distance(atom_3) <2.4):
+                     if (170 < atom_2.angle(atom_3 ,atom_4) ):
+                      print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
 
 
 
