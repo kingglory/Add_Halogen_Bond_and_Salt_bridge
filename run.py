@@ -92,7 +92,7 @@ def add_H_atoms_into_pad_files(pdb_file):
   os.system("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
 
 
-def get_iron_bond_atom_pairs(hierarchy):
+def get_salt_bridge_atom_pairs(hierarchy):
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
   for atom_1 in hierarchy.atoms():
@@ -149,7 +149,7 @@ def get_iron_bond_atom_pairs(hierarchy):
 
 
 if __name__ == '__main__':
-    pdb_file = "1b20.pdb"
+    pdb_file = "5v7d.pdb"
     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
     model = mmtbx.model.manager(
         model_input=pdb_inp,
@@ -167,5 +167,5 @@ if __name__ == '__main__':
 
     add_H_atoms_into_pad_files(pdb_file)
 
-    get_iron_bond_atom_pairs(
+    get_salt_bridge_atom_pairs(
         hierarchy=model.get_hierarchy())
