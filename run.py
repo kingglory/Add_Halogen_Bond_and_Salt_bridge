@@ -123,6 +123,7 @@ def get_salt_bridge_atom_pairs(hierarchy):
                    if(1.3 < atom_1.distance(atom_2) < 2.3):
                     if (1.3 < atom_2.distance(atom_3) <2.4):
                      if (170 < atom_2.angle(atom_3 ,atom_4) ):
+                      print "find the salt bridge "
                       print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
 
 
@@ -153,6 +154,15 @@ def get_salt_bridge_atom_pairs(hierarchy):
 
 
 if __name__ == '__main__':
+#   path = "/home/pdb/mirror/pub/pdb/data/structures/divided/pdb"
+#   of   = open("".join([path,"INDEX"]),"r")
+#   files= ["".join([path,f]).strip() for f in of.readlines()]
+#   of.close()
+#   list = []
+#   for f in files:
+#     pdb_code = os.path.basename(f)[3:7]
+#     pdb_file = str(pdb_code) + ".pdb"
+
     pdb_file = "5v7d.pdb"
     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
     model = mmtbx.model.manager(
