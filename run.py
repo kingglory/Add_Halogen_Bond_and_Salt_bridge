@@ -91,7 +91,12 @@ def add_H_atoms_into_pad_files(pdb_file):
   new_pdb_file = creat_new_filename(pdb_file)
   os.system("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
 
-
+# in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
+#  with electrically charged side chains,the positive charged atom is N
+# there are some H atoms around this N atom
+# [asp,glu] are negative,the negative charged atom is O
+# the N atom and the O atom will make up the iron bond,the o atom and
+# one of the H atom make up the H bond
 def get_salt_bridge_atom_pairs(hierarchy):
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
