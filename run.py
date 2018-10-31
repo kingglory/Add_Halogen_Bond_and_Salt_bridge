@@ -133,31 +133,6 @@ def get_salt_bridge_atom_pairs(hierarchy):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
 #   path = "/home/pdb/mirror/pub/pdb/data/structures/divided/pdb"
 #   of   = open("".join([path,"INDEX"]),"r")
