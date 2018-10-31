@@ -10,6 +10,7 @@ def change_the_pdb_file_into_dataframe(pdb_file):
     Halogen_bond_pdb_file_atom_label = pd.DataFrame(index=['Atom_ID','Chain_label', 'Nucleic_acid_ID', 'X', 'Y', 'Z', 'Atomic_symbol'])
     if (find_halogen_atoms(pdb_file)==True):
         for line in pdb_inp.readlines():
+
             L = line.split(' ')
             L = [item for item in filter(lambda x: x != '', L)]
             if (is_number(L[1])) == True:
