@@ -73,22 +73,57 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
              if (1 < atom_2.distance(atom_4) < 3):
               angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
               if (90 < angle_2 < 140):
-                print "find halogen bond," \
-                              "the information of the four atoms is :"
-                print atom_1.id_str(),atom_2.id_str(),\
-                            atom_3.id_str(),atom_4.id_str()
+                print ("find halogen bond," 
+                        "the information of the four atoms is :")
+                print (atom_1.id_str(),atom_2.id_str(),atom_1.distance(atom_2),
+                       atom_3.id_str(),atom_4.id_str())
+Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR","ASN","GLU","CYS","SEC",
+               "GLY","PRO","ALA","VAL","ILE","LEU","MET","PHE","TYR","TRP"]
+
+
+
 
 def find_the_atoms_makeing_up_halogen_bond_test():
- X_bonds_file = ["2h79.pdb", "2ito.pdb", "2oxy.pdb",
-                 "2vag.pdb", "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+ X_bonds_file = ["2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
+               "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+
  for pdb_file in X_bonds_file:
-  pdb_inp = iotbx.pdb.input(file_name=pdb_file)
-  model = mmtbx.model.manager(model_input=pdb_inp,
-                              process_input=True,
-                              log=null_out())
-  vdwr = model.get_vdw_radii()
-  find_the_atoms_makeing_up_halogen_bond(hierarchy=model.get_hierarchy(),
+     print (" go on 1 ")
+     #os.system("phenix.pdbtools %s keep = 'protein and notresname CAS'  " %pdb_file)
+
+     log_file = (str(pdb_file))+'.log'
+     (os.system(" phenix.geometry_minimization %s > %s" %(pdb_file , log_file)))
+     f = open(log_file)
+     contents = f.readlines()
+     Unknown_res = []
+     for  line in contents:
+        if "Unknown residues" in line:
+         d = eval(line[28:])
+         Unknown_residues = (d.keys()[0])
+         if Unknown_residues not in Unknown_res:
+          Unknown_res.append(Unknown_residues)
+          print (Unknown_res)
+
+          print (Unknown_residues)
+          os.system("phenix.pdbtools pdb_file remove = ('resname '+ Unknown_residues)")
+          pdb_file = pdb_file + "_modified.pdb"
+          log_file = log_file + '.log'
+          print (pdb_file)
+          (os.system(" phenix.geometry_minimization %s > %s" % (pdb_file, log_file)))
+          print (" go on 2 ")
+     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
+     model = mmtbx.model.manager(
+         model_input=pdb_inp,
+         process_input=True,
+         log=null_out())
+     print (" go on 3 ")
+     vdwr = model.get_vdw_radii()
+     print (" go on 4 ")
+     print (vdwr.keys())
+     print (" go on 5 ")
+     find_the_atoms_makeing_up_halogen_bond(hierarchy=model.get_hierarchy(),
                                          vdwr=vdwr)
+     print (" go on 6 ")
 
 # Second step,find salt bridge in one pdb filess'3
 def creat_new_filename(pdb_file):
@@ -137,8 +172,9 @@ def get_salt_bridge_atom_pairs(hierarchy):
                    if(1.3 < atom_1.distance(atom_2) < 2.3):
                     if (1.3 < atom_2.distance(atom_3) <2.4):
                      if (170 < atom_2.angle(atom_3 ,atom_4) ):
-                      print "find the salt bridge "
-                      print atom_1.id_str(),atom_2.id_str(),atom_3.id_str(),atom_4.id_str()
+                      print ("find the salt bridge ")
+                      print (atom_1.id_str(),atom_2.id_str(),
+                             atom_3.id_str(),atom_4.id_str())
 
 
 
@@ -153,21 +189,21 @@ if __name__ == '__main__':
 #     pdb_file = str(pdb_code) + ".pdb"
 
 
-#    pdb_file = "1b20.pdb"
-#    pdb_inp = iotbx.pdb.input(file_name=pdb_file)
-#    model = mmtbx.model.manager(
-#        model_input=pdb_inp,
-#        process_input=True,
-#       log=null_out())
-#    vdwr = model.get_vdw_radii()
-    #print vdwr.keys()
-#    get_halogen_bond_pairs(
-#       hierarchy=model.get_hierarchy(),
-#       vdwr=vdwr)
+    pdb_file = "5v7d.pdb"
+    pdb_inp = iotbx.pdb.input(file_name=pdb_file)
+    model = mmtbx.model.manager(
+        model_input=pdb_inp,
+        process_input=True,
+       log=null_out())
+    vdwr = model.get_vdw_radii()
+ #   print vdwr.keys()
+    get_halogen_bond_pairs(
+       hierarchy=model.get_hierarchy(),
+       vdwr=vdwr)
 
-#    find_the_atoms_makeing_up_halogen_bond(
-#       hierarchy=model.get_hierarchy(),
-#       vdwr=vdwr)
+    find_the_atoms_makeing_up_halogen_bond(
+       hierarchy=model.get_hierarchy(),
+       vdwr=vdwr)
     find_the_atoms_makeing_up_halogen_bond_test()
 
 #    add_H_atoms_into_pad_files(pdb_file)
