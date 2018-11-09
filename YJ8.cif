@@ -1,0 +1,405 @@
+# electronic Ligand Builder and Optimisation Workbench (eLBOW)
+#   - a module of PHENIX version 1.14-3260-
+#   - file written: Fri Nov  9 09:32:50 2018
+#
+#   Input file: /home/wangwensong/phenix-1.14-3260/modules/chem_data/chemical_components/y/data_YJ8.cif
+#   Random seed: 3628800
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+YJ8        YJ8 'Unknown                  ' ligand 60 35 .
+#
+data_comp_YJ8
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+YJ8         C1     C   CR15   0    .      -0.8920   -0.4508   -0.2456
+YJ8         N2     N   NR5    0    .       0.4494   -0.4123   -0.2597
+YJ8         C3     C   CH2    0    .       0.9324   -0.5621    1.2247
+YJ8         C4     C   CR15   0    .      -0.3822   -0.3836    2.1196
+YJ8         C5     C   CH2    0    .      -1.3380    0.0895    1.2656
+YJ8         C6     C   C      0    .      -1.4501    0.4580   -1.3084
+YJ8         O7     O   O      0    .      -0.8198    1.3951   -1.6796
+YJ8         S8     S   S      0    .      -0.9075   -2.0268    2.8257
+YJ8         C9     C   CR6    0    .      -1.1963   -1.8798    4.6317
+YJ8         C10    C   CR6    0    .      -0.3637   -2.5461    5.5228
+YJ8         C11    C   CR16   0    .      -0.6495   -2.5340    6.8826
+YJ8         C12    C   CR16   0    .      -1.7675   -1.8558    7.3516
+YJ8         C13    C   CR16   0    .      -2.6000   -1.1898    6.4615
+YJ8         C14    C   CR16   0    .      -2.3149   -1.2015    5.1016
+YJ8        CL      CL  CL     0    .       1.0487   -3.4575    4.9151
+YJ8         N16    N   NH1    0    .      -2.7476    0.1441   -1.9404
+YJ8         C17    C   CT     0    .      -3.2610    0.9931   -3.0319
+YJ8         C18    C   C1     0    .      -2.7387    0.8080   -4.4706
+YJ8         C19    C   CH2    0    .      -3.6233    2.4291   -2.6390
+YJ8         C20    C   CH2    0    .      -4.7315    1.4067   -2.9115
+YJ8         C21    C   C      0    .       1.3136   -0.2573   -1.4558
+YJ8         O22    O   O      0    .       0.8234   -0.1524   -2.5332
+YJ8         C23    C   CT     0    .       2.8632   -0.2645   -1.3033
+YJ8         C24    C   CR6    0    .       3.4507    1.0309   -1.9248
+YJ8         C25    C   CR16   0    .       3.4238    1.2143   -3.3031
+YJ8         C26    C   CR16   0    .       4.0175    2.3382   -3.8666
+YJ8         C27    C   CR6    0    .       4.6378    3.2784   -3.0528
+YJ8         C28    C   CR16   0    .       4.6649    3.0955   -1.6751
+YJ8         C29    C   CR16   0    .       4.0714    1.9717   -1.1111
+YJ8         I30    I   I      0    .       5.4820    5.0183   -3.9035
+YJ8         C31    C   CH2    0    .       3.4459   -1.4035   -2.1504
+YJ8         C32    C   CH2    0    .       3.2966   -1.5779   -0.6389
+YJ8         O33    O   OS     0    .      -2.0952   -2.5475    2.1370
+YJ8         O34    O   OS     0    .       0.0770   -3.0739    2.5273
+YJ8         N35    N   N      0    .      -3.1364   -0.1660   -5.1652
+YJ8         H1     H   HCR5   0    .      -1.2391   -1.4731   -0.3957
+YJ8         H3     H   HCH2   0    .       1.3623   -1.5500    1.3819
+YJ8         H3A    H   HCH2   0    .       1.6583    0.2147    1.4641
+YJ8         H4     H   HCR5   0    .      -0.1999    0.3370    2.9173
+YJ8         H5     H   HCH2   0    .      -2.3140   -0.3122    1.5349
+YJ8         H5A    H   HCH2   0    .      -1.3532    1.1799    1.2855
+YJ8         H11    H   HCR6   0    .       0.0026   -3.0557    7.5803
+YJ8         H12    H   HCR6   0    .      -1.9911   -1.8465    8.4167
+YJ8         H13    H   HCR6   0    .      -3.4758   -0.6586    6.8291
+YJ8         H14    H   HCR6   0    .      -2.9666   -0.6802    4.4052
+YJ8        HN16    H   HNH1   0    .      -3.2687   -0.6644   -1.6445
+YJ8         H19    H   HCH2   0    .      -3.4666    2.6836   -1.5934
+YJ8        H19A    H   HCH2   0    .      -3.4760    3.1802   -3.4142
+YJ8         H20    H   HCH2   0    .      -5.2637    1.5305   -3.8538
+YJ8        H20A    H   HCH2   0    .      -5.2538    1.0345   -2.0318
+YJ8         H25    H   HCR6   0    .       2.9386    0.4789   -3.9399
+YJ8         H26    H   HCR6   0    .       3.9963    2.4816   -4.9451
+YJ8         H28    H   HCR6   0    .       5.1507    3.8318   -1.0380
+YJ8         H29    H   HCR6   0    .       4.0927    1.8287   -0.0333
+YJ8         H31    H   HCH2   0    .       2.7285   -1.9510   -2.7591
+YJ8        H31A    H   HCH2   0    .       4.4637   -1.2508   -2.5072
+YJ8         H32    H   HCH2   0    .       2.4888   -2.2314   -0.3202
+YJ8        H32A    H   HCH2   0    .       4.2228   -1.5322   -0.0668
+YJ8         H35    H   H      0    .      -3.7932   -0.8210   -4.7817
+YJ8         H18    H   H      0    .      -2.0268    1.5178   -4.8864
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+YJ8   C1      N2    single        1.342 0.020     1.342
+YJ8   C1      C5    single        1.666 0.020     1.666
+YJ8   C1      C6    single        1.506 0.020     1.506
+YJ8   C1      H1    single        0.970 0.020     1.090
+YJ8   N2      C3    single        1.568 0.020     1.568
+YJ8   N2      C21   single        1.484 0.020     1.484
+YJ8   C3      C4    single        1.600 0.020     1.600
+YJ8   C3      H3    single        0.970 0.020     1.090
+YJ8   C3      H3A   single        0.970 0.020     1.090
+YJ8   C4      C5    single        1.366 0.020     1.366
+YJ8   C4      S8    single        1.864 0.020     1.864
+YJ8   C4      H4    single        0.970 0.020     1.090
+YJ8   C5      H5    single        0.970 0.020     1.090
+YJ8   C5      H5A   single        0.970 0.020     1.090
+YJ8   C6      O7    double        1.189 0.020     1.189
+YJ8   C6      N16   single        1.477 0.020     1.477
+YJ8   S8      C9    single        1.835 0.020     1.835
+YJ8   S8      O33   double        1.468 0.020     1.468
+YJ8   S8      O34   double        1.468 0.020     1.468
+YJ8   C9      C10   aromatic      1.390 0.020     1.390
+YJ8   C9      C14   aromatic      1.390 0.020     1.390
+YJ8   C10     C11   aromatic      1.390 0.020     1.390
+YJ8   C10    CL     single        1.787 0.020     1.787
+YJ8   C11     C12   aromatic      1.389 0.020     1.389
+YJ8   C11     H11   single        0.930 0.020     1.080
+YJ8   C12     C13   aromatic      1.389 0.020     1.389
+YJ8   C12     H12   single        0.930 0.020     1.080
+YJ8   C13     C14   aromatic      1.390 0.020     1.390
+YJ8   C13     H13   single        0.930 0.020     1.080
+YJ8   C14     H14   single        0.930 0.020     1.080
+YJ8   N16     C17   single        1.475 0.020     1.475
+YJ8   N16    HN16   single        0.860 0.020     1.020
+YJ8   C17     C18   single        1.542 0.020     1.542
+YJ8   C17     C19   single        1.532 0.020     1.532
+YJ8   C17     C20   single        1.532 0.020     1.532
+YJ8   C18     N35   double        1.261 0.020     1.261
+YJ8   C19     C20   single        1.532 0.020     1.532
+YJ8   C19     H19   single        0.970 0.020     1.090
+YJ8   C19    H19A   single        0.970 0.020     1.090
+YJ8   C20     H20   single        0.970 0.020     1.090
+YJ8   C20    H20A   single        0.970 0.020     1.090
+YJ8   C21     O22   double        1.188 0.020     1.188
+YJ8   C21     C23   single        1.557 0.020     1.557
+YJ8   C23     C24   single        1.552 0.020     1.552
+YJ8   C23     C31   single        1.534 0.020     1.534
+YJ8   C23     C32   single        1.534 0.020     1.534
+YJ8   C24     C25   aromatic      1.391 0.020     1.391
+YJ8   C24     C29   aromatic      1.390 0.020     1.390
+YJ8   C25     C26   aromatic      1.390 0.020     1.390
+YJ8   C25     H25   single        0.930 0.020     1.080
+YJ8   C26     C27   aromatic      1.390 0.020     1.390
+YJ8   C26     H26   single        0.930 0.020     1.080
+YJ8   C27     C28   aromatic      1.390 0.020     1.390
+YJ8   C27     I30   single        2.113 0.020     2.113
+YJ8   C28     C29   aromatic      1.390 0.020     1.390
+YJ8   C28     H28   single        0.930 0.020     1.080
+YJ8   C29     H29   single        0.930 0.020     1.080
+YJ8   C31     C32   single        1.529 0.020     1.529
+YJ8   C31     H31   single        0.970 0.020     1.090
+YJ8   C31    H31A   single        0.970 0.020     1.090
+YJ8   C32     H32   single        0.970 0.020     1.090
+YJ8   C32    H32A   single        0.970 0.020     1.090
+YJ8   C18     H18   single        0.930 0.020     1.080
+YJ8   N35     H35   single        0.890 0.020     1.040
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+YJ8   H1      C1      C6          110.54 3.000
+YJ8   H1      C1      C5          110.11 3.000
+YJ8   C6      C1      C5          110.20 3.000
+YJ8   H1      C1      N2          110.11 3.000
+YJ8   C6      C1      N2          110.23 3.000
+YJ8   C5      C1      N2          105.54 3.000
+YJ8   C21     N2      C3          126.42 3.000
+YJ8   C21     N2      C1          126.42 3.000
+YJ8   C3      N2      C1          107.17 3.000
+YJ8   H3A     C3      H3          110.61 3.000
+YJ8   H3A     C3      C4          110.17 3.000
+YJ8   H3      C3      C4          110.18 3.000
+YJ8   H3A     C3      N2          110.18 3.000
+YJ8   H3      C3      N2          110.18 3.000
+YJ8   C4      C3      N2          105.41 3.000
+YJ8   H4      C4      S8          110.65 3.000
+YJ8   H4      C4      C5          110.21 3.000
+YJ8   S8      C4      C5          110.17 3.000
+YJ8   H4      C4      C3          110.21 3.000
+YJ8   S8      C4      C3          110.18 3.000
+YJ8   C5      C4      C3          105.29 3.000
+YJ8   H5A     C5      H5          110.59 3.000
+YJ8   H5A     C5      C4          110.15 3.000
+YJ8   H5      C5      C4          110.16 3.000
+YJ8   H5A     C5      C1          110.15 3.000
+YJ8   H5      C5      C1          110.16 3.000
+YJ8   C4      C5      C1          105.51 3.000
+YJ8   N16     C6      O7          119.98 3.000
+YJ8   N16     C6      C1          119.97 3.000
+YJ8   O7      C6      C1          119.98 3.000
+YJ8   O34     S8      O33         101.20 3.000
+YJ8   O34     S8      C9          111.27 3.000
+YJ8   O33     S8      C9          111.27 3.000
+YJ8   O34     S8      C4          111.28 3.000
+YJ8   O33     S8      C4          111.28 3.000
+YJ8   C9      S8      C4          110.28 3.000
+YJ8   C14     C9      C10         119.95 3.000
+YJ8   C14     C9      S8          119.90 3.000
+YJ8   C10     C9      S8          119.90 3.000
+YJ8  CL       C10     C11         119.98 3.000
+YJ8  CL       C10     C9          119.99 3.000
+YJ8   C11     C10     C9          120.01 3.000
+YJ8   H11     C11     C12         120.00 3.000
+YJ8   H11     C11     C10         119.99 3.000
+YJ8   C12     C11     C10         120.01 3.000
+YJ8   H12     C12     C13         119.99 3.000
+YJ8   H12     C12     C11         119.99 3.000
+YJ8   C13     C12     C11         120.01 3.000
+YJ8   H13     C13     C14         120.00 3.000
+YJ8   H13     C13     C12         119.99 3.000
+YJ8   C14     C13     C12         120.01 3.000
+YJ8   H14     C14     C13         119.99 3.000
+YJ8   H14     C14     C9          120.00 3.000
+YJ8   C13     C14     C9          120.01 3.000
+YJ8  HN16     N16     C17         119.98 3.000
+YJ8  HN16     N16     C6          119.99 3.000
+YJ8   C17     N16     C6          120.01 3.000
+YJ8   C20     C17     C19          60.00 3.000
+YJ8   C20     C17     C18         115.53 3.000
+YJ8   C19     C17     C18         115.59 3.000
+YJ8   C20     C17     N16         115.55 3.000
+YJ8   C19     C17     N16         115.59 3.000
+YJ8   C18     C17     N16         120.23 3.000
+YJ8   H18     C18     N35         120.00 3.000
+YJ8   H18     C18     C17         120.00 3.000
+YJ8   N35     C18     C17         120.00 3.000
+YJ8  H19A     C19     H19         120.23 3.000
+YJ8  H19A     C19     C20         115.55 3.000
+YJ8   H19     C19     C20         115.55 3.000
+YJ8  H19A     C19     C17         115.58 3.000
+YJ8   H19     C19     C17         115.58 3.000
+YJ8   C20     C19     C17          60.00 3.000
+YJ8  H20A     C20     H20         120.23 3.000
+YJ8  H20A     C20     C19         115.56 3.000
+YJ8   H20     C20     C19         115.56 3.000
+YJ8  H20A     C20     C17         115.57 3.000
+YJ8   H20     C20     C17         115.57 3.000
+YJ8   C19     C20     C17          60.00 3.000
+YJ8   C23     C21     O22         119.98 3.000
+YJ8   C23     C21     N2          120.01 3.000
+YJ8   O22     C21     N2          119.99 3.000
+YJ8   C32     C23     C31          59.76 3.000
+YJ8   C32     C23     C24         141.33 3.000
+YJ8   C31     C23     C24         104.76 3.000
+YJ8   C32     C23     C21         109.12 3.000
+YJ8   C31     C23     C21         109.11 3.000
+YJ8   C24     C23     C21         109.49 3.000
+YJ8   C29     C24     C25         119.97 3.000
+YJ8   C29     C24     C23         119.96 3.000
+YJ8   C25     C24     C23         119.97 3.000
+YJ8   H25     C25     C26         120.00 3.000
+YJ8   H25     C25     C24         120.00 3.000
+YJ8   C26     C25     C24         120.00 3.000
+YJ8   H26     C26     C27         120.00 3.000
+YJ8   H26     C26     C25         120.00 3.000
+YJ8   C27     C26     C25         120.01 3.000
+YJ8   I30     C27     C28         119.98 3.000
+YJ8   I30     C27     C26         119.98 3.000
+YJ8   C28     C27     C26         120.00 3.000
+YJ8   H28     C28     C29         120.00 3.000
+YJ8   H28     C28     C27         119.99 3.000
+YJ8   C29     C28     C27         120.01 3.000
+YJ8   H29     C29     C28         120.00 3.000
+YJ8   H29     C29     C24         120.00 3.000
+YJ8   C28     C29     C24         120.00 3.000
+YJ8  H31A     C31     H31         120.21 3.000
+YJ8  H31A     C31     C32         115.54 3.000
+YJ8   H31     C31     C32         115.54 3.000
+YJ8  H31A     C31     C23         115.57 3.000
+YJ8   H31     C31     C23         115.58 3.000
+YJ8   C32     C31     C23          60.12 3.000
+YJ8  H32A     C32     H32         120.21 3.000
+YJ8  H32A     C32     C31         115.54 3.000
+YJ8   H32     C32     C31         115.54 3.000
+YJ8  H32A     C32     C23         115.57 3.000
+YJ8   H32     C32     C23         115.58 3.000
+YJ8   C31     C32     C23          60.12 3.000
+YJ8   H35     N35     C18         120.01 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+YJ8 CONST_01       C12     C11     C10     C9           -0.00   0.0 0
+YJ8 CONST_02       C12     C13     C14     C9            0.00   0.0 0
+YJ8 CONST_03       C13     C14     C9      C10          -0.00   0.0 0
+YJ8 CONST_04       C13     C12     C11     C10           0.00   0.0 0
+YJ8 CONST_05       C14     C9      C10     C11           0.00   0.0 0
+YJ8 CONST_06       C14     C13     C12     C11          -0.00   0.0 0
+YJ8 CONST_07       C27     C26     C25     C24          -0.00   0.0 0
+YJ8 CONST_08       C27     C28     C29     C24           0.00   0.0 0
+YJ8 CONST_09       C28     C29     C24     C25          -0.00   0.0 0
+YJ8 CONST_10       C28     C27     C26     C25           0.00   0.0 0
+YJ8 CONST_11       C29     C24     C25     C26           0.00   0.0 0
+YJ8 CONST_12       C29     C28     C27     C26          -0.00   0.0 0
+YJ8 CONST_13       C26     C25     C24     C23        -176.34   0.0 0
+YJ8 CONST_14       C28     C29     C24     C23         176.34   0.0 0
+YJ8 CONST_15       C11     C10     C9      S8         -174.29   0.0 0
+YJ8 CONST_16       C13     C14     C9      S8          174.29   0.0 0
+YJ8 CONST_17      CL       C10     C11     C12        -178.26   0.0 0
+YJ8 CONST_18      CL       C10     C9      C14         178.26   0.0 0
+YJ8 CONST_19       I30     C27     C26     C25        -177.92   0.0 0
+YJ8 CONST_20       I30     C27     C28     C29         177.92   0.0 0
+YJ8 CONST_21       C23     C21     N2      C1         -178.60   0.0 0
+YJ8 CONST_22       C23     C21     N2      C3            1.39   0.0 0
+YJ8 CONST_23       H11     C11     C10     C9          180.00   0.0 0
+YJ8 CONST_24       H13     C13     C14     C9          180.00   0.0 0
+YJ8 CONST_25       H14     C14     C9      C10        -180.00   0.0 0
+YJ8 CONST_26       H12     C12     C11     C10         180.00   0.0 0
+YJ8 CONST_27       H25     C25     C24     C23           3.66   0.0 0
+YJ8 CONST_28       H29     C29     C24     C23          -3.66   0.0 0
+YJ8 CONST_29       H26     C26     C25     C24         180.00   0.0 0
+YJ8 CONST_30       H28     C28     C29     C24         180.00   0.0 0
+YJ8 CONST_31       O22     C21     N2      C1            0.01   0.0 0
+YJ8 CONST_32       C17     N16     C6      C1         -176.72   0.0 0
+YJ8 CONST_33       O22     C21     N2      C3          180.00   0.0 0
+YJ8 CONST_34       C17     N16     C6      O7            0.01   0.0 0
+YJ8 CONST_35      HN16     N16     C6      C1            1.51   0.0 0
+YJ8 Var_01         C4      C3      N2      C1          -11.63  30.0 1
+YJ8 Var_02         C32     C31     C23     C24         141.36  30.0 1
+YJ8 Var_03         C31     C23     C24     C25          47.21  30.0 2
+YJ8 Var_04         C24     C23     C21     N2         -124.60  30.0 3
+YJ8 Var_05         C10     C9      S8      C4         -113.48  30.0 2
+YJ8 Var_06         C20     C19     C17     N16        -106.00  30.0 1
+YJ8 Var_07         H20     C20     C19     C17        -106.04  30.0 1
+YJ8 Var_08         H32     C32     C31     C23         106.10  30.0 1
+YJ8 Var_09         C19     C17     N16     C6          -66.03  30.0 3
+YJ8 Var_10         N35     C18     C17     C19        -137.38  30.0 3
+#
+loop_
+_chem_comp_chir.comp_id
+_chem_comp_chir.id
+_chem_comp_chir.atom_id_centre
+_chem_comp_chir.atom_id_1
+_chem_comp_chir.atom_id_2
+_chem_comp_chir.atom_id_3
+_chem_comp_chir.volume_sign
+YJ8 chir_01   C1      N2      C5      C6    negativ
+YJ8 chir_02   C4      S8      C3      C5    negativ
+YJ8 chir_03   C17     C18     C19     C20   both
+YJ8 chir_04   C23     C24     C31     C32   both
+#
+loop_
+_chem_comp_plane_atom.comp_id
+_chem_comp_plane_atom.plane_id
+_chem_comp_plane_atom.atom_id
+_chem_comp_plane_atom.dist_esd
+YJ8 plan-1     C1 0.020
+YJ8 plan-1     C6 0.020
+YJ8 plan-1     O7 0.020
+YJ8 plan-1    N16 0.020
+YJ8 plan-1    C17 0.020
+YJ8 plan-1   HN16 0.020
+YJ8 plan-2     S8 0.020
+YJ8 plan-2     C9 0.020
+YJ8 plan-2    C10 0.020
+YJ8 plan-2    C11 0.020
+YJ8 plan-2    C12 0.020
+YJ8 plan-2    C13 0.020
+YJ8 plan-2    C14 0.020
+YJ8 plan-2     CL 0.020
+YJ8 plan-2    H11 0.020
+YJ8 plan-2    H12 0.020
+YJ8 plan-2    H13 0.020
+YJ8 plan-2    H14 0.020
+YJ8 plan-3    C23 0.020
+YJ8 plan-3    C24 0.020
+YJ8 plan-3    C25 0.020
+YJ8 plan-3    C26 0.020
+YJ8 plan-3    C27 0.020
+YJ8 plan-3    C28 0.020
+YJ8 plan-3    C29 0.020
+YJ8 plan-3    I30 0.020
+YJ8 plan-3    H25 0.020
+YJ8 plan-3    H26 0.020
+YJ8 plan-3    H28 0.020
+YJ8 plan-3    H29 0.020
+YJ8 plan-4     C1 0.020
+YJ8 plan-4     N2 0.020
+YJ8 plan-4     C3 0.020
+YJ8 plan-4    C21 0.020
+YJ8 plan-4    O22 0.020
+YJ8 plan-4    C23 0.020
+YJ8 plan-5    C17 0.020
+YJ8 plan-5    C18 0.020
+YJ8 plan-5    N35 0.020
+YJ8 plan-5    H35 0.020
+YJ8 plan-5    H18 0.020

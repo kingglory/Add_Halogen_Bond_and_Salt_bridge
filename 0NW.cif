@@ -1,6 +1,6 @@
 # electronic Ligand Builder and Optimisation Workbench (eLBOW)
 #   - a module of PHENIX version 1.14-3260-
-#   - file written: Thu Nov  8 20:56:23 2018
+#   - file written: Fri Nov  9 09:36:22 2018
 #
 #   Input file: /home/wangwensong/phenix-1.14-3260/modules/chem_data/chemical_components/0/data_0NW.cif
 #   Random seed: 3628800

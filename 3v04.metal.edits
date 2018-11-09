@@ -1,0 +1,40 @@
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name MG   and chain A and resname MG and resseq  503
+    atom_selection_2 = name  OD2 and chain A and resname ASP and resseq  208
+    distance_ideal = 2.070000
+    sigma = 0.100
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name MG   and chain A and resname MG and resseq  503
+    atom_selection_2 = name  O2A and chain A and resname ATP and resseq  502
+    distance_ideal = 2.090000
+    sigma = 0.250
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name MG   and chain A and resname MG and resseq  503
+    atom_selection_2 = name  OD1 and chain A and resname ASN and resseq  195
+    distance_ideal = 2.090000
+    sigma = 0.100
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name MG   and chain A and resname MG and resseq  503
+    atom_selection_2 = name  O1B and chain A and resname ATP and resseq  502
+    distance_ideal = 2.090000
+    sigma = 0.250
+  }
+}

@@ -1,9 +1,11 @@
 from __future__ import division
 import iotbx.pdb
+import iotbx.cif
 from iotbx.pdb import hierarchy
 from scitbx.array_family import flex
 import mmtbx.model
 from libtbx.utils import null_out
+from libtbx import easy_run
 import os
 # first step write codes to find halogen bond in one pdb file
 
@@ -84,42 +86,69 @@ Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR","ASN","GLU","CYS","SEC"
 
 
 
-
-def find_the_atoms_makeing_up_halogen_bond_test():
+# prepare the cif file if the pdb file needs
+def prepare_cif_for_pdb_file():
+  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
+                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+  for pdb_file in X_bonds_file:
+    easy_run.call(" phenix.ready_set %s " %pdb_file)
+# prepare the cif file if the pdb file needs
+def list_cif_and_pdb_file():
  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
-               "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+              "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+ i = 0
  for pdb_file in X_bonds_file:
   pdb_cif = pdb_file[0:4] + ".ligands.cif"
-  print (pdb_cif)                         
-  try:
-    os.system(" phenix.geometry_minimization pdb_file" )
-  except BaseException,e:
-    if len(e.message)>0:
-     os.system(" phenix.ready_set 4e7r.pdb ")
-     pdb_inp = iotbx.pdb.input(file_name=pdb_file,
-                               source_info=None)
-     pdb_cif = pdb_file[0:4] + ".ligands.cif"
-     cif_object = iotbx.cif.reader(pdb_cif).model()
-     cif_objects = [(pdb_cif, cif_object)]
-     model = mmtbx.model.manager(model_input=pdb_inp,
-                                 build_grm=True,
-                                 restraint_objects=cif_objects)
-     hierarchy = model.get_hierarchy()
-     vdwr = model.get_vdw_radii()
-     find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
-     print (pdb_file[0:4] +" this pdb_file is ok")
+  if os.path.exists(pdb_cif):
+    X_bonds_file[i] = [pdb_file, pdb_cif]
   else:
-      pdb_inp = iotbx.pdb.input(file_name=pdb_file)
-      model = mmtbx.model.manager(model_input=pdb_inp,
+    X_bonds_file[i] = [pdb_file,None]
+  i = i + 1
+ return  X_bonds_file
+
+
+
+
+
+def halogen_find_test_cif_model(pdb_file):
+  pdb_inp = iotbx.pdb.input(file_name=pdb_file,
+                            source_info=None)
+  pdb_cif = pdb_file[0:4] + ".ligands.cif"
+  cif_object = iotbx.cif.reader(pdb_cif).model()
+  cif_objects = [(pdb_cif, cif_object)]
+  model = mmtbx.model.manager(model_input=pdb_inp,
+                              build_grm=True,
+                              restraint_objects=cif_objects,
+                              log=null_out())
+  hierarchy = model.get_hierarchy()
+  vdwr = model.get_vdw_radii()
+  find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
+  print (pdb_file[0:4] +" this pdb_file is ok")
+
+
+
+def halogen_find_test_No_cif_model(pdb_file):
+  pdb_inp = iotbx.pdb.input(file_name=pdb_file)
+  model = mmtbx.model.manager(model_input=pdb_inp,
                                   process_input=True,
                                   log=null_out())
-      hierarchy = model.get_hierarchy()
-      vdwr = model.get_vdw_radii()
-      find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
-      print (pdb_file[0:4] +" this pdb_file is ok")
+  hierarchy = model.get_hierarchy()
+  vdwr = model.get_vdw_radii()
+  find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
+  print (pdb_file[0:4] +" this pdb_file is ok")
 
 
-# Second step,find salt bridge in one pdb filess'3
+def find_the_atoms_makeing_up_halogen_bond_test():
+    X_bonds_file = list_cif_and_pdb_file()
+    for i in range(len(X_bonds_file)) :
+      pdb_file = X_bonds_file[i][0]
+      if X_bonds_file[i][1] == None:
+        halogen_find_test_No_cif_model(pdb_file)
+      else:
+        halogen_find_test_cif_model(pdb_file)
+
+#Second step,find salt bridge in one pdb filess
+
 def creat_new_filename(pdb_file):
   new_pdb_file = pdb_file[0:4] + 'h.pdb'
   return new_pdb_file
@@ -127,7 +156,7 @@ def creat_new_filename(pdb_file):
 
 def add_H_atoms_into_pad_files(pdb_file):
   new_pdb_file = creat_new_filename(pdb_file)
-  os.system("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
+  easy_run.call("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
 
 # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
 #  with electrically charged side chains,the positive charged atom is N
@@ -190,7 +219,7 @@ if __name__ == '__main__':
         process_input=True,
        log=null_out())
     vdwr = model.get_vdw_radii()
- #   print vdwr.keys()
+    print vdwr.keys()
     get_halogen_bond_pairs(
        hierarchy=model.get_hierarchy(),
        vdwr=vdwr)
@@ -198,8 +227,11 @@ if __name__ == '__main__':
     find_the_atoms_makeing_up_halogen_bond(
        hierarchy=model.get_hierarchy(),
        vdwr=vdwr)
+    prepare_cif_for_pdb_file()
+    
        """
-find_the_atoms_makeing_up_halogen_bond_test()
+
+ find_the_atoms_makeing_up_halogen_bond_test()
 
 #    add_H_atoms_into_pad_files(pdb_file)
 
