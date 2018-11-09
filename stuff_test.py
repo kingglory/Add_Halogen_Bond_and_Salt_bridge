@@ -7,13 +7,8 @@ import math
 import os
 from iotbx.pdb import hierarchy
 import iotbx.pdb
-def distance(atom1,atom2):
-    list(map(float,atom1))
-    list(map(float,atom2))
-    distance = math.sqrt(((atom1[0]-atom2[0])**2) + ((atom1[1]-atom2[1])**2) + ((atom1[2]-atom2[2])**2))
-    return distance
-
 import iotbx.pdb
+import iotbx.cif
 from iotbx.pdb import hierarchy
 from scitbx.array_family import flex
 import mmtbx.model
@@ -92,33 +87,47 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
                 print (atom_1.id_str(),atom_2.id_str(),atom_1.distance(atom_3),
                        atom_3.id_str(),atom_4.id_str(),atom_2.distance(atom_4))
 
-# test
-
-atom1 = [1,1.0,1]
-atom2 = [2,1,1]
-d = distance(atom1,atom2)
-
 
 
 
 
 
 if __name__ == '__main__':
-    os.system(" phenix.geometry_minimization 4e7r.pdb > 4e7r.log")
+ #   os.system(" phenix.ready_set 4e7r.pdb ")
+    pdb_file = "4e7r.pdb"
+    pdb_cif = "4e7r.ligands.cif"
 #    os.system("phenix.pdbtools 2ito.pdb remove='resname IRE'")
     # os.system(" phenix.geometry_minimization 2h79.pdb_modified.pdb > %s" %( log_file))
 #    os.system("phenix.pdbtools 2h79.pdb_modified.pdb remove='resname T3'")
 #    os.system(" phenix.geometry_minimization 2h79.pdb_modified.pdb_modified.pdb > 2h79.log" )
+    pdb_inp = iotbx.pdb.input(file_name= pdb_file,
+                              source_info = None)
+#    iotbx.cif.reader()
+    cif_object = iotbx.cif.reader(pdb_cif).model()
+    cif_objects = [(pdb_cif,cif_object)]
+    model = mmtbx.model.manager(
+                 model_input       = pdb_inp,
+                 build_grm         = True,
+                 restraint_objects = cif_objects
+    )
+   # print dir(model)
+  #  print dir(hierarchy)
 
- #   pdb_file = "2h79.pdb_modified.pdb_modified.pdb"
-###    pdb_inp = iotbx.pdb.input(file_name=pdb_file)
-  #  model = mmtbx.model.manager(
-#    model_input=pdb_inp,
-#    process_input=True,
- #   log=null_out())
- #   print (" go on 3 ")
- #   vdwr = model.get_vdw_radii()
- #   print (" go on 4 ")
-
-#    find_the_atoms_makeing_up_halogen_bond(hierarchy=model.get_hierarchy(),
- #                                      vdwr=vdwr)
+    hierarchy = model.get_hierarchy()
+    for atom in hierarchy.atoms():
+     e = atom.element.strip().upper()
+     if e == "CL":
+        print atom.id_str()
+        vdwr = model.get_vdw_radii()
+        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr)
+"""pdb_file = "4e7r.updated.pdb"
+    pdb_inp = iotbx.pdb.input(file_name=pdb_file)
+    model = mmtbx.model.manager(
+      model_input=pdb_inp,
+      process_input=True,
+    log=null_out())
+    print (" go on 3 ")
+    vdwr = model.get_vdw_radii()
+    print (" go on 4 ")
+"""
+#    find_the_atoms_makeing_up_halogen_bond(hierarchy=model.get_hierarchy(),vdwr=vdwr)

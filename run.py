@@ -54,8 +54,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr):
 # another angle (that the halogen atom is in the middle)is near 180 degrees
 
 def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
-  result = get_halogen_bond_pairs(hierarchy=model.get_hierarchy(),
-                                  vdwr=vdwr)
+  result = get_halogen_bond_pairs(hierarchy,vdwr)
   if (result is not None):
    (atom_1, atom_2,copy_ID_1, resname_1, resid_1,
        copy_ID_2, resname_2, resid_2) = result
@@ -174,17 +173,17 @@ def get_salt_bridge_atom_pairs(hierarchy):
 
 
 if __name__ == '__main__':
-#   path = "/home/pdb/mirror/pub/pdb/data/structures/divided/pdb"
-#   of   = open("".join([path,"INDEX"]),"r")
-#   files= ["".join([path,f]).strip() for f in of.readlines()]
-#   of.close()
-#   list = []
-#   for f in files:
-#     pdb_code = os.path.basename(f)[3:7]
-#     pdb_file = str(pdb_code) + ".pdb"
+ #   path = "/home/pdb/mirror/pub/pdb/data/structures/divided/pdb"
+ #   of   = open("".join([path,"INDEX"]),"r")
+ #   files= ["".join([path,f]).strip() for f in of.readlines()]
+ #   of.close()
+ #   list = []
+ #   for f in files:
+ #     pdb_code = os.path.basename(f)[3:7]
+ #     pdb_file = str(pdb_code) + ".pdb"
 
 
-    pdb_file = "5v7d.pdb"
+ """   pdb_file = "5v7d.pdb"
     pdb_inp = iotbx.pdb.input(file_name=pdb_file)
     model = mmtbx.model.manager(
         model_input=pdb_inp,
@@ -199,7 +198,8 @@ if __name__ == '__main__':
     find_the_atoms_makeing_up_halogen_bond(
        hierarchy=model.get_hierarchy(),
        vdwr=vdwr)
-    find_the_atoms_makeing_up_halogen_bond_test()
+       """
+find_the_atoms_makeing_up_halogen_bond_test()
 
 #    add_H_atoms_into_pad_files(pdb_file)
 
