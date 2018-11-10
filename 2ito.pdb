@@ -1,4 +1,4 @@
-HEADER    TRANSFERASE                             25-MAY-06   2ITO              
+﻿HEADER    TRANSFERASE                             25-MAY-06   2ITO              
 TITLE     CRYSTAL STRUCTURE OF EGFR KINASE DOMAIN G719S MUTATION IN             
 TITLE    2 COMPLEX WITH IRESSA                                                  
 COMPND    MOL_ID: 1;                                                            
@@ -3009,7 +3009,7 @@ HETATM 2443  NAS IRE A2020     -50.876   0.406 -23.183  1.00 89.31           N
 HETATM 2444  CAY IRE A2020     -50.978   0.472 -24.509  1.00 89.06           C  
 HETATM 2445  CAG IRE A2020     -50.925   1.714 -25.133  1.00 89.22           C  
 HETATM 2446  CAX IRE A2020     -51.007   1.806 -26.512  1.00 89.05           C  
-HETATM 2447 CL   IRE A2020     -50.943   3.360 -27.240  1.00 89.85           CL
+HETATM 2447 CL   IRE A2020     -50.943   3.360 -27.240  1.00 89.85          CL
 HETATM 2448  CAW IRE A2020     -51.141   0.667 -27.293  1.00 89.10           C  
 HETATM 2449  FAB IRE A2020     -51.218   0.793 -28.634  1.00 88.75           F  
 HETATM 2450  CAD IRE A2020     -51.189  -0.585 -26.674  1.00 89.45           C  

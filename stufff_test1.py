@@ -7,7 +7,7 @@ from scitbx.array_family import flex
 import mmtbx.model
 from libtbx.utils import null_out
 import os
-
+from libtbx import easy_run
 
 X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
               "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
@@ -21,3 +21,9 @@ for pdb_file in X_bonds_file:
   X_bonds_file[i] = [pdb_file,None]
  i = i + 1
 print X_bonds_file
+
+
+easy_run.call("phenix.geometry_minimization 2yj8.pdb modified.pdb")
+
+
+

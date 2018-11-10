@@ -31,14 +31,17 @@ def find_atom_information(atom):
 # define a function to try finding the halogen bond pairs
 def get_halogen_bond_pairs(hierarchy, vdwr):
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", 'O', "N"]
+  halogen_bond_pairs_atom = ['S','O', "N"]
   for atom_1 in hierarchy.atoms():
+    atom_e1 = atom_1.name.strip("1").upper()
     e1 = atom_1.name.strip().upper()
-    if (e1 in halogens):
+    if (atom_e1 in halogens):
+      print (e1+"find"+"*"*50)
       (copy_ID_1,resname_1,resid_1) = find_atom_information(atom_1)
       for atom_2 in hierarchy.atoms():
+        atom_e2 = atom_2.name.strip("1").upper()
         e2 = atom_2.name.strip().upper()
-        if (e2 in halogen_bond_pairs_atom):
+        if (atom_e2 in halogen_bond_pairs_atom):
           (copy_ID_2, resname_2, resid_2) = find_atom_information(atom_2)
           result = get_rid_of_no_bonding_situations(copy_ID_1,copy_ID_2,resid_1,resid_2)
           if  ((result) ==1 ):
@@ -94,17 +97,19 @@ def prepare_cif_for_pdb_file():
     easy_run.call(" phenix.ready_set %s " %pdb_file)
 # prepare the cif file if the pdb file needs
 def list_cif_and_pdb_file():
- X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
-              "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
- i = 0
- for pdb_file in X_bonds_file:
-  pdb_cif = pdb_file[0:4] + ".ligands.cif"
-  if os.path.exists(pdb_cif):
-    X_bonds_file[i] = [pdb_file, pdb_cif]
-  else:
-    X_bonds_file[i] = [pdb_file,None]
+  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
+                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+  i = 0
+  for pdb_file in X_bonds_file:
+   pdb_file = pdb_file[0:4] + ".updated.pdb"
+   pdb_cif = pdb_file[0:4] + ".ligands.cif"
+   if os.path.exists(pdb_cif):
+     X_bonds_file[i] = [pdb_file, pdb_cif]
+   else:
+     X_bonds_file[i] = [pdb_file,None]
   i = i + 1
- return  X_bonds_file
+  print X_bonds_file
+  return  X_bonds_file
 
 
 
@@ -122,6 +127,7 @@ def halogen_find_test_cif_model(pdb_file):
                               log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
+  print (pdb_file[0:4] +" this pdb_file is ok")
   find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
   print (pdb_file[0:4] +" this pdb_file is ok")
 
@@ -134,6 +140,7 @@ def halogen_find_test_No_cif_model(pdb_file):
                                   log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
+  print (pdb_file[0:4] +" this pdb_file is ok")
   find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr)
   print (pdb_file[0:4] +" this pdb_file is ok")
 
@@ -142,6 +149,7 @@ def find_the_atoms_makeing_up_halogen_bond_test():
     X_bonds_file = list_cif_and_pdb_file()
     for i in range(len(X_bonds_file)) :
       pdb_file = X_bonds_file[i][0]
+      print pdb_file
       if X_bonds_file[i][1] == None:
         halogen_find_test_No_cif_model(pdb_file)
       else:
