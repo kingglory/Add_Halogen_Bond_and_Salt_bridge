@@ -23,7 +23,17 @@ for pdb_file in X_bonds_file:
 print X_bonds_file
 
 
-easy_run.call("phenix.geometry_minimization 2yj8.pdb modified.pdb")
+easy_run.call("phenix.geometry_minimization 2yj8.ligands.cif modified.pdb")
+
+strn = "sef23sd3"
+ss = filter(str.isalpha,strn)
+print ss
 
 
 
+stri = "sdfs''dds"
+
+
+
+stri = stri.replace("'","*")
+print stri
