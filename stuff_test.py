@@ -112,7 +112,7 @@ if __name__ == '__main__':
     )
    # print dir(model)
   #  print dir(hierarchy)
-
+    vdwr = model.get_vdw_radii()
     hierarchy = model.get_hierarchy()
     for atom in hierarchy.atoms():
      e = atom.element.strip().upper()
