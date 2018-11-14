@@ -127,6 +127,7 @@ def get_salt_bridge_atom_pairs(hierarchy):
    for atom_3 in hierarchy.atoms():
     if (atom_1.parent().resname in positive_acide):
      if (atom_3.parent().resname in positive_acide):
+      if (not atom_1.is_in_same_conformer_as(atom_3)): continue
       if(atom_1.parent().parent().resseq==atom_3.parent().parent().resseq) :
         e1 = filter(str.isalpha,atom_1.name.upper() )
         e3 = filter(str.isalpha,atom_3.name.upper() )
@@ -134,9 +135,11 @@ def get_salt_bridge_atom_pairs(hierarchy):
          if e3 == "H":
           if (0.95 < atom_1.distance(atom_3) <1.05):
            for atom_2 in hierarchy.atoms():
+            if (not atom_1.is_in_same_conformer_as(atom_2)): continue
             for atom_4 in hierarchy.atoms():
              if (atom_2.parent().resname in negative_acids):
               if (atom_4.parent().resname in negative_acids):
+               if (not atom_2.is_in_same_conformer_as(atom_4)): continue
                if(atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
                 e2 = filter(str.isalpha,atom_2.name.upper() )
                 e4 = filter(str.isalpha,atom_4.name.upper() )
