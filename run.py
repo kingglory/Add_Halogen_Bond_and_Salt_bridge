@@ -27,6 +27,8 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
            # O2' in pdb file will recognized as O2* ,so replace it
            e1 = e1.replace("'","*")
            e2 = e2.replace("'","*")
+           # 2yj8.pdb  vdwr can't recognize 'OXT'
+           e2 = e2.replace("XT","")
            sum_vdwr = vdwr[e1] + vdwr[e2]
            sum_vdwr_min = sum_vdwr*0.6
            if (sum_vdwr_min-eps < d < sum_vdwr+eps):
