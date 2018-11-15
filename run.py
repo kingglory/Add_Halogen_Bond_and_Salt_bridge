@@ -21,7 +21,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
        if (not atom_1.is_in_same_conformer_as(atom_2)): continue
        if (atom_1.parent().parent().resseq == atom_2.parent().parent().resseq): continue
        if (atom_e2 in halogen_bond_pairs_atom):
-        # O2' in pdb file will recognized as O2* ,so replace it
+        # O2' in 3v04.pdb file will recognized as O2* ,so replace it
         e1 = e1.replace("'","*")
         e2 = e2.replace("'","*")
         # 2yj8.pdb  vdwr can't recognize 'OXT'
