@@ -97,6 +97,6 @@ angle2          =  126.81 degrees
           pdb:4e7r(not sure,coot result is strange)
 
  
-   
-        
+ SALT BRIDGE FILE TEST：
+   TO　PREPARE！！！
 
