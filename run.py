@@ -9,7 +9,7 @@ from libtbx import easy_run
 # define a function to try finding the halogen bond pairs
 def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S","O", "N","CL","BR","I"]
+  halogen_bond_pairs_atom = ["S","O", "N"]
   result = []
   for atom_1 in hierarchy.atoms():
     atom_e1 = filter(str.isalpha,atom_1.element.upper() )
@@ -20,7 +20,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
        e2 = atom_2.name.strip().upper()
        if (not atom_1.is_in_same_conformer_as(atom_2)): continue
        if (atom_1.parent().parent().resseq == atom_2.parent().parent().resseq): continue
-       if (atom_e2 in halogen_bond_pairs_atom):
+       if (atom_e2[0] in halogen_bond_pairs_atom):
         # O2' in 3v04.pdb file will recognized as O2* ,so replace it
         e1 = e1.replace("'","*")
         e2 = e2.replace("'","*")
@@ -43,28 +43,42 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
 
 def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
   result = get_halogen_bond_pairs(hierarchy,vdwr)
+  d_list = []
+  info_result = []
   if (result is not None):
    for i in range(len(result)):
     (d,sum_vdwr,d_x_p,atom_1,atom_2) = result[i]
     for atom_3 in hierarchy.atoms():
-     if (not atom_1.is_in_same_conformer_as(atom_3)): continue
-     if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
-      if (1.3< atom_1.distance(atom_3) <3):
-       angle_1 = (atom_1.angle(atom_2,atom_3,deg = True))
-       if (150 < angle_1 ):
-        for atom_4 in hierarchy.atoms():
-         if (not atom_2.is_in_same_conformer_as(atom_4)): continue
-         if (atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
-          if (1 < atom_2.distance(atom_4) < 3):
-           angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
-           if (90 < angle_2 < 160):
-             print ("**"*50)
-             print ("find halogen bond," 
-                        "the information of the four atoms is :")
-             print (atom_1.id_str(),atom_2.id_str(),
-                    d,sum_vdwr,d_x_p,
-                    angle_1,d_x_p,atom_3.id_str(),atom_4.id_str())
-             print ("**"*50)
+     e3 = filter(str.isalpha, atom_3.element.upper())
+     if e3[0] == "C":
+      if (not atom_1.is_in_same_conformer_as(atom_3)): continue
+      if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
+       if (1.3< atom_1.distance(atom_3) <3):
+        angle_1 = (atom_1.angle(atom_2,atom_3,deg = True))
+        if (140 < angle_1 ):
+         for atom_4 in hierarchy.atoms():
+          e4 = filter(str.isalpha, atom_4.element.upper())
+          if (not atom_2.is_in_same_conformer_as(atom_4)): continue
+          if (atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
+           if e4[0] == "C":
+            if (1 < atom_2.distance(atom_4) < 3):
+             angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
+             if (90 < angle_2 < 160):
+              d_list.append(result[i][0])
+              info_result.append((atom_3.id_str(),atom_1.id_str(),
+                                  atom_2.id_str(), atom_4.id_str(),
+                                  d,sum_vdwr,d_x_p,angle_1,angle_2
+                                  ))
+   d_min = min(d_list)
+   print (d_min)
+   for i in range(len(result)):
+    if (info_result[i][4])==d_min:
+     print ("find halogen bond," "the information of the four atoms is :")
+     print ("**" * 50)
+     print (info_result[i])
+     print info_result[i][4]
+
+
 
 def hierarchy_cif_model(pdb_file):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file,
