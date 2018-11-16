@@ -107,6 +107,15 @@ angle2          =  126.81 degrees
 
 
           pdb:4e7r(not sure,coot result is strange)
+C３７　　Ｈ３０２　ＯＮＷ
+ＣＬ２　　Ｈ３０２　　ＯＮＷ
+Ｏ　　　Ｈ　９８　　　ＡＳＮ
+Ｃ　　　Ｈ　９８　　　ＡＳＮ
+X_bond_distance =  3.２１
+sum_vdwr        =  3.１５
+percentages     =  １．０２
+angle1          =  1５７．８４ degrees
+angle2          =  ８３．８０ degrees
 
  
  SALT BRIDGE FILE TEST：
