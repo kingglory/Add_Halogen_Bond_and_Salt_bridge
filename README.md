@@ -53,6 +53,18 @@ percentages     =  0.9063
 angle1          =  176.33 degrees
 angle2          =  131.67 degrees
 
+
+C1    B100２  K17;
+BR1   B100２  K17;
+O     B 116  VAL;
+C     B 116  VAL;
+X_bond_distance =  2.9２
+sum_vdwr        =  3.28
+percentages     =  0.８９０２
+angle1          =  17３.８６ degrees
+angle2          =  131.８３ degrees
+
+
           pdb:2vag
 CAP    A1482   V25;
 CL2    A1482   V25;
