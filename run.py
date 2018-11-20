@@ -152,12 +152,14 @@ def get_salt_bridge(hierarchy,vdwr,eps = 0.3):
              if (not atom_1.is_in_same_conformer_as(atom_2)): continue
              if (atom_1.parent().parent().resseq != atom_2.parent().parent().resseq):
               e2 = filter(str.isalpha, atom_2.name.upper())
-              if e2[0] == "O":
+              dict_h_bond_lengh = { "O" : 0.98,"N" : 1.45,"F" : 0.92}
+              dict_ionic_bond_lengh={}
+              if e2[0] in dict_h_bond_lengh.keys():
                Length_o_n = 1.46
-               Length_o_h = 0.98
+               h_d = dict_h_bond_lengh[e2[0]]
                sum_vdwr = vdwr[e2[0]] + vdwr[e3]
                if(Length_o_n - 0.1 < atom_1.distance(atom_2) < 4):
-                 if (Length_n_h-0.1< atom_2.distance(atom_3) < sum_vdwr):
+                 if (h_d-eps< atom_2.distance(atom_3) < sum_vdwr ):
                   angle_1 = (atom_3.angle(atom_1, atom_2, deg=True))
                   if(90< angle_1):
                    print ("find the salt bridge ")
