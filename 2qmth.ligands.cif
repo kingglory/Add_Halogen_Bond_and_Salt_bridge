@@ -1,0 +1,146 @@
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+MRD MRD "Unknown                  " ligand 22 8 . 
+#
+data_comp_MRD
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+MRD        C1      C   CH3    0 .         -2.1473   -0.8302    0.1651
+MRD        C2      C   CT     0 .         -0.6201   -0.8302    0.1651
+MRD        O2      O   OH1    0 .         -0.1533   -0.8302    1.4855
+MRD        CM      C   CH3    0 .         -0.1111   -2.0771   -0.5548
+MRD        C3      C   CH2    0 .         -0.1111    0.4167   -0.5548
+MRD        C4      C   CH1    0 .          0.9983    1.0636    0.2706
+MRD        O4      O   OH1    0 .          0.4378    1.7193    1.3732
+MRD        C5      C   CH3    0 .          1.7523    2.0724   -0.5922
+MRD        H1C1    H   HCH3   0 .         -2.5084   -1.7922    0.5080
+MRD        H1C2    H   HCH3   0 .         -2.5084   -0.6462   -0.8396
+MRD        H1C3    H   HCH3   0 .         -2.5084   -0.0522    0.8267
+MRD        H2      H   HOH1   0 .         -0.5000   -1.5790    1.9416
+MRD        HMC1    H   HCH3   0 .         -0.4378   -2.0566   -1.5875
+MRD        HMC2    H   HCH3   0 .          0.9714   -2.0982   -0.5190
+MRD        HMC3    H   HCH3   0 .         -0.5057   -2.9611   -0.0688
+MRD        H3C1    H   HCH2   0 .          0.2774    0.1390   -1.5272
+MRD        H3C2    H   HCH2   0 .         -0.9257    1.1200   -0.6789
+MRD        H4      H   HCH1   0 .          1.6844    0.2994    0.6153
+MRD        HA      H   HOH1   0 .          1.1241    1.9895    1.9606
+MRD        H5C1    H   HCH3   0 .          2.1743    1.5676   -1.4528
+MRD        H5C2    H   HCH3   0 .          1.0692    2.8444   -0.9255
+MRD        H5C3    H   HCH3   0 .          2.5484    2.5213   -0.0106
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+MRD  C1      C2     single        1.527 0.020     1.527
+MRD  C1      H1C1   single        0.970 0.020     1.090
+MRD  C1      H1C2   single        0.970 0.020     1.090
+MRD  C1      H1C3   single        0.970 0.020     1.090
+MRD  C2      O2     single        1.401 0.020     1.401
+MRD  C2      CM     single        1.527 0.020     1.527
+MRD  C2      C3     single        1.527 0.020     1.527
+MRD  O2      H2     single        0.850 0.020     0.980
+MRD  CM      HMC1   single        0.970 0.020     1.090
+MRD  CM      HMC2   single        0.970 0.020     1.090
+MRD  CM      HMC3   single        0.970 0.020     1.090
+MRD  C3      C4     single        1.527 0.020     1.527
+MRD  C3      H3C1   single        0.970 0.020     1.090
+MRD  C3      H3C2   single        0.970 0.020     1.090
+MRD  C4      O4     single        1.400 0.020     1.400
+MRD  C4      C5     single        1.527 0.020     1.527
+MRD  C4      H4     single        0.970 0.020     1.090
+MRD  O4      HA     single        0.850 0.020     0.980
+MRD  C5      H5C1   single        0.970 0.020     1.090
+MRD  C5      H5C2   single        0.970 0.020     1.090
+MRD  C5      H5C3   single        0.970 0.020     1.090
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+MRD  H1C3    C1      H1C2         109.47 3.000
+MRD  H1C3    C1      H1C1         109.47 3.000
+MRD  H1C2    C1      H1C1         109.47 3.000
+MRD  H1C3    C1      C2           109.47 3.000
+MRD  H1C2    C1      C2           109.47 3.000
+MRD  H1C1    C1      C2           109.47 3.000
+MRD  C3      C2      CM           109.47 3.000
+MRD  C3      C2      O2           109.47 3.000
+MRD  CM      C2      O2           109.47 3.000
+MRD  C3      C2      C1           109.47 3.000
+MRD  CM      C2      C1           109.47 3.000
+MRD  O2      C2      C1           109.47 3.000
+MRD  H2      O2      C2           109.48 3.000
+MRD  HMC3    CM      HMC2         109.47 3.000
+MRD  HMC3    CM      HMC1         109.47 3.000
+MRD  HMC2    CM      HMC1         109.47 3.000
+MRD  HMC3    CM      C2           109.47 3.000
+MRD  HMC2    CM      C2           109.48 3.000
+MRD  HMC1    CM      C2           109.47 3.000
+MRD  H3C2    C3      H3C1         109.47 3.000
+MRD  H3C2    C3      C4           109.47 3.000
+MRD  H3C1    C3      C4           109.47 3.000
+MRD  H3C2    C3      C2           109.47 3.000
+MRD  H3C1    C3      C2           109.47 3.000
+MRD  C4      C3      C2           109.47 3.000
+MRD  H4      C4      C5           109.47 3.000
+MRD  H4      C4      O4           109.47 3.000
+MRD  C5      C4      O4           109.47 3.000
+MRD  H4      C4      C3           109.47 3.000
+MRD  C5      C4      C3           109.47 3.000
+MRD  O4      C4      C3           109.47 3.000
+MRD  HA      O4      C4           109.48 3.000
+MRD  H5C3    C5      H5C2         109.47 3.000
+MRD  H5C3    C5      H5C1         109.47 3.000
+MRD  H5C2    C5      H5C1         109.47 3.000
+MRD  H5C3    C5      C4           109.47 3.000
+MRD  H5C2    C5      C4           109.47 3.000
+MRD  H5C1    C5      C4           109.47 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+MRD Var_01        C4      C3      C2      C1           133.83  30.0 3
+MRD Var_02        HMC1    CM      C2      C1            62.33  30.0 3
+MRD Var_03        H1C1    C1      C2      O2           -70.38  30.0 3
+#
+loop_
+_chem_comp_chir.comp_id
+_chem_comp_chir.id
+_chem_comp_chir.atom_id_centre
+_chem_comp_chir.atom_id_1
+_chem_comp_chir.atom_id_2
+_chem_comp_chir.atom_id_3
+_chem_comp_chir.volume_sign
+MRD chir_01  C4      C3      O4      C5     positiv

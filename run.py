@@ -53,6 +53,8 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
     for atom_3 in hierarchy.atoms():
      e3 = filter(str.isalpha, atom_3.element.upper())
      if e3[0] == "C":
+      e1 = atom_1.name.strip().upper()
+      sum_vdwr1 = vdwr[e1] + vdwr[e3]
       if (not atom_1.is_in_same_conformer_as(atom_3)): continue
       if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
        if (1.3< atom_1.distance(atom_3) <3):
@@ -63,6 +65,8 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
           if (not atom_2.is_in_same_conformer_as(atom_4)): continue
           if (atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
            if e4[0] == "C":
+            if (atom_3.distance(atom_2)<1.9):continue
+            if (atom_4.distance(atom_1) < sum_vdwr1): continue
             if (1 < atom_2.distance(atom_4) < 3):
              angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
              if (90 < angle_2 < 160):
@@ -128,7 +132,7 @@ def add_H_atoms_into_pad_files(pdb_file):
 # [asp,glu] are negative,the negative charged atom is O
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
-def get_salt_bridge(hierarchy):
+def get_salt_bridge(hierarchy,vdwr,eps = 0.3):
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
   for atom_1 in hierarchy.atoms():
@@ -139,28 +143,26 @@ def get_salt_bridge(hierarchy):
       if(atom_1.parent().parent().resseq==atom_3.parent().parent().resseq) :
         e1 = filter(str.isalpha,atom_1.name.upper() )
         e3 = filter(str.isalpha,atom_3.name.upper() )
-        if e1 == "N" :
-         if e3 == "H":
-          if (0.95 < atom_1.distance(atom_3) <1.05):
+        if e1[0] == "N" :
+         if e3[0] == "H":
+          Length_n_h =1.01
+          if ( Length_n_h - eps < atom_1.distance(atom_3) < Length_n_h + eps):
            for atom_2 in hierarchy.atoms():
-            if (not atom_1.is_in_same_conformer_as(atom_2)): continue
-            if (atom_1.parent().parent().resseq != atom_2.parent().parent().resseq):
-             for atom_4 in hierarchy.atoms():
-              if (atom_2.parent().resname in negative_acids):
-               if (atom_4.parent().resname in negative_acids):
-                if (not atom_2.is_in_same_conformer_as(atom_4)): continue
-                if(atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
-                 e2 = filter(str.isalpha,atom_2.name.upper() )
-                 e4 = filter(str.isalpha,atom_4.name.upper() )
-                 if e2 == "O" :
-                  if e4 == "C" :
-                   if(1.3 < atom_1.distance(atom_2) < 4):
-                    if (1.3 < atom_2.distance(atom_3) <2.4):
-                     angle = atom_2.angle(atom_3 ,atom_4)
-                     if (170 < angle):
-                      print ("find the salt bridge ")
-                      print (angle,atom_1.id_str(),atom_2.id_str(),
-                             atom_3.id_str(),atom_4.id_str())
+            if (atom_2.parent().resname in negative_acids):
+             if (not atom_1.is_in_same_conformer_as(atom_2)): continue
+             if (atom_1.parent().parent().resseq != atom_2.parent().parent().resseq):
+              e2 = filter(str.isalpha, atom_2.name.upper())
+              if e2[0] == "O":
+               Length_o_n = 1.46
+               Length_o_h = 0.98
+               sum_vdwr = vdwr[e2[0]] + vdwr[e3]
+               if(Length_o_n - 0.1 < atom_1.distance(atom_2) < 4):
+                 if (Length_n_h-0.1< atom_2.distance(atom_3) < sum_vdwr):
+                  angle_1 = (atom_3.angle(atom_1, atom_2, deg=True))
+                  if(90< angle_1):
+                   print ("find the salt bridge ")
+                   print (atom_1.id_str(),atom_2.id_str(),
+                             atom_3.id_str())
 
 
 
