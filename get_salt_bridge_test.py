@@ -8,14 +8,14 @@ from run import get_salt_bridge
 
 # prepare the cif file if the pdb file needs
 def prepare_cif_for_pdb_file():
-  X_bonds_file = []
+  X_bonds_file = ["1ifr.pdb"]
   for pdb_file in X_bonds_file:
     easy_run.call(" phenix.ready_set %s " %pdb_file)
 
 
 # prepare the cif file if the pdb file needs
 def list_cif_and_pdb_file():
- X_bonds_file = []
+ X_bonds_file = ["1ifr.pdb"]
 
  i = 0
  for pdb_file in X_bonds_file:

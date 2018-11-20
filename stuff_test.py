@@ -110,8 +110,7 @@ if __name__ == '__main__':
                  build_grm         = True,
                  restraint_objects = cif_objects
     )
-   # print dir(model)
-  #  print dir(hierarchy)
+
     vdwr = model.get_vdw_radii()
     hierarchy = model.get_hierarchy()
     for atom in hierarchy.atoms():
