@@ -9,6 +9,7 @@ from libtbx import easy_run
 # define a function to try finding the halogen bond pairs
 def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
   halogens = ["CL", "BR", "I", "F"]
+  # less pi in  halogen_bond_pairs_atom!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   halogen_bond_pairs_atom = ["S","O", "N"]
   result = []
   for atom_1 in hierarchy.atoms():
@@ -35,18 +36,6 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
   return result
 
 
-def bond_ideal(model,atom1,atom2):
-    geometry = model.geometry_restraints
-    xray_structure=model.get_xray_structure()
-    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-        sites_cart=xray_structure.scatterers())
-    table = []
-    for proxy in bond_proxies_simple:
-        table.append(atom1.id_str,atom2.id_str,proxy.distance_ideal)
-
-    print table
-
-
 """define a function trying to find the third atoms that can make up the angles
    the third atoms make up covalent bond with the knowed atoms
    the distance of covalent bond is near from 1 angstrom to 3 angstrom!!!
@@ -54,7 +43,7 @@ def bond_ideal(model,atom1,atom2):
     another angle (that the halogen atom is in the middle)is near 180 degrees
 """
 
-def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
+def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
   result = get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3)
   d_list = []
   info_result = []
@@ -66,9 +55,6 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
      if e3[0] == "C":
       if (not atom_1.is_in_same_conformer_as(atom_3)): continue
       if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
-       atom1 = atom_1
-       atom2 = atom_3
-       bond_ideal(model, atom1, atom2)
        if (1.3< atom_1.distance(atom_3) <3):
         angle_1 = (atom_1.angle(atom_2,atom_3,deg = True))
         if (140 < angle_1 ):
@@ -108,7 +94,7 @@ def hierarchy_cif_model(pdb_file):
                               log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
-  return hierarchy, vdwr,model
+  return hierarchy, vdwr
 
 
 def hierarchy_No_cif_model(pdb_file):
@@ -118,7 +104,7 @@ def hierarchy_No_cif_model(pdb_file):
                                   log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
-  return hierarchy,vdwr,model
+  return hierarchy,vdwr
 
 
 #Second step,find salt bridge in one pdb filess

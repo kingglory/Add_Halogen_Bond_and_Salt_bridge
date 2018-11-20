@@ -4,35 +4,52 @@ import os
 from run import hierarchy_No_cif_model
 from run import hierarchy_cif_model
 from run import get_salt_bridge
+"""
+if os.path.exists(pdb_update_file):
+    pdb_file = pdb_update_file
+    if os.path.exists(pdb_cif):
+        SB_bonds_file[i] = [pdb_file, pdb_cif]
+elif os.path.exists(pdb_update_file):
+    pdb_file = pdb_update_file
+    if not os.path.exists(pdb_cif):
+        SB_bonds_file[i] = [pdb_file, None]
+elif not os.path.exists(pdb_update_file):
+    if os.path.exists(pdb_cif):
+        SB_bonds_file[i] = [pdb_file, pdb_cif]
 
+
+"""
 
 # prepare the cif file if the pdb file needs
 def prepare_cif_for_pdb_file():
-  X_bonds_file = []
-  for pdb_file in X_bonds_file:
+  SB_bonds_file = ["1ifr.pdb","1cbr.pdb","1pga.pdb","2qmt.pdb","1mio.pdb","2on8.pdb","2onq.pdb"]
+  for pdb_file in SB_bonds_file:
     easy_run.call(" phenix.ready_set %s " %pdb_file)
 
 
 # prepare the cif file if the pdb file needs
 def list_cif_and_pdb_file():
- X_bonds_file = []
+ SB_bonds_file = ["1ifr.pdb","1cbr.pdb","1pga.pdb","2qmt.pdb","1mio.pdb","2on8.pdb","2onq.pdb"]
 
  i = 0
- for pdb_file in X_bonds_file:
-  pdb_file = pdb_file[0:4] + ".updated.pdb"
+ for pdb_file in SB_bonds_file:
+  pdb_update_file = pdb_file[0:4] + ".updated.pdb"
   pdb_cif = pdb_file[0:4] + ".ligands.cif"
   if os.path.exists(pdb_cif):
-    X_bonds_file[i] = [pdb_file, pdb_cif]
+      SB_bonds_file[i] = [pdb_update_file, pdb_cif]
   else:
-    X_bonds_file[i] = [pdb_file,None]
+     SB_bonds_file[i] = [pdb_file,None]
   i = i + 1
- return  X_bonds_file
+ return  SB_bonds_file
 
 def find_the_atoms_makeing_up_halogen_bond_test():
-    X_bonds_file = list_cif_and_pdb_file()
-    for i in range(len(X_bonds_file)) :
-      pdb_file = X_bonds_file[i][0]
-      if X_bonds_file[i][1] == None:
+    SB_bonds_file = list_cif_and_pdb_file()
+    print SB_bonds_file
+    for i in range(len(SB_bonds_file)) :
+      pdb_file = SB_bonds_file[i][0]
+      pdb_cif  = SB_bonds_file[i][1]
+      print pdb_file,pdb_cif,"#"*50
+      if pdb_cif  == None:
         hierarchy, vdwr=hierarchy_No_cif_model(pdb_file)
         get_salt_bridge(hierarchy)
         print (pdb_file[0:4] + " this pdb_file is ok")
@@ -40,3 +57,9 @@ def find_the_atoms_makeing_up_halogen_bond_test():
         hierarchy, vdwr = hierarchy_cif_model(pdb_file)
         get_salt_bridge(hierarchy)
         print (pdb_file[0:4] + " this pdb_file_cif is ok")
+
+
+
+if __name__ == '__main__':
+  #  prepare_cif_for_pdb_file()
+  find_the_atoms_makeing_up_halogen_bond_test()

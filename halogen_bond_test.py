@@ -34,12 +34,12 @@ def find_the_atoms_makeing_up_halogen_bond_test():
     for i in range(len(X_bonds_file)) :
       pdb_file = X_bonds_file[i][0]
       if X_bonds_file[i][1] == None:
-        hierarchy, vdwr,module=hierarchy_No_cif_model(pdb_file)
-        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr,module)
+        hierarchy, vdwr=hierarchy_No_cif_model(pdb_file)
+        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr)
         print (pdb_file[0:4] + " this pdb_file is ok")
       else:
-        hierarchy, vdwr,module = hierarchy_cif_model(pdb_file)
-        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr,module)
+        hierarchy, vdwr = hierarchy_cif_model(pdb_file)
+        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr)
         print (pdb_file[0:4] + " this pdb_file_cif is ok")
 
 
