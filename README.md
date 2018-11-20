@@ -119,5 +119,12 @@ angle2          =  ８３．８０ degrees
 
  
  SALT BRIDGE FILE TEST：
-   TO　PREPARE！！！
-
+ ["1ifr.pdb","1cbr.pdb","1pga.pdb","2qmt.pdb","1mio.pdb","2on8.pdb","2onq.pdb"]
+   1CBR.pdb
+   Arg 131 N 
+   Retinoic Acid  O
+   bond_N_O = 3.58
+   1CBR.pdb
+   58 N 55 o
+   12 n 23 o
+   39 n 35 o
