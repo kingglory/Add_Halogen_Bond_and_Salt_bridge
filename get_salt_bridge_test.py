@@ -26,11 +26,10 @@ def prepare_cif_for_pdb_file():
 # prepare the cif file if the pdb file needs
 def list_cif_and_pdb_file():
  SB_bonds_file = ["1ifrh.pdb","1cbrh.pdb","1pgah.pdb","1eq5.pdb","2qmth.pdb","1mioh.pdb","2on8h.pdb","2onqh.pdb"]
-
  i = 0
  for pdb_file in SB_bonds_file:
-  pdb_update_file = pdb_file[0:4] + ".updated.pdb"
-  pdb_cif = pdb_file[0:4] + ".ligands.cif"
+  pdb_update_file = pdb_file[0:5] + ".updated.pdb"
+  pdb_cif = pdb_file[0:5] + ".ligands.cif"
   if os.path.exists(pdb_cif):
     SB_bonds_file[i] = [pdb_update_file, pdb_cif]
   else:
