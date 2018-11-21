@@ -1,7 +1,10 @@
 # Find_Halogen_Bond_and_Salt_bridge
 The project is to write a CCTBX based Python program that would take a PDB file with a protein structure and find all halogen bonds and salt bridges in the structure (meaning finding all pairs of amino-acid residues participating in said interactions). 
 
+
 FILE_DECRIBE:
+
+
 run.py                   is the main scripe to implement the functions of Finding halogebonds and salt bridges
 get_salt_bridge_test.py  is the test file for get salt bridges function
 halogen_bond_test.py     is the test file for get halogen donds function
@@ -10,7 +13,12 @@ THe others               are the test related files
 
 
 HALOGEN BONGS FILE TEST:
+
+
 ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb", "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
+
+
+
           pdb:5v7d
 CE2    A  18  BYR;
 BR     A  18  BYR;
