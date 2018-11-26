@@ -34,13 +34,13 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
           d_x_p = d/sum_vdwr
           result.append([d,sum_vdwr,d_x_p,atom_1,atom_2])
   return result
-
+# test。。。。。。。。。。
 
 """define a function trying to find the third atoms that can make up the angles
    the third atoms make up covalent bond with the knowed atoms
    the distance of covalent bond is near from 1 angstrom to 3 angstrom!!!
    one of the angle (that the halogen atom is at side)is near 120 degrees
-    another angle (that the halogen atom is in the middle)is near 180 degrees
+   another angle (that the halogen atom is in the middle)is near 180 degrees
 """
 
 def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
