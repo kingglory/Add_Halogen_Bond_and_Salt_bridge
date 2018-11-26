@@ -34,7 +34,6 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
           d_x_p = d/sum_vdwr
           result.append([d,sum_vdwr,d_x_p,atom_1,atom_2])
   return result
-# test。。。。。。。。。。
 
 """define a function trying to find the third atoms that can make up the angles
    the third atoms make up covalent bond with the knowed atoms
@@ -43,7 +42,7 @@ def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
    another angle (that the halogen atom is in the middle)is near 180 degrees
 """
 
-def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
+def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
   result = get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3)
   d_list = []
   info_result = []
@@ -51,9 +50,12 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
    for i in range(len(result)):
     (d,sum_vdwr,d_x_p,atom_1,atom_2) = result[i]
     for atom_3 in hierarchy.atoms():
-     e3 = filter(str.isalpha, atom_3.element.upper())
-     if e3[0] == "C":
+     atom_3_e = ["C","P","S"]
+     atom_e3 = filter(str.isalpha, atom_3.element.upper())
+     if atom_e3[0] in  atom_3_e :
+      e3 = atom_3.name.strip().upper()
       e1 = atom_1.name.strip().upper()
+      e3 = e3.replace("'", "*")
       sum_vdwr1 = vdwr[e1] + vdwr[e3]
       if (not atom_1.is_in_same_conformer_as(atom_3)): continue
       if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
@@ -71,18 +73,36 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr):
              angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
              if (90 < angle_2 < 160):
               d_list.append(result[i][0])
-              info_result.append((atom_3.id_str(),atom_1.id_str(),
-                                  atom_2.id_str(), atom_4.id_str(),
-                                  d,sum_vdwr,d_x_p,angle_1,angle_2
-                                  ))
+              info_result.append([atom_3,atom_1,
+                                  atom_2, atom_4,
+                                  d,sum_vdwr,d_x_p,
+                                  angle_1,angle_2
+                                  ])
    d_min = min(d_list)
    print (d_min)
-   for i in range(len(result)):
-    if (info_result[i][4])==d_min:
-     print ("find halogen bond," "the information of the four atoms is :")
-     print ("**" * 50)
-     print (info_result[i])
-     print info_result[i][4]
+   for i in range(len(info_result)):
+    if (d_min is not None):
+     if (info_result[i][4])==d_min:
+      print (atom_1.id_str(),atom_2.id_str())
+      geometry = model.get_restraints_manager()
+      bond_proxies_simple,asu = geometry.geometry.get_all_bond_proxies(
+                                sites_cart = model.get_sites_cart())
+      for proxy in bond_proxies_simple:
+        i_seq,j_seq = proxy.i_seqs
+        h_seq,k_seq = proxy.i_seqs
+        atom_1 = info_result[i][1]
+        atom_3 = info_result[i][0]
+        atom_2 = info_result[i][2]
+        atom_4 = info_result[i][3]
+        if (atom_1.i_seq in proxy.i_seqs):
+         if (atom_1.i_seq == i_seq):
+          if (atom_3.i_seq == j_seq):
+            if (atom_2.i_seq in proxy.i_seqs):
+             if (atom_2.i_seq == h_seq):
+              if (atom_4.i_seq == k_seq):
+                print (info_result[i])
+
+
 
 
 
@@ -98,7 +118,7 @@ def hierarchy_cif_model(pdb_file):
                               log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
-  return hierarchy, vdwr
+  return hierarchy, vdwr,model
 
 
 def hierarchy_No_cif_model(pdb_file):
@@ -108,7 +128,7 @@ def hierarchy_No_cif_model(pdb_file):
                                   log=null_out())
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
-  return hierarchy,vdwr
+  return hierarchy,vdwr,model
 
 
 #Second step,find salt bridge in one pdb filess
