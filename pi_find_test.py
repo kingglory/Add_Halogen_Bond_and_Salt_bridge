@@ -39,5 +39,5 @@ def find_pi_test():
         print (pdb_file[0:4] + " this pdb_file_cif is ok")
 
 if __name__ == '__main__':
- #   prepare_cif_for_pdb_file()
-    find_pi_test()
+   #prepare_cif_for_pdb_file()
+   find_pi_test()

@@ -14,21 +14,21 @@ def add_H_atoms_into_pad_files():
       easy_run.call("phenix.reduce %s > %s " % (pdb_file,  add_h_pdb_file))
       
 def prepare_cif_for_pdb_file():
-  X_bonds_file = ["5v7dh.pdb","2h79h.pdb", "2itoh.pdb", "2oxyh.pdb","2vagh.pdb",
-                  "2yj8h.pdb", "3v04h.pdb", "4e7rh.pdb"]
+  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
+                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
   for pdb_file in X_bonds_file:
     easy_run.call(" phenix.ready_set %s " %pdb_file)
 
 
 # prepare the cif file if the pdb file needs
 def list_cif_and_pdb_file():
- X_bonds_file = ["5v7dh.pdb","2h79h.pdb", "2itoh.pdb", "2oxyh.pdb","2vagh.pdb",
-                  "2yj8h.pdb", "3v04h.pdb", "4e7rh.pdb"]
+ X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
+                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
 
  i = 0
  for pdb_file in X_bonds_file:
-  pdb_file = pdb_file[0:5] + ".updated.pdb"
-  pdb_cif = pdb_file[0:5] + ".ligands.cif"
+  pdb_file = pdb_file[0:4] + ".updated.pdb"
+  pdb_cif = pdb_file[0:4] + ".ligands.cif"
   if os.path.exists(pdb_cif):
     X_bonds_file[i] = [pdb_file, pdb_cif]
   else:
