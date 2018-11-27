@@ -7,6 +7,17 @@ from libtbx.utils import null_out
 from libtbx import easy_run
 # first step write codes to find halogen bond in one pdb file
 # define a function to try finding the halogen bond pairs
+def find_water(hierarchy):
+    get_class = iotbx.pdb.common_residue_names_get_class
+    for model in hierarchy.models():
+        for chain in model.chains():
+            for rg in chain.residue_groups():
+                for ag in rg.atom_groups():
+                    if (get_class(ag.resname)=="water"):
+                        print  ("water here :",ag)
+                        return ag
+
+
 def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
   halogens = ["CL", "BR", "I", "F"]
   # less pi in  halogen_bond_pairs_atom!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -58,6 +69,7 @@ def ideal_distance(atom_1,atom_2,model):
 
 def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
   result = get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3)
+  find_water(hierarchy)
   d_list = []
   info_result = []
   if (result is not None):
@@ -139,8 +151,9 @@ def hierarchy_No_cif_model(pdb_file):
 
 #Second step,find salt bridge in one pdb filess
 
-Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR","ASN","GLU","CYS","SEC",
-               "GLY","PRO","ALA","VAL","ILE","LEU","MET","PHE","TYR","TRP"]
+Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR",
+               "ASN","GLU","CYS","SEC","GLY","PRO","ALA",
+               "VAL","ILE","LEU","MET","PHE","TYR","TRP"]
 
 
 def creat_new_filename(pdb_file):
@@ -204,40 +217,48 @@ def get_salt_bridge(hierarchy,vdwr,model,eps = 0.3):
                              atom_3.id_str())
 
 def define_pi_system(hierarchy,vdwr,model,eps = 5):
+ pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
  for atom_1 in hierarchy.atoms():
   for atom_2 in hierarchy.atoms():
    for atom_3 in hierarchy.atoms():
     for atom_4 in hierarchy.atoms():
      for atom_5 in hierarchy.atoms():
       for atom_6 in hierarchy.atoms():
-       if (not atom_1.is_in_same_conformer_as(atom_2)): continue
-       if (not atom_1.is_in_same_conformer_as(atom_3)): continue
-       if (not atom_1.is_in_same_conformer_as(atom_4)): continue
-       if (not atom_1.is_in_same_conformer_as(atom_5)): continue
-       if (not atom_1.is_in_same_conformer_as(atom_6)): continue
-       result_12 = ideal_distance(atom_1, atom_2, model)
-       if result_12 is None:continue
-       result_23 = ideal_distance(atom_2, atom_3, model)
-       if result_23 is None: continue
-       result_34 = ideal_distance(atom_3, atom_4, model)
-       if result_34 is None: continue
-       result_45 = ideal_distance(atom_4, atom_5, model)
-       if result_45 is None: continue
-       result_56 = ideal_distance(atom_5, atom_6, model)
-       if result_56 is None: continue
-       angle1 = atom_1.angle(atom_2 , atom_6, degree = True)
-       angle2 = atom_2.angle(atom_1 , atom_3, degree = True)
-       angle3 = atom_3.angle(atom_2 , atom_4, degree = True)
-       angle4 = atom_4.angle(atom_3 , atom_5, degree = True)
-       angle5 = atom_5.angle(atom_4 , atom_6, degree = True)
-       angle6 = atom_6.angle(atom_5 , atom_1, degree = True)
-       if (abs(angle1 - 120) > eps): continue
-       if (abs(angle2 - 120) > eps): continue
-       if (abs(angle3 - 120) > eps): continue
-       if (abs(angle4 - 120) > eps): continue
-       if (abs(angle5 - 120) > eps): continue
-       if (abs(angle6 - 120) > eps): continue
-       print (atom_1 ,atom_2 ,atom_3 ,atom_4 ,atom_5 ,atom_6 )
+       if (atom_1.parent().resname==
+           atom_2.parent().resname==
+           atom_3.parent().resname==
+           atom_4.parent().resname==
+           atom_5.parent().resname==
+           atom_6.parent().resname):
+        if (not atom_1.parent().resname in pi_amino_acids): continue
+        if (not atom_1.is_in_same_conformer_as(atom_2)): continue
+        if (not atom_1.is_in_same_conformer_as(atom_3)): continue
+        if (not atom_1.is_in_same_conformer_as(atom_4)): continue
+        if (not atom_1.is_in_same_conformer_as(atom_5)): continue
+        if (not atom_1.is_in_same_conformer_as(atom_6)): continue
+        result_12 = ideal_distance(atom_1, atom_2, model)
+        if result_12 is None:continue
+        result_23 = ideal_distance(atom_2, atom_3, model)
+        if result_23 is None: continue
+        result_34 = ideal_distance(atom_3, atom_4, model)
+        if result_34 is None: continue
+        result_45 = ideal_distance(atom_4, atom_5, model)
+        if result_45 is None: continue
+        result_56 = ideal_distance(atom_5, atom_6, model)
+        if result_56 is None: continue
+        angle1 = atom_1.angle(atom_2 , atom_6, degree = True)
+        angle2 = atom_2.angle(atom_1 , atom_3, degree = True)
+        angle3 = atom_3.angle(atom_2 , atom_4, degree = True)
+        angle4 = atom_4.angle(atom_3 , atom_5, degree = True)
+        angle5 = atom_5.angle(atom_4 , atom_6, degree = True)
+        angle6 = atom_6.angle(atom_5 , atom_1, degree = True)
+        if (abs(angle1 - 120) > eps): continue
+        if (abs(angle2 - 120) > eps): continue
+        if (abs(angle3 - 120) > eps): continue
+        if (abs(angle4 - 120) > eps): continue
+        if (abs(angle5 - 120) > eps): continue
+        if (abs(angle6 - 120) > eps): continue
+        print (atom_1 ,atom_2 ,atom_3 ,atom_4 ,atom_5 ,atom_6 )
 
 
 

@@ -1,0 +1,254 @@
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+V25 V25 "Unknown                  " ligand 35 22 . 
+#
+data_comp_V25
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+V25        CAA     C   CH3    0 .         -1.9053    0.5853   -4.8855
+V25        CAL     C   CH2    0 .         -1.6691   -0.3695   -3.7167
+V25        OAM     O   O2     0 .         -0.9569    0.2922   -2.7105
+V25        CAN     C   C      0 .         -0.6644   -0.5101   -1.6020
+V25        OAE     O   O      0 .         -0.9178   -1.6675   -1.6249
+V25        CAS     C   CR5    0 .         -0.0211    0.1069   -0.3608
+V25        NAV     N   NR5    0 .         -0.4002    1.2403    0.2823
+V25        CAB     C   CH3    0 .         -0.3893    2.6109   -0.1967
+V25        CAU     C   CR56   0 .         -0.1665    1.0675    1.6251
+V25        CAQ     C   CR6    0 .         -0.3816    1.9057    2.7333
+V25        CL1     CL  CL     0 .         -1.0590    3.4369    3.3520
+V25        CAP     C   CR6    0 .         -0.0600    1.4660    4.0082
+V25        CL2     CL  CL     0 .         -0.2533    2.1481    5.6463
+V25        CAJ     C   CR16   0 .          0.4737    0.1995    4.1907
+V25        CAK     C   CR16   0 .          0.6860   -0.6275    3.0984
+V25        CAT     C   CR56   0 .          0.3601   -0.1820    1.8052
+V25        CAR     C   CR5    0 .          0.4519   -0.7798    0.5805
+V25        CAO     C   C      0 .          1.8593   -1.3745    0.5738
+V25        CAH     C   CSP    0 .          3.0674   -0.4808    0.8483
+V25        NAC     N   NS     0 .          3.9631    0.1819    1.0518
+V25        CAI     C   C1     0 .          2.0309   -2.6577    0.3315
+V25        NAD     N   NH2    0 .          0.8831   -3.5067    0.0709
+V25        HAA1    H   HCH3   0 .         -0.9502    0.8804   -5.3107
+V25        HAA2    H   HCH3   0 .         -2.4322    1.4670   -4.5320
+V25        HAA3    H   HCH3   0 .         -2.5016    0.0874   -5.6452
+V25        HAL1    H   HCH2   0 .         -2.6238   -0.7037   -3.3241
+V25        HAL2    H   HCH2   0 .         -1.0991   -1.2266   -4.0594
+V25        HAB1    H   HCH3   0 .         -1.4040    2.9982   -0.2091
+V25        HAB2    H   HCH3   0 .          0.2227    3.2200    0.4624
+V25        HAB3    H   HCH3   0 .          0.0216    2.6399   -1.2017
+V25        HAJ     H   HCR6   0 .          0.7249   -0.1440    5.1873
+V25        HAK     H   HCR6   0 .          1.1031   -1.6170    3.2413
+V25        HAI     H   H      0 .          3.0286   -3.0794    0.3267
+V25        HAD1    H   HNH2   0 .          0.2351   -3.7125    0.8064
+V25        HAD2    H   HNH2   0 .          0.7439   -3.8947   -0.8429
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+V25  CAA     CAL    single        1.528 0.020     1.528
+V25  CAL     OAM    single        1.399 0.020     1.399
+V25  OAM     CAN    single        1.399 0.020     1.399
+V25  CAN     OAE    double        1.185 0.020     1.185
+V25  CAN     CAS    single        1.528 0.020     1.528
+V25  CAS     NAV    aromatic      1.357 0.020     1.357
+V25  CAS     CAR    aromatic      1.377 0.020     1.377
+V25  NAV     CAB    single        1.452 0.020     1.452
+V25  NAV     CAU    aromatic      1.374 0.020     1.374
+V25  CAU     CAQ    aromatic      1.406 0.020     1.406
+V25  CAU     CAT    aromatic      1.368 0.020     1.368
+V25  CAQ     CL1    single        1.785 0.020     1.785
+V25  CAQ     CAP    aromatic      1.386 0.020     1.386
+V25  CAP     CL2    single        1.785 0.020     1.785
+V25  CAP     CAJ    aromatic      1.386 0.020     1.386
+V25  CAJ     CAK    aromatic      1.386 0.020     1.386
+V25  CAK     CAT    aromatic      1.406 0.020     1.406
+V25  CAT     CAR    aromatic      1.366 0.020     1.366
+V25  CAR     CAO    single        1.528 0.020     1.528
+V25  CAO     CAH    single        1.528 0.020     1.528
+V25  CAO     CAI    double        1.317 0.020     1.317
+V25  CAH     NAC    triple        1.133 0.020     1.133
+V25  CAI     NAD    single        1.451 0.020     1.451
+V25  CAA     HAA1   single        0.970 0.020     1.090
+V25  CAA     HAA2   single        0.970 0.020     1.090
+V25  CAA     HAA3   single        0.970 0.020     1.090
+V25  CAL     HAL1   single        0.970 0.020     1.090
+V25  CAL     HAL2   single        0.970 0.020     1.090
+V25  CAB     HAB1   single        0.970 0.020     1.090
+V25  CAB     HAB2   single        0.970 0.020     1.090
+V25  CAB     HAB3   single        0.970 0.020     1.090
+V25  CAJ     HAJ    single        0.930 0.020     1.080
+V25  CAK     HAK    single        0.930 0.020     1.080
+V25  CAI     HAI    single        0.930 0.020     1.080
+V25  NAD     HAD1   single        0.860 0.020     1.020
+V25  NAD     HAD2   single        0.860 0.020     1.020
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+V25  HAA3    CAA     HAA2         109.47 3.000
+V25  HAA3    CAA     HAA1         109.47 3.000
+V25  HAA2    CAA     HAA1         109.47 3.000
+V25  HAA3    CAA     CAL          109.47 3.000
+V25  HAA2    CAA     CAL          109.47 3.000
+V25  HAA1    CAA     CAL          109.47 3.000
+V25  HAL2    CAL     HAL1         109.47 3.000
+V25  HAL2    CAL     OAM          109.47 3.000
+V25  HAL1    CAL     OAM          109.47 3.000
+V25  HAL2    CAL     CAA          109.47 3.000
+V25  HAL1    CAL     CAA          109.47 3.000
+V25  OAM     CAL     CAA          109.47 3.000
+V25  CAN     OAM     CAL          113.89 3.000
+V25  CAS     CAN     OAE          120.00 3.000
+V25  CAS     CAN     OAM          120.00 3.000
+V25  OAE     CAN     OAM          120.00 3.000
+V25  CAR     CAS     NAV          108.04 3.000
+V25  CAR     CAS     CAN          116.10 3.000
+V25  NAV     CAS     CAN          127.19 3.000
+V25  CAU     NAV     CAB          116.10 3.000
+V25  CAU     NAV     CAS          108.09 3.000
+V25  CAB     NAV     CAS          129.04 3.000
+V25  HAB3    CAB     HAB2         109.47 3.000
+V25  HAB3    CAB     HAB1         109.47 3.000
+V25  HAB2    CAB     HAB1         109.47 3.000
+V25  HAB3    CAB     NAV          109.47 3.000
+V25  HAB2    CAB     NAV          109.47 3.000
+V25  HAB1    CAB     NAV          109.47 3.000
+V25  CAT     CAU     CAQ          119.98 3.000
+V25  CAT     CAU     NAV          108.00 3.000
+V25  CAQ     CAU     NAV          132.01 3.000
+V25  CAP     CAQ     CL1           92.37 3.000
+V25  CAP     CAQ     CAU          120.01 3.000
+V25  CL1     CAQ     CAU          147.42 3.000
+V25  CAJ     CAP     CL2          105.66 3.000
+V25  CAJ     CAP     CAQ          120.01 3.000
+V25  CL2     CAP     CAQ          134.23 3.000
+V25  HAJ     CAJ     CAK          120.00 3.000
+V25  HAJ     CAJ     CAP          120.00 3.000
+V25  CAK     CAJ     CAP          120.01 3.000
+V25  HAK     CAK     CAT          120.00 3.000
+V25  HAK     CAK     CAJ          120.00 3.000
+V25  CAT     CAK     CAJ          120.01 3.000
+V25  CAR     CAT     CAK          132.10 3.000
+V25  CAR     CAT     CAU          107.91 3.000
+V25  CAK     CAT     CAU          119.98 3.000
+V25  CAO     CAR     CAT          103.66 3.000
+V25  CAO     CAR     CAS          124.34 3.000
+V25  CAT     CAR     CAS          107.95 3.000
+V25  CAI     CAO     CAH          120.00 3.000
+V25  CAI     CAO     CAR          120.00 3.000
+V25  CAH     CAO     CAR          120.00 3.000
+V25  NAC     CAH     CAO          180.00 3.000
+V25  HAI     CAI     NAD          120.00 3.000
+V25  HAI     CAI     CAO          120.00 3.000
+V25  NAD     CAI     CAO          120.00 3.000
+V25  HAD2    NAD     HAD1         120.00 3.000
+V25  HAD2    NAD     CAI          120.00 3.000
+V25  HAD1    NAD     CAI          120.00 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+V25 CONST_01      CAQ     CAU     NAV     CAS         -179.40   0.0 0
+V25 CONST_02      CAT     CAU     NAV     CAS            0.00   0.0 0
+V25 CONST_03      CAU     CAT     CAR     CAS            0.00   0.0 0
+V25 CONST_04      CAK     CAT     CAR     CAS          179.40   0.0 0
+V25 CONST_05      CAT     CAR     CAS     NAV            0.00   0.0 0
+V25 CONST_06      CAP     CAQ     CAU     NAV          179.34   0.0 0
+V25 CONST_07      CAK     CAT     CAU     NAV         -179.48   0.0 0
+V25 CONST_08      CAR     CAT     CAU     NAV           -0.00   0.0 0
+V25 CONST_09      CAR     CAS     NAV     CAU           -0.00   0.0 0
+V25 CONST_10      CAJ     CAP     CAQ     CAU            0.00   0.0 0
+V25 CONST_11      CAJ     CAK     CAT     CAU            0.00   0.0 0
+V25 CONST_12      CAK     CAT     CAU     CAQ           -0.00   0.0 0
+V25 CONST_13      CAR     CAT     CAU     CAQ          179.48   0.0 0
+V25 CONST_14      CAK     CAJ     CAP     CAQ           -0.00   0.0 0
+V25 CONST_15      CAT     CAU     CAQ     CAP            0.00   0.0 0
+V25 CONST_16      CAT     CAK     CAJ     CAP            0.00   0.0 0
+V25 CONST_17      CAR     CAT     CAK     CAJ         -179.34   0.0 0
+V25 CONST_18      CAU     NAV     CAS     CAN          145.89   0.0 0
+V25 CONST_19      CAT     CAR     CAS     CAN         -150.17   0.0 0
+V25 CONST_20      CAO     CAR     CAS     NAV         -121.46   0.0 0
+V25 CONST_21      CL1     CAQ     CAU     NAV            6.31   0.0 0
+V25 CONST_22      CAR     CAS     NAV     CAB          149.41   0.0 0
+V25 CONST_23      CAQ     CAU     NAV     CAB           26.71   0.0 0
+V25 CONST_24      CAT     CAU     NAV     CAB         -153.89   0.0 0
+V25 CONST_25      CL2     CAP     CAQ     CAU         -175.82   0.0 0
+V25 CONST_26      CAO     CAR     CAT     CAU          133.54   0.0 0
+V25 CONST_27      CAT     CAU     CAQ     CL1         -173.03   0.0 0
+V25 CONST_28      CAJ     CAP     CAQ     CL1          176.25   0.0 0
+V25 CONST_29      CAK     CAJ     CAP     CL2          176.89   0.0 0
+V25 CONST_30      CAO     CAR     CAT     CAK          -47.06   0.0 0
+V25 CONST_31      HAK     CAK     CAT     CAU         -180.00   0.0 0
+V25 CONST_32      HAJ     CAJ     CAP     CAQ         -180.00   0.0 0
+V25 Var_01        NAV     CAS     CAN     OAM           47.74  30.0 2
+V25 Var_02        CAH     CAO     CAR     CAS           68.32  30.0 2
+V25 Var_03        HAB1    CAB     NAV     CAS          117.96  30.0 2
+V25 Var_04        NAD     CAI     CAO     CAR            0.00   0.0 2
+V25 Var_05        CAS     CAN     OAM     CAL         -173.61  30.0 3
+V25 Var_06        HAA1    CAA     CAL     OAM           62.85  30.0 3
+V25 Var_07        HAL1    CAL     OAM     CAN           61.28  30.0 1
+V25 Var_08        HAD1    NAD     CAI     CAO          -68.97  30.0 2
+#
+loop_
+_chem_comp_plane_atom.comp_id
+_chem_comp_plane_atom.plane_id
+_chem_comp_plane_atom.atom_id
+_chem_comp_plane_atom.dist_esd
+V25 plan-1  CAN    0.020
+V25 plan-1  CAS    0.020
+V25 plan-1  NAV    0.020
+V25 plan-1  CAB    0.020
+V25 plan-1  CAU    0.020
+V25 plan-1  CAQ    0.020
+V25 plan-1  CL1    0.020
+V25 plan-1  CAP    0.020
+V25 plan-1  CL2    0.020
+V25 plan-1  CAJ    0.020
+V25 plan-1  CAK    0.020
+V25 plan-1  CAT    0.020
+V25 plan-1  CAR    0.020
+V25 plan-1  CAO    0.020
+V25 plan-1  HAJ    0.020
+V25 plan-1  HAK    0.020
+V25 plan-2  OAM    0.020
+V25 plan-2  CAN    0.020
+V25 plan-2  OAE    0.020
+V25 plan-2  CAS    0.020
+V25 plan-3  CAR    0.020
+V25 plan-3  CAO    0.020
+V25 plan-3  CAH    0.020
+V25 plan-3  CAI    0.020
+V25 plan-3  NAD    0.020
+V25 plan-3  HAI    0.020
