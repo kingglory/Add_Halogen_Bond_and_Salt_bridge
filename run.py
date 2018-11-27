@@ -113,11 +113,19 @@ def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
       atom_3 = info_result[i][0]
       atom_2 = info_result[i][2]
       atom_4 = info_result[i][3]
-      print (atom_1.id_str(), atom_2.id_str())
+      print ("old result:","**"*50)
+      print (atom_3.id_str(),atom_1.id_str(),
+             atom_2.id_str(),atom_4.id_str(),
+             d,sum_vdwr,d_x_p,
+             angle_1,angle_2)
       result1 = ideal_distance(atom_1, atom_3, model)
+      print ("new result 0 :", "$$" * 50)
+      print (result1)
       if result1 is None:continue
+      print ("new result 1 :","$$"*50)
       result2 = ideal_distance(atom_2, atom_4, model)
       if result2 is None:continue
+      print ("new result 2 :","$$"*50)
       print (info_result[i])
 
 
