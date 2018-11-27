@@ -5,7 +5,7 @@ from run import hierarchy_No_cif_model
 from run import hierarchy_cif_model
 from run import find_water
 
-
+# didn't find water containing pdb files,so just useing the follow files to try,then didn't find water,work hard!!!
 
 def add_H_atoms_into_pad_files():
   W_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb"]
