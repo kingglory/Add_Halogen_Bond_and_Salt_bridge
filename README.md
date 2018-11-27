@@ -144,3 +144,6 @@ angle2          =  ８３．８０ degrees
    12 n 23 o
    39 n 35 o
    
+  PI FILE TEST :
+  ["1c14.pdb","3Az9.pdb"]
+   
