@@ -46,11 +46,11 @@ def find_the_atoms_makeing_up_halogen_bond_test():
       print (pdb_file,pdb_cif,"#"*500)
       if pdb_cif  == None:
         hierarchy, vdwr,model=hierarchy_No_cif_model(pdb_file)
-        get_salt_bridge(hierarchy,vdwr,eps = 0.3)
+        get_salt_bridge(hierarchy,vdwr,model,eps = 0.3)
         print (pdb_file[0:4] + " this pdb_file is ok")
       else:
         hierarchy, vdwr,model = hierarchy_cif_model(pdb_file)
-        get_salt_bridge(hierarchy,vdwr,eps = 0.3)
+        get_salt_bridge(hierarchy,vdwr,model,eps = 0.3)
         print (pdb_file[0:4] + " this pdb_file_cif is ok")
 
 
