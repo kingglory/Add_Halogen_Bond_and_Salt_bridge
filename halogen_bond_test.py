@@ -55,5 +55,5 @@ def find_the_atoms_makeing_up_halogen_bond_test():
 
 if __name__ == '__main__':
     #add_H_atoms_into_pad_files()
-    prepare_cif_for_pdb_file()
-    #find_the_atoms_makeing_up_halogen_bond_test()
+    #prepare_cif_for_pdb_file()
+    find_the_atoms_makeing_up_halogen_bond_test()
