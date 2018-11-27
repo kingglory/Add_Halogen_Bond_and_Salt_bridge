@@ -231,7 +231,7 @@ def define_pi_system(hierarchy,vdwr,model,eps = 5):
        angle4 = atom_4.angle(atom_3 , atom_5, degree = True)
        angle5 = atom_5.angle(atom_4 , atom_6, degree = True)
        angle6 = atom_6.angle(atom_5 , atom_1, degree = True)
-       if (abs(angle1 - 120) > eps):continue
+       if (abs(angle1 - 120) > eps): continue
        if (abs(angle2 - 120) > eps): continue
        if (abs(angle3 - 120) > eps): continue
        if (abs(angle4 - 120) > eps): continue
