@@ -35,7 +35,7 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", "O", "N"]
+  halogen_bond_pairs_atom = ["S", "O", "N"] #XXX Add halogens here
   result = []
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
@@ -59,37 +59,36 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
             d_x_p = d/sum_vdwr
             for a3 in hierarchy.atoms():
               e3 = a3.element.upper()
-              if e3 in ["C","P","S"]:
-               e3 = a3.name.strip().upper()
-               e1 = a1.name.strip().upper()
-               e3 = e3.replace("'", "*")
-               sum_vdwr1 = vdwr[e1] + vdwr[e3]
-               if(not a1.is_in_same_conformer_as(a3)): continue
-               if(a1.parent().parent().resseq==a3.parent().parent().resseq):
-                 if(1.3 < a1.distance(a3) < 3):
-                   angle_123 = (a1.angle(a2, a3, deg = True))
-                   if(140 < angle_123):
-                     for a4 in hierarchy.atoms():
-                       e4 = a4.element.upper()
-                       if(not a2.is_in_same_conformer_as(a4)): continue
-                       if(a2.parent().parent().resseq == 
-                          a4.parent().parent().resseq):
-                         if(e4[0] == "C"):
-                           if(a3.distance(a2) < 1.9): continue
-                           if(a4.distance(a1) < sum_vdwr1): continue
-                           if(1 < a2.distance(a4) < 3):
-                             angle_214 = (a2.angle(a1, a4, deg = True))
-                             if(90 < angle_214 < 160):
-                               result.append(group_args(
-                                 atom_1    = a1,
-                                 atom_2    = a2,
-                                 atom_3    = a3,
-                                 atom_4    = a4,
-                                 d12       = d,
-                                 sum_vdwr  = sum_vdwr,
-                                 d_x_p     = d_x_p,
-                                 angle_123 = angle_123,
-                                 angle_214 = angle_214))
+              if(e3 in ["C","P","S"]): # XXX Cite paper
+                e3 = a3.name.strip().upper() # XXX Fix naming
+                e1 = a1.name.strip().upper()
+                e3 = e3.replace("'", "*") # XXX Fix naming
+                sum_vdwr1 = vdwr[e1] + vdwr[e3] # XXX Fix naming; use pair_proxy instead!
+                if(not a1.is_in_same_conformer_as(a3)): continue
+                if(a1.parent().parent().resseq==a3.parent().parent().resseq):
+                  if(1.3 < a1.distance(a3) < 3): # XXX use pair_proxy instead, don't calculate distance!
+                    angle_123 = (a1.angle(a2, a3, deg = True)) # theta_1 angle in PAPER
+                    if(140 < angle_123): # See figure XXX in paper XXX
+                      for a4 in hierarchy.atoms():
+                        e4 = a4.element.upper()
+                        if(not a2.is_in_same_conformer_as(a4)): continue
+                        if(a2.parent().parent().resseq == 
+                           a4.parent().parent().resseq):
+                          if(a3.distance(a2) < 1.9): continue # XXX use pair_proxy instead
+                          if(a4.distance(a1) < sum_vdwr1): continue # XXX use pair_proxy instead
+                          if(1 < a2.distance(a4) < 3): # XXX use pair_proxy instead
+                            angle_214 = (a2.angle(a1, a4, deg = True)) # theta_2 angle in PAPER
+                            if(90 < angle_214 < 160): # theta_2 angle in PAPER
+                              result.append(group_args(
+                                atom_1    = a1,
+                                atom_2    = a2,
+                                atom_3    = a3,
+                                atom_4    = a4,
+                                d12       = d,
+                                sum_vdwr  = sum_vdwr,
+                                d_x_p     = d_x_p,
+                                angle_123 = angle_123,
+                                angle_214 = angle_214))
   return result
 
 def hierarchy_cif_model(pdb_file):
