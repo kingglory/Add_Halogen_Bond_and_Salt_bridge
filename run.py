@@ -5,46 +5,7 @@ from iotbx.pdb import hierarchy
 import mmtbx.model
 from libtbx.utils import null_out
 from libtbx import easy_run
-# first step write codes to find halogen bond in one pdb file
-# define a function to try finding the halogen bond pairs
-def find_water(hierarchy):
-    get_class = iotbx.pdb.common_residue_names_get_class
-    for model in hierarchy.models():
-        for chain in model.chains():
-            for rg in chain.residue_groups():
-                for ag in rg.atom_groups():
-                    if (get_class(ag.resname)=="water"):
-                        print  ("water here :",ag)
-                        return ag
-
-
-def get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3):
-  halogens = ["CL", "BR", "I", "F"]
-  # less pi in  halogen_bond_pairs_atom!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  halogen_bond_pairs_atom = ["S","O", "N"]
-  result = []
-  for atom_1 in hierarchy.atoms():
-    atom_e1 = filter(str.isalpha,atom_1.element.upper() )
-    e1 = atom_1.name.strip().upper()
-    if (atom_e1 in halogens):
-      for atom_2 in hierarchy.atoms():
-       atom_e2 = filter(str.isalpha,atom_2.element.upper() )
-       e2 = atom_2.name.strip().upper()
-       if (not atom_1.is_in_same_conformer_as(atom_2)): continue
-       if (atom_1.parent().parent().resseq == atom_2.parent().parent().resseq): continue
-       if (atom_e2[0] in halogen_bond_pairs_atom):
-        # O2' in 3v04.pdb file will recognized as O2* ,so replace it
-        e1 = e1.replace("'","*")
-        e2 = e2.replace("'","*")
-        # 2yj8.pdb  vdwr can't recognize 'OXT'
-        e2 = e2.replace("XT","")
-        d = atom_1.distance(atom_2)
-        sum_vdwr = vdwr[e1] + vdwr[e2]
-        sum_vdwr_min = sum_vdwr*0.6
-        if (sum_vdwr_min-eps < d < sum_vdwr+eps):
-          d_x_p = d/sum_vdwr
-          result.append([d,sum_vdwr,d_x_p,atom_1,atom_2])
-  return result
+from libtbx import group_args
 
 def ideal_distance(atom_1,atom_2,model):
   geometry = model.get_restraints_manager()
@@ -58,79 +19,78 @@ def ideal_distance(atom_1,atom_2,model):
         d = atom_1.distance(atom_2)
         return atom_1 ,atom_2,d
 
+# first step write codes to find halogen bond in one pdb file
+# define a function to try finding the halogen bond pairs
+def find_water(hierarchy):
+    get_class = iotbx.pdb.common_residue_names_get_class
+    for model in hierarchy.models():
+        for chain in model.chains():
+            for rg in chain.residue_groups():
+                for ag in rg.atom_groups():
+                    if (get_class(ag.resname)=="water"):
+                        print  ("water here :",ag)
+                        return ag
 
-
-"""define a function trying to find the third atoms that can make up the angles
-   the third atoms make up covalent bond with the knowed atoms
-   the distance of covalent bond is near from 1 angstrom to 3 angstrom!!!
-   one of the angle (that the halogen atom is at side)is near 120 degrees
-   another angle (that the halogen atom is in the middle)is near 180 degrees
-"""
-
-def find_the_atoms_makeing_up_halogen_bond(hierarchy,vdwr,model):
-  result = get_halogen_bond_pairs(hierarchy, vdwr,eps = 0.3)
-  find_water(hierarchy)
-  d_list = []
-  info_result = []
-  if (result is not None):
-   for i in range(len(result)):
-    (d,sum_vdwr,d_x_p,atom_1,atom_2) = result[i]
-    for atom_3 in hierarchy.atoms():
-     atom_3_e = ["C","P","S"]
-     atom_e3 = filter(str.isalpha, atom_3.element.upper())
-     if atom_e3[0] in  atom_3_e :
-      e3 = atom_3.name.strip().upper()
-      e1 = atom_1.name.strip().upper()
-      e3 = e3.replace("'", "*")
-      sum_vdwr1 = vdwr[e1] + vdwr[e3]
-      if (not atom_1.is_in_same_conformer_as(atom_3)): continue
-      if (atom_1.parent().parent().resseq==atom_3.parent().parent().resseq):
-       if (1.3< atom_1.distance(atom_3) <3):
-        angle_1 = (atom_1.angle(atom_2,atom_3,deg = True))
-        if (140 < angle_1 ):
-         for atom_4 in hierarchy.atoms():
-          e4 = filter(str.isalpha, atom_4.element.upper())
-          if (not atom_2.is_in_same_conformer_as(atom_4)): continue
-          if (atom_2.parent().parent().resseq==atom_4.parent().parent().resseq):
-           if e4[0] == "C":
-            if (atom_3.distance(atom_2)<1.9):continue
-            if (atom_4.distance(atom_1) < sum_vdwr1): continue
-            if (1 < atom_2.distance(atom_4) < 3):
-             angle_2 = (atom_2.angle(atom_1,atom_4,deg = True))
-             if (90 < angle_2 < 160):
-              d_list.append(result[i][0])
-              info_result.append([atom_3,atom_1,
-                                  atom_2, atom_4,
-                                  d,sum_vdwr,d_x_p,
-                                  angle_1,angle_2
-                                  ])
-   d_min = min(d_list)
-   print (d_min)
-   for i in range(len(info_result)):
-    if (d_min is not None):
-     if (info_result[i][4])==d_min:
-      atom_1 = info_result[i][1]
-      atom_3 = info_result[i][0]
-      atom_2 = info_result[i][2]
-      atom_4 = info_result[i][3]
-      print ("old result:","**"*50)
-      print (atom_3.id_str(),atom_1.id_str(),
-             atom_2.id_str(),atom_4.id_str(),
-             d,sum_vdwr,d_x_p,
-             angle_1,angle_2)
-      result1 = ideal_distance(atom_1, atom_3, model)
-      print ("new result 0 :", "$$" * 50)
-      print (result1)
-      if result1 is None:continue
-      print ("new result 1 :","$$"*50)
-      result2 = ideal_distance(atom_2, atom_4, model)
-      if result2 is None:continue
-      print ("new result 2 :","$$"*50)
-      print (info_result[i])
-
-
-
-
+def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
+  hierarchy = model.get_hierarchy()
+  vdwr      = model.get_vdw_radii()
+  halogens = ["CL", "BR", "I", "F"]
+  halogen_bond_pairs_atom = ["S", "O", "N"]
+  result = []
+  for a1 in hierarchy.atoms():
+    e1 = a1.element.upper()
+    n1 = a1.name.strip().upper()
+    if(e1 in halogens):
+      for a2 in hierarchy.atoms():
+        e2 = a2.element.upper()
+        n2 = a2.name.strip().upper()
+        if(not a1.is_in_same_conformer_as(a2)): continue
+        if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
+        if(e2 in halogen_bond_pairs_atom):
+          # O2' in 3v04.pdb file will recognized as O2* ,so replace it
+          n1 = n1.replace("'","*")
+          n2 = n2.replace("'","*")
+          # 2yj8.pdb  vdwr can't recognize 'OXT'
+          n2 = n2.replace("XT","")
+          d = a1.distance(a2)
+          sum_vdwr = vdwr[n1] + vdwr[n2]
+          sum_vdwr_min = sum_vdwr*emp_scale
+          if(sum_vdwr_min-eps < d < sum_vdwr+eps): # found HB pairs-candidates
+            d_x_p = d/sum_vdwr
+            for a3 in hierarchy.atoms():
+              e3 = a3.element.upper()
+              if e3 in ["C","P","S"]:
+               e3 = a3.name.strip().upper()
+               e1 = a1.name.strip().upper()
+               e3 = e3.replace("'", "*")
+               sum_vdwr1 = vdwr[e1] + vdwr[e3]
+               if(not a1.is_in_same_conformer_as(a3)): continue
+               if(a1.parent().parent().resseq==a3.parent().parent().resseq):
+                 if(1.3 < a1.distance(a3) < 3):
+                   angle_123 = (a1.angle(a2, a3, deg = True))
+                   if(140 < angle_123):
+                     for a4 in hierarchy.atoms():
+                       e4 = a4.element.upper()
+                       if(not a2.is_in_same_conformer_as(a4)): continue
+                       if(a2.parent().parent().resseq == 
+                          a4.parent().parent().resseq):
+                         if(e4[0] == "C"):
+                           if(a3.distance(a2) < 1.9): continue
+                           if(a4.distance(a1) < sum_vdwr1): continue
+                           if(1 < a2.distance(a4) < 3):
+                             angle_214 = (a2.angle(a1, a4, deg = True))
+                             if(90 < angle_214 < 160):
+                               result.append(group_args(
+                                 atom_1    = a1,
+                                 atom_2    = a2,
+                                 atom_3    = a3,
+                                 atom_4    = a4,
+                                 d12       = d,
+                                 sum_vdwr  = sum_vdwr,
+                                 d_x_p     = d_x_p,
+                                 angle_123 = angle_123,
+                                 angle_214 = angle_214))
+  return result
 
 def hierarchy_cif_model(pdb_file):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file,

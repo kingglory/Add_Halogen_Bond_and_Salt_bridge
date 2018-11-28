@@ -1,59 +1,39 @@
 from __future__ import division
-from libtbx import easy_run
-import os
-from run import hierarchy_No_cif_model
-from run import hierarchy_cif_model
-from run import find_the_atoms_makeing_up_halogen_bond
-# prepare the cif file if the pdb file needs
+from run import find_halogen_bonds
+import iotbx.pdb
+import mmtbx.model
+from libtbx.utils import null_out
+import iotbx.cif
 
-def add_H_atoms_into_pad_files():
-  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
-                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
-  for pdb_file in X_bonds_file:
-      add_h_pdb_file = pdb_file[0:4] + 'h.pdb'
-      easy_run.call("phenix.reduce %s > %s " % (pdb_file,  add_h_pdb_file))
-      
-def prepare_cif_for_pdb_file():
-  X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
-                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
-  for pdb_file in X_bonds_file:
-    easy_run.call(" phenix.ready_set %s " %pdb_file)
+def get_model(pdb_file_name, cif_file_name):
+  pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
+  restraint_objects = None
+  if(cif_file_name is not None):
+    cif_object = iotbx.cif.reader(cif_file_name).model()
+    restraint_objects = [(cif_file_name, cif_object)]
+  model = mmtbx.model.manager(
+    model_input       = pdb_inp,
+    restraint_objects = restraint_objects,
+    process_input     = True,
+    log               = null_out())
+  return model
 
-
-# prepare the cif file if the pdb file needs
-def list_cif_and_pdb_file():
- X_bonds_file = ["5v7d.pdb","2h79.pdb", "2ito.pdb", "2oxy.pdb","2vag.pdb",
-                  "2yj8.pdb", "3v04.pdb", "4e7r.pdb"]
-
- i = 0
- for pdb_file in X_bonds_file:
-  pdb_file = pdb_file[0:4] + ".updated.pdb"
-  pdb_cif = pdb_file[0:4] + ".ligands.cif"
-  if os.path.exists(pdb_cif):
-    X_bonds_file[i] = [pdb_file, pdb_cif]
-  else:
-    X_bonds_file[i] = [pdb_file,None]
-  i = i + 1
- return  X_bonds_file
-
-
-def find_the_atoms_makeing_up_halogen_bond_test():
-    X_bonds_file = list_cif_and_pdb_file()
-    for i in range(len(X_bonds_file)) :
-      pdb_file = X_bonds_file[i][0]
-      if X_bonds_file[i][1] == None:
-        hierarchy, vdwr,model=hierarchy_No_cif_model(pdb_file)
-        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr,model)
-        print (pdb_file[0:4] + " this pdb_file is ok")
-      else:
-        hierarchy, vdwr,model = hierarchy_cif_model(pdb_file)
-        find_the_atoms_makeing_up_halogen_bond(hierarchy, vdwr,model)
-        print (pdb_file[0:4] + " this pdb_file_cif is ok")
-
-
-
+def exercise():
+  files = [["5v7d.pdb",None],
+           ["2h79.pdb","2h79.ligands.cif"],
+           ["2ito.pdb","2ito.ligands.cif"],
+           ["2oxy.pdb","2oxy.ligands.cif"],
+           ["2vag.pdb","2vag.ligands.cif"],
+           #["2yj8.pdb","2yj8.ligands.cif"],
+           ["3v04.pdb","3v04.ligands.cif"],
+           ["4e7r.pdb","4e7r.ligands.cif"]]
+  for (pdb_file_name, cif_file_name) in files:
+    print pdb_file_name, "-"*50
+    model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    result = find_halogen_bonds(model = model)
+    for r in result:
+      print "%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(), \
+        r.atom_3.id_str(), r.atom_4.id_str()
 
 if __name__ == '__main__':
-    #add_H_atoms_into_pad_files()
-    #prepare_cif_for_pdb_file()
-    find_the_atoms_makeing_up_halogen_bond_test()
+  exercise()
