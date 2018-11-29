@@ -28,12 +28,12 @@ def exercise():
            ["3v04.pdb","3v04.ligands.cif"],
            ["4e7r.pdb","4e7r.ligands.cif"]]
   for (pdb_file_name, cif_file_name) in files:
-    print pdb_file_name, "-"*50
+    print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
     result = find_halogen_bonds(model = model)
     for r in result:
-      print "%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(), \
-        r.atom_3.id_str(), r.atom_4.id_str()
+      print ("%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(),
+        r.atom_3.id_str(), r.atom_4.id_str())
 
 if __name__ == '__main__':
   exercise()

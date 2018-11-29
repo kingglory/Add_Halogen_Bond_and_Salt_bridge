@@ -1,10 +1,6 @@
 from __future__ import division
 import iotbx.pdb
 import iotbx.cif
-from iotbx.pdb import hierarchy
-import mmtbx.model
-from libtbx.utils import null_out
-from libtbx import easy_run
 from libtbx import group_args
 
 def ideal_distance(atom_1,atom_2,model):
@@ -16,8 +12,7 @@ def ideal_distance(atom_1,atom_2,model):
     if (atom_1.i_seq in proxy.i_seqs):
      if (atom_1.i_seq == i_seq):
       if (atom_2.i_seq == j_seq):
-        d = atom_1.distance(atom_2)
-        return atom_1 ,atom_2,d
+        return atom_1 ,atom_2
 
 # first step write codes to find halogen bond in one pdb file
 # define a function to try finding the halogen bond pairs
@@ -31,11 +26,11 @@ def find_water(hierarchy):
                         print  ("water here :",ag)
                         return ag
 
-def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
+def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6,angle_eps=40):
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", "O", "N"] #XXX Add halogens here
+  halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
   result = []
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
@@ -45,40 +40,41 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
         e2 = a2.element.upper()
         n2 = a2.name.strip().upper()
         if(not a1.is_in_same_conformer_as(a2)): continue
+        result_12 = ideal_distance(a1,a2, model)
+        if result_12 is not None:continue
         if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
-          # O2' in 3v04.pdb file will recognized as O2* ,so replace it
-          n1 = n1.replace("'","*")
+          n1 = n1.replace("'","*")# O2' in 3v04.pdb file will recognized as O2* ,so replace it
           n2 = n2.replace("'","*")
-          # 2yj8.pdb  vdwr can't recognize 'OXT'
-          n2 = n2.replace("XT","")
+          n2 = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
           d = a1.distance(a2)
           sum_vdwr = vdwr[n1] + vdwr[n2]
-          sum_vdwr_min = sum_vdwr*emp_scale
+          sum_vdwr_min = sum_vdwr*emp_scale #see Figure 4 in paper
+                                            # "Halogen bonding(X-bonding):A biological perspective"
           if(sum_vdwr_min-eps < d < sum_vdwr+eps): # found HB pairs-candidates
             d_x_p = d/sum_vdwr
+            print (a1.id_str(),a2.id_str())
             for a3 in hierarchy.atoms():
-              e3 = a3.element.upper()
-              if(e3 in ["C","P","S"]): # XXX Cite paper
-                e3 = a3.name.strip().upper() # XXX Fix naming
-                e1 = a1.name.strip().upper()
-                e3 = e3.replace("'", "*") # XXX Fix naming
-                sum_vdwr1 = vdwr[e1] + vdwr[e3] # XXX Fix naming; use pair_proxy instead!
-                if(not a1.is_in_same_conformer_as(a3)): continue
-                if(a1.parent().parent().resseq==a3.parent().parent().resseq):
-                  if(1.3 < a1.distance(a3) < 3): # XXX use pair_proxy instead, don't calculate distance!
-                    angle_123 = (a1.angle(a2, a3, deg = True)) # theta_1 angle in PAPER
-                    if(140 < angle_123): # See figure XXX in paper XXX
+                result_13 = ideal_distance(a1,a3, model)
+                if result_13 is not None:
+                 print (result_13)
+                 angle_312 = (a1.angle(a2, a3, deg = True)) # theta_1 angle in paper
+                 print (angle_312)                          # "Halogen bond in biological molecules"
+                 if(130 < angle_312): # see Fig.1 in paper
+                                      # "Halogen bond in biological molecules"
                       for a4 in hierarchy.atoms():
                         e4 = a4.element.upper()
-                        if(not a2.is_in_same_conformer_as(a4)): continue
-                        if(a2.parent().parent().resseq == 
-                           a4.parent().parent().resseq):
-                          if(a3.distance(a2) < 1.9): continue # XXX use pair_proxy instead
-                          if(a4.distance(a1) < sum_vdwr1): continue # XXX use pair_proxy instead
-                          if(1 < a2.distance(a4) < 3): # XXX use pair_proxy instead
-                            angle_214 = (a2.angle(a1, a4, deg = True)) # theta_2 angle in PAPER
-                            if(90 < angle_214 < 160): # theta_2 angle in PAPER
+                        if (e4[0] in ["C", "P", "S"]):  # see Fig.1 in paper
+                                                        # "Halogen bond in biological molecules"
+                         result_24 = ideal_distance(a2, a4, model)
+                         if result_24 is not None:
+                          print (result_24)
+                          if(not a2.is_in_same_conformer_as(a4)): continue
+                          angle_214 = (a2.angle(a1, a4, deg = True)) # theta_2 angle in paper
+                                                                     #  "Halogen bond in biological molecules"
+                          if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
+                                                                              # Geometry of X-bonds in paper
+                                                                              # "Halogen bond in biological molecules"
                               result.append(group_args(
                                 atom_1    = a1,
                                 atom_2    = a2,
@@ -87,34 +83,9 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6):
                                 d12       = d,
                                 sum_vdwr  = sum_vdwr,
                                 d_x_p     = d_x_p,
-                                angle_123 = angle_123,
+                                angle_312 = angle_312,
                                 angle_214 = angle_214))
   return result
-
-def hierarchy_cif_model(pdb_file):
-  pdb_inp = iotbx.pdb.input(file_name=pdb_file,
-                            source_info=None)
-  pdb_cif = pdb_file[0:4] + ".ligands.cif"
-  cif_object = iotbx.cif.reader(pdb_cif).model()
-  cif_objects = [(pdb_cif, cif_object)]
-  model = mmtbx.model.manager(model_input=pdb_inp,
-                              build_grm=True,
-                              restraint_objects=cif_objects,
-                              log=null_out())
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  return hierarchy, vdwr,model
-
-
-def hierarchy_No_cif_model(pdb_file):
-  pdb_inp = iotbx.pdb.input(file_name=pdb_file)
-  model = mmtbx.model.manager(model_input=pdb_inp,
-                                  process_input=True,
-                                  log=null_out())
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  return hierarchy,vdwr,model
-
 
 #Second step,find salt bridge in one pdb filess
 
@@ -123,65 +94,57 @@ Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR",
                "VAL","ILE","LEU","MET","PHE","TYR","TRP"]
 
 
-def creat_new_filename(pdb_file):
-  new_pdb_file = pdb_file[0:4] + 'h.pdb'
-  return new_pdb_file
-
-
-def add_H_atoms_into_pad_files(pdb_file):
-  new_pdb_file = creat_new_filename(pdb_file)
-  easy_run.call("phenix.reduce %s > %s " % (pdb_file,  new_pdb_file))
-
 # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
 #  with electrically charged side chains,the positive charged atom is N
 # there are some H atoms around this N atom
 # [asp,glu] are negative,the negative charged atom is O
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
-def get_salt_bridge(hierarchy,vdwr,model,eps = 0.3):
+def find_salt_bridge(model,eps = 0.3):
+  hierarchy = model.get_hierarchy()
+  vdwr = model.get_vdw_radii()
+  result = []
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
-  for atom_1 in hierarchy.atoms():
-   for atom_3 in hierarchy.atoms():
-    if (atom_1.parent().resname in positive_acide):
-     if (atom_3.parent().resname in positive_acide):
-      if (not atom_1.is_in_same_conformer_as(atom_3)): continue
-      if(atom_1.parent().parent().resseq==atom_3.parent().parent().resseq) :
-        e1 = filter(str.isalpha,atom_1.name.upper() )
-        e3 = filter(str.isalpha,atom_3.name.upper() )
-        if e1[0] == "N" :
-         if e3[0] == "H":
-          Length_n_h =1.01
-          if ( Length_n_h - eps <
-                   atom_1.distance(atom_3)
-                   < Length_n_h + eps):
-           geometry = model.get_restraints_manager()
-           bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                  sites_cart=model.get_sites_cart())
-           for proxy in bond_proxies_simple:
-            i_seq, j_seq = proxy.i_seqs
-            if (atom_1.i_seq in proxy.i_seqs):
-             if (atom_1.i_seq == i_seq):
-              if (atom_3.i_seq == j_seq):
-               for atom_2 in hierarchy.atoms():
-                if (atom_2.parent().resname in negative_acids):
-                 if (not atom_1.is_in_same_conformer_as(atom_2)): continue
-                 if (atom_1.parent().parent().resseq !=
-                         atom_2.parent().parent().resseq):
-                  e2 = filter(str.isalpha, atom_2.name.upper())
-                  dict_h_bond_lengh = { "O" : 0.98,"N" : 1.45,"F" : 0.92}
-                  dict_ionic_bond_lengh={}
-                  if e2[0] in dict_h_bond_lengh.keys():
-                   Length_o_n = 1.46
-                   h_d = dict_h_bond_lengh[e2[0]]
-                   sum_vdwr = vdwr[e2[0]] + vdwr[e3]
-                   if(Length_o_n - 0.1 < atom_1.distance(atom_2) < 4):
-                    if (h_d-eps< atom_2.distance(atom_3) < sum_vdwr ):
-                      angle_1 = (atom_3.angle(atom_1, atom_2, deg=True))
-                      if(90< angle_1):
-                       print ("find the salt bridge ")
-                       print (atom_1.id_str(),atom_2.id_str(),
-                             atom_3.id_str())
+  for a1 in hierarchy.atoms():
+   for a3 in hierarchy.atoms():
+    result_13 = ideal_distance(a1, a3, model)
+    if result_13 is not None:
+     if (a1.parent().resname in positive_acide):
+      if (a3.parent().resname in positive_acide):
+       if (not a1.is_in_same_conformer_as(a3)): continue
+       if(a1.parent().parent().resseq==a3.parent().parent().resseq) :
+        n1 = filter(str.isalpha,a1.name.upper() )
+        n3 = filter(str.isalpha,a3.name.upper() )
+        if n1[0] == "N" :
+         if n3[0] == "H":
+          for a2 in hierarchy.atoms():
+            if (a2.parent().resname in negative_acids):
+              result_12 = ideal_distance(a1, a2, model)
+              result_32 = ideal_distance(a3, a2, model)
+              if result_12 is not None:continue
+              if result_32 is not None: continue
+              #if (not a1.is_in_same_conformer_as(a2)): continue
+              #if (a1.parent().parent().resseq !=a2.parent().parent().resseq):
+              n2 = filter(str.isalpha, a2.name.upper())
+              dict_h_bond_lengh = { "O" : 0.98,"N" : 1.45,"F" : 0.92}
+              if n2[0] in dict_h_bond_lengh.keys():
+               d_h = dict_h_bond_lengh[n2[0]]
+               sum_vdwr = vdwr[n2[0]] + vdwr[n3]# in lifrh.pdb ,vdwr can't recognized OE,OD...
+               d_n = a1.distance(a2)
+               if(d_n < 4):
+                if (d_h-eps< a2.distance(a3) < sum_vdwr ):
+                      angle_132 = (a3.angle(a1, a2, deg=True))
+                      if(90< angle_132):
+                          result.append(group_args(
+                              atom_1=a1,
+                              atom_2=a2,
+                              atom_3=a3,
+                              d_n   =d_n,
+                              d_h   =d_h,
+                              sum_vdwr=sum_vdwr,
+                              angle_132=angle_132))
+  return result
 
 def define_pi_system(hierarchy,vdwr,model,eps = 5):
  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
@@ -231,20 +194,3 @@ def define_pi_system(hierarchy,vdwr,model,eps = 5):
 
 
 
-
-""" path = "/home/pdb/mirror/pub/pdb/data/structures/divided/pdb"
-    of  = open("".join([path,"INDEX"]),"r")
-    files= ["".join([path,f]).strip() for f in of.readlines()]
-    of.close()
-    list = []
-    for f in files:
-      pdb_code = os.path.basename(f)[3:7]
-      pdb_file = str(pdb_code) + ".pdb"
-
-
-
-    add_H_atoms_into_pad_files(pdb_file)
-
-    get_salt_bridge_atom_pairs(
-       hierarchy=model.get_hierarchy())
-"""

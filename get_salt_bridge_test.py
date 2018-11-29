@@ -1,64 +1,40 @@
 from __future__ import division
-from libtbx import easy_run
-import os
-from run import hierarchy_No_cif_model
-from run import hierarchy_cif_model
-from run import get_salt_bridge
+from run import find_salt_bridge
+import iotbx.pdb
+import mmtbx.model
+from libtbx.utils import null_out
+import iotbx.cif
+
+def get_model(pdb_file_name, cif_file_name):
+  pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
+  restraint_objects = None
+  if(cif_file_name is not None):
+    cif_object = iotbx.cif.reader(cif_file_name).model()
+    restraint_objects = [(cif_file_name, cif_object)]
+  model = mmtbx.model.manager(
+    model_input       = pdb_inp,
+    restraint_objects = restraint_objects,
+    process_input     = True,
+    log               = null_out())
+  return model
 
 
 
-
-def add_H_atoms_into_pad_files():
-  SB_bonds_file = ["1ifr.pdb", "1cbr.pdb", "1pga.pdb","1eq5.pdb",
-                   "2qmt.pdb", "2on8.pdb", "2onq.pdb"]
-  for pdb_file in SB_bonds_file:
-      add_h_pdb_file = pdb_file[0:4] + 'h.pdb'
-      easy_run.call("phenix.reduce %s > %s " % (pdb_file,  add_h_pdb_file))
-
-
-# prepare the cif file if the pdb file needs,
-#but here it isn't sucessful for 1mio.pdb
-def prepare_cif_for_pdb_file():
-  SB_bonds_file = ["1ifrh.pdb","1cbrh.pdb","1pgah.pdb","1eq5.pdb",
-                   "2qmth.pdb","2on8h.pdb","2onqh.pdb"]
-  for pdb_file in SB_bonds_file:
-    easy_run.call(" phenix.ready_set %s " %pdb_file)
-
-
-# prepare the cif file if the pdb file needs
-def list_cif_and_pdb_file():
- SB_bonds_file = ["1ifrh.pdb","1cbrh.pdb","1pgah.pdb","1eq5.pdb",
-                  "2qmth.pdb","2on8h.pdb","2onqh.pdb"]
- i = 0
- for pdb_file in SB_bonds_file:
-  pdb_update_file = pdb_file[0:5] + ".updated.pdb"
-  pdb_cif = pdb_file[0:5] + ".ligands.cif"
-  if os.path.exists(pdb_cif):
-    SB_bonds_file[i] = [pdb_update_file, pdb_cif]
-  else:
-    SB_bonds_file[i] = [pdb_file,None]
-  i = i + 1
- return  SB_bonds_file
-
-def find_the_atoms_makeing_up_halogen_bond_test():
-    SB_bonds_file = list_cif_and_pdb_file()
-    print (SB_bonds_file)
-    for i in range(len(SB_bonds_file)) :
-      pdb_file = SB_bonds_file[i][0]
-      pdb_cif  = SB_bonds_file[i][1]
-      print (pdb_file,pdb_cif,"#"*500)
-      if pdb_cif  == None:
-        hierarchy, vdwr,model=hierarchy_No_cif_model(pdb_file)
-        get_salt_bridge(hierarchy,vdwr,model,eps = 0.3)
-        print (pdb_file[0:4] + " this pdb_file is ok")
-      else:
-        hierarchy, vdwr,model = hierarchy_cif_model(pdb_file)
-        get_salt_bridge(hierarchy,vdwr,model,eps = 0.3)
-        print (pdb_file[0:4] + " this pdb_file_cif is ok")
-
-
+def exercise():
+  files = [["1ifrh.pdb",None],
+           ["1cbrh.pdb",None],
+           ["1pgah.pdb",None],
+           ["1eq5h.pdb",None],
+           ["2qmth.pdb","2qmth.ligands.cif"],
+           ["2on8h.pdb",None],
+           ["2onqh.pdb",None]]
+  for (pdb_file_name, cif_file_name) in files:
+    print (pdb_file_name, "-"*50)
+    model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    result = find_salt_bridge(model = model)
+    for r in result:
+      print ("%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(),
+        r.atom_3.id_str(), r.atom_4.id_str())
 
 if __name__ == '__main__':
-   # add_H_atoms_into_pad_files()
-   #prepare_cif_for_pdb_file()
-   find_the_atoms_makeing_up_halogen_bond_test()
+  exercise()
