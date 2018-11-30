@@ -3,16 +3,14 @@ import iotbx.pdb
 import iotbx.cif
 from libtbx import group_args
 
-def ideal_distance(atom_1,atom_2,model):
-  geometry = model.get_restraints_manager()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-        sites_cart=model.get_sites_cart())
+def is_bonded(atom_1, atom_2, bond_proxies_simple):
+  result = False
   for proxy in bond_proxies_simple:
     i_seq, j_seq = proxy.i_seqs
-    if (atom_1.i_seq in proxy.i_seqs):
-     if (atom_1.i_seq == i_seq):
-      if (atom_2.i_seq == j_seq):
-        return atom_1 ,atom_2
+    if(atom_1.i_seq in proxy.i_seqs and atom_2.i_seq in proxy.i_seqs):
+      result = True
+      break
+  return result
 
 # first step write codes to find halogen bond in one pdb file
 # define a function to try finding the halogen bond pairs
@@ -26,7 +24,13 @@ def find_water(hierarchy):
                         print  ("water here :",ag)
                         return ag
 
-def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6,angle_eps=40):
+def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6, angle_eps=40):
+  """
+  Some explanatory text goes here.
+  """
+  geometry = model.get_restraints_manager()
+  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+    sites_cart = model.get_sites_cart())
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
   halogens = ["CL", "BR", "I", "F"]
@@ -40,8 +44,7 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6,angle_eps=40):
         e2 = a2.element.upper()
         n2 = a2.name.strip().upper()
         if(not a1.is_in_same_conformer_as(a2)): continue
-        result_12 = ideal_distance(a1,a2, model)
-        if result_12 is not None:continue
+        if(is_bonded(a1,a2, bond_proxies_simple)): continue
         if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
           n1 = n1.replace("'","*")# O2' in 3v04.pdb file will recognized as O2* ,so replace it
@@ -53,38 +56,33 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6,angle_eps=40):
                                             # "Halogen bonding(X-bonding):A biological perspective"
           if(sum_vdwr_min-eps < d < sum_vdwr+eps): # found HB pairs-candidates
             d_x_p = d/sum_vdwr
-            print (a1.id_str(),a2.id_str())
             for a3 in hierarchy.atoms():
-                result_13 = ideal_distance(a1,a3, model)
-                if result_13 is not None:
-                 print (result_13)
-                 angle_312 = (a1.angle(a2, a3, deg = True)) # theta_1 angle in paper
-                 print (angle_312)                          # "Halogen bond in biological molecules"
-                 if(130 < angle_312): # see Fig.1 in paper
-                                      # "Halogen bond in biological molecules"
-                      for a4 in hierarchy.atoms():
-                        e4 = a4.element.upper()
-                        if (e4[0] in ["C", "P", "S"]):  # see Fig.1 in paper
-                                                        # "Halogen bond in biological molecules"
-                         result_24 = ideal_distance(a2, a4, model)
-                         if result_24 is not None:
-                          print (result_24)
-                          if(not a2.is_in_same_conformer_as(a4)): continue
-                          angle_214 = (a2.angle(a1, a4, deg = True)) # theta_2 angle in paper
-                                                                     #  "Halogen bond in biological molecules"
-                          if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
-                                                                              # Geometry of X-bonds in paper
-                                                                              # "Halogen bond in biological molecules"
-                              result.append(group_args(
-                                atom_1    = a1,
-                                atom_2    = a2,
-                                atom_3    = a3,
-                                atom_4    = a4,
-                                d_12       = d,
-                                sum_vdwr  = sum_vdwr,
-                                d_x_p     = d_x_p,
-                                angle_312 = angle_312,
-                                angle_214 = angle_214))
+              if(not is_bonded(a1,a3, bond_proxies_simple)): continue
+              # theta_1 angle in paper "Halogen bond in biological molecules"
+              angle_312 = (a1.angle(a2, a3, deg = True))
+              # See Fig.1 in paper "Halogen bond in biological molecules"
+              if(130 < angle_312):
+                for a4 in hierarchy.atoms():
+                  e4 = a4.element.upper()
+                  # See Fig.1 in paper "Halogen bond in biological molecules"
+                  if(e4[0] in ["C", "P", "S"]):
+                    if(not is_bonded(a2, a4, bond_proxies_simple)): continue
+                    if(not a2.is_in_same_conformer_as(a4)): continue
+                    # theta_2 angle in paper "Halogen bond in biological molecules"
+                    angle_214 = (a2.angle(a1, a4, deg = True))
+                    if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
+                                                                      # Geometry of X-bonds in paper
+                                                                      # "Halogen bond in biological molecules"
+                      result.append(group_args(
+                        atom_1    = a1,
+                        atom_2    = a2,
+                        atom_3    = a3,
+                        atom_4    = a4,
+                        d_12      = d,
+                        sum_vdwr  = sum_vdwr,
+                        d_x_p     = d_x_p,
+                        angle_312 = angle_312,
+                        angle_214 = angle_214))
   return result
 
 #Second step,find salt bridge in one pdb filess
