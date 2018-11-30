@@ -80,7 +80,7 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6,angle_eps=40):
                                 atom_2    = a2,
                                 atom_3    = a3,
                                 atom_4    = a4,
-                                d12       = d,
+                                d_12       = d,
                                 sum_vdwr  = sum_vdwr,
                                 d_x_p     = d_x_p,
                                 angle_312 = angle_312,
