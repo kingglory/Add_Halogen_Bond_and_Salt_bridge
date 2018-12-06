@@ -23,8 +23,13 @@ def find_water(hierarchy):
                     if (get_class(ag.resname)=="water"):
                         print  ("water here :",ag)
                         return ag
-
-def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6, angle_eps=40):
+"""
+1,when one halogen atoms make halogen bond when other atom,when the distance and angle
+limations all fited,the bond distance more shorter ,more possible;
+2, when chooseing the third atoms to make up the angle1,the angle1 is more near 180,more possible;
+3,when chooseing the fourth atoms to make up the angle2,the angle1 is more near 120,more possible;
+"""
+def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
   """
   Some explanatory text goes here.
   """
@@ -33,9 +38,12 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6, angle_eps=40):
     sites_cart = model.get_sites_cart())
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
-  halogens = ["CL", "BR", "I", "F"]
+  halogens  = ["CL", "BR", "I", "F"]
   halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
-  result = []
+  result      = []
+  result_123  = []
+  pairs_atoms = {}
+  angle_312   = {}
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
     n1 = a1.name.strip().upper()
@@ -54,15 +62,39 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6, angle_eps=40):
           sum_vdwr = vdwr[n1] + vdwr[n2]
           sum_vdwr_min = sum_vdwr*emp_scale #see Figure 4 in paper
                                             # "Halogen bonding(X-bonding):A biological perspective"
-          if(sum_vdwr_min-eps < d < sum_vdwr+eps): # found HB pairs-candidates
+          if(sum_vdwr_min-eps < d < sum_vdwr+eps):# found HB pairs-candidates
             d_x_p = d/sum_vdwr
             for a3 in hierarchy.atoms():
+              n3 = a3.name.strip().upper()
               if(not is_bonded(a1,a3, bond_proxies_simple)): continue
               # theta_1 angle in paper "Halogen bond in biological molecules"
               angle_312 = (a1.angle(a2, a3, deg = True))
               # See Fig.1 in paper "Halogen bond in biological molecules"
               if(130 < angle_312):
-                for a4 in hierarchy.atoms():
+                pairs_atoms[n2]= d
+                angle1  = (int(round(angle_312)))
+               # angle_312[n3] = angle1
+                result_123.append(group_args(
+                    a1         = a1,
+                    a2         = a2,
+                    a3         = a3,
+                    d_12       = d,
+                    d_x_p      = d_x_p,
+                    sum_vdwr   = sum_vdwr,
+                    angle_312  = angle_312
+                ))
+
+  for r in result_123:
+    if pairs_atoms[n2] == min(pairs_atoms.values()):  # 1.line 27
+      if r.a2.name.strip().upper()== n2:
+        a1        = r.a1
+        a2        = r.a2
+        a3        = r.a3
+        d         = r.d_12
+        d_x_p     = r.d_x_p
+        sum_vdwr  = r.sum_vdwr
+        angle_312 = r.angle_312
+        for a4 in hierarchy.atoms():
                   e4 = a4.element.upper()
                   # See Fig.1 in paper "Halogen bond in biological molecules"
                   if(e4[0] in ["C", "P", "S"]):
@@ -83,6 +115,7 @@ def find_halogen_bonds(model, eps = 0.3, emp_scale = 0.6, angle_eps=40):
                         d_x_p     = d_x_p,
                         angle_312 = angle_312,
                         angle_214 = angle_214))
+
   return result
 
 #Second step,find salt bridge in one pdb filess
