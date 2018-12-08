@@ -32,9 +32,6 @@ limations all fited,the bond distance more shorter ,more possible;
 5,theta_2 angle :Geometry of X-bonds in paper "Halogen bond in biological molecules"
 """
 def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
-  """
-  Some explanatory text goes here.
-  """
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                 sites_cart = model.get_sites_cart())
@@ -60,7 +57,8 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
         if(is_bonded(a1,a2, bond_proxies_simple)): continue
         if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
-          n1           = n1.replace("'","*")# O2' in 3v04.pdb file will recognized as O2* ,so replace it
+          # O2' in 3v04.pdb file will recognized as O2* ,so replace it
+          n1           = n1.replace("'","*")
           n2           = n2.replace("'","*")
           n2           = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
           d            = a1.distance(a2)
@@ -90,10 +88,9 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
   for r in result_123:
    for values in a_312.values():
     angle1_eps[n3] = abs(180-values) # 2, line 29
-    if a_312[n3] == min(angle1_eps.values):
+    if r.a3.name.strip().upper() == angle1_eps[min(angle1_eps.values)]:
      if pairs_atoms[n2] == min(pairs_atoms.values()): # 1.line 27
       if r.a2.name.strip().upper()== n2:
-        if r.a3.name.strip().upper() == n3:
          a1        = r.a1
          a2        = r.a2
          a3        = r.a3
@@ -126,8 +123,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
          for r in result:
            for values in a_124.values():
              angle2_eps[n4] = abs(120 - values)
-             if a_124[n4] == min(angle2_eps.values):
-              if r.a4.name.strip().upper() == n4:
+             if r.a4.name.strip().upper() == angle2_eps[min(angle2_eps.values)]:
                   final_result.append(r)
 
   return final_result
