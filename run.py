@@ -28,6 +28,8 @@ def find_water(hierarchy):
 limations all fited,the bond distance more shorter ,more possible;
 2, when chooseing the third atoms to make up the angle1,the angle1 is more near 180,more possible;
 3,when chooseing the fourth atoms to make up the angle2,the angle1 is more near 120,more possible;
+4,see Figure 4 in paper "Halogen bonding(X-bonding):  A biological perspective"
+5,theta_2 angle :Geometry of X-bonds in paper "Halogen bond in biological molecules"
 """
 def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
   """
@@ -61,8 +63,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
           n2 = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
           d = a1.distance(a2)
           sum_vdwr = vdwr[n1] + vdwr[n2]
-          sum_vdwr_min = sum_vdwr*emp_scale #see Figure 4 in paper
-                                            # "Halogen bonding(X-bonding):A biological perspective"
+          sum_vdwr_min = sum_vdwr*emp_scale #4 line 31
           if(sum_vdwr_min-eps < d < sum_vdwr+eps):# found HB pairs-candidates
             d_x_p = d/sum_vdwr
             for a3 in hierarchy.atoms():
@@ -106,9 +107,8 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
              if(not a2.is_in_same_conformer_as(a4)): continue
              # theta_2 angle in paper "Halogen bond in biological molecules"
              angle_214 = (a2.angle(a1, a4, deg = True))
-             if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
-                                                                      # Geometry of X-bonds in paper
-               a_124[n4] = angle_214                                              # "Halogen bond in biological molecules"
+             if(120 - angle_eps  < angle_214 < 120 + angle_eps): # 5,line32
+               a_124[n4] = angle_214
                result.append(group_args(
                         atom_1    = a1,
                         atom_2    = a2,
