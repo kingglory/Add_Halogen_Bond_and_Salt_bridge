@@ -60,23 +60,23 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
         if(is_bonded(a1,a2, bond_proxies_simple)): continue
         if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
-          n1 = n1.replace("'","*")# O2' in 3v04.pdb file will recognized as O2* ,so replace it
-          n2 = n2.replace("'","*")
-          n2 = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
-          d = a1.distance(a2)
-          sum_vdwr = vdwr[n1] + vdwr[n2]
+          n1           = n1.replace("'","*")# O2' in 3v04.pdb file will recognized as O2* ,so replace it
+          n2           = n2.replace("'","*")
+          n2           = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
+          d            = a1.distance(a2)
+          sum_vdwr     = vdwr[n1] + vdwr[n2]
           sum_vdwr_min = sum_vdwr*emp_scale #4 line 31
           if(sum_vdwr_min-eps < d < sum_vdwr+eps):# found HB pairs-candidates
             d_x_p = d/sum_vdwr
             for a3 in hierarchy.atoms():
-              n3 = a3.name.strip().upper()
+              n3  = a3.name.strip().upper()
               if(not is_bonded(a1,a3, bond_proxies_simple)): continue
               # theta_1 angle in paper "Halogen bond in biological molecules"
               angle_312 = (a1.angle(a2, a3, deg = True))
               # See Fig.1 in paper "Halogen bond in biological molecules"
               if(130 < angle_312):
                 pairs_atoms[n2]= d
-                a_312[n3] = angle_312
+                a_312[n3]      = angle_312
                 result_123.append(group_args(
                     a1         = a1,
                     a2         = a2,
@@ -101,7 +101,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
          d_x_p     = r.d_x_p
          sum_vdwr  = r.sum_vdwr
          angle_312 = r.angle_312
-         a_124 = {}
+         a_124     = {}
          for a4 in hierarchy.atoms():
            e4 = a4.element.upper()
            n4 = a4.name.strip().upper()
@@ -110,7 +110,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
              if(not is_bonded(a2, a4, bond_proxies_simple)): continue
              if(not a2.is_in_same_conformer_as(a4)): continue
              # theta_2 angle in paper "Halogen bond in biological molecules"
-             angle_214 = (a2.angle(a1, a4, deg = True))
+             angle_214   = (a2.angle(a1, a4, deg = True))
              if(120 - angle_eps  < angle_214 < 120 + angle_eps): # 5,line32
                a_124[n4] = angle_214
                result.append(group_args(
@@ -146,14 +146,14 @@ Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR",
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
 def find_salt_bridge(model,eps = 0.3):
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  result = []
+  hierarchy      = model.get_hierarchy()
+  vdwr           = model.get_vdw_radii()
+  result         = []
   positive_acide = ["ARG" , "HIS", "LYS"]
   negative_acids = ["ASP" , "GLU"]
   for a1 in hierarchy.atoms():
    for a3 in hierarchy.atoms():
-    result_13 = is_bonded(a1, a3, model)
+    result_13    = is_bonded(a1, a3, model)
     if result_13 is not None:
      if (a1.parent().resname in positive_acide):
       if (a3.parent().resname in positive_acide):
@@ -174,21 +174,21 @@ def find_salt_bridge(model,eps = 0.3):
               n2 = filter(str.isalpha, a2.name.upper())
               dict_h_bond_lengh = { "O" : 0.98,"N" : 1.45,"F" : 0.92}
               if n2[0] in dict_h_bond_lengh.keys():
-               d_h = dict_h_bond_lengh[n2[0]]
+               d_h      = dict_h_bond_lengh[n2[0]]
                sum_vdwr = vdwr[n2[0]] + vdwr[n3]# in lifrh.pdb ,vdwr can't recognized OE,OD...
-               d_n = a1.distance(a2)
+               d_n      = a1.distance(a2)
                if(d_n < 4):
                 if (d_h-eps< a2.distance(a3) < sum_vdwr ):
                       angle_132 = (a3.angle(a1, a2, deg=True))
                       if(90< angle_132):
                           result.append(group_args(
-                              atom_1=a1,
-                              atom_2=a2,
-                              atom_3=a3,
-                              d_n   =d_n,
-                              d_h   =d_h,
-                              sum_vdwr=sum_vdwr,
-                              angle_132=angle_132))
+                              atom_1   = a1,
+                              atom_2   = a2,
+                              atom_3   = a3,
+                              d_n      = d_n,
+                              d_h      = d_h,
+                              sum_vdwr = sum_vdwr,
+                              angle_132= angle_132))
   return result
 
 def define_pi_system(hierarchy,vdwr,model,eps = 5):
