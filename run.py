@@ -35,15 +35,16 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
   """
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart = model.get_sites_cart())
+                sites_cart = model.get_sites_cart())
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
   halogens  = ["CL", "BR", "I", "F"]
   halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
-  result      = []
-  result_123  = []
-  pairs_atoms = {}
-  angle_312   = {}
+  result       = []
+  result_123   = []
+  pairs_atoms  = {}
+  a_312        = {}
+  final_result = []
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
     n1 = a1.name.strip().upper()
@@ -72,8 +73,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
               # See Fig.1 in paper "Halogen bond in biological molecules"
               if(130 < angle_312):
                 pairs_atoms[n2]= d
-                angle1  = (int(round(angle_312)))
-               # angle_312[n3] = angle1
+                a_312[n3] = angle_312
                 result_123.append(group_args(
                     a1         = a1,
                     a2         = a2,
@@ -85,27 +85,31 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
                 ))
 
   for r in result_123:
-    if pairs_atoms[n2] == min(pairs_atoms.values()):  # 1.line 27
+   if a_312[n3] == min(abs(180-a_312.values())):  # 2, line 29
+    if pairs_atoms[n2] == min(pairs_atoms.values()): # 1.line 27
       if r.a2.name.strip().upper()== n2:
-        a1        = r.a1
-        a2        = r.a2
-        a3        = r.a3
-        d         = r.d_12
-        d_x_p     = r.d_x_p
-        sum_vdwr  = r.sum_vdwr
-        angle_312 = r.angle_312
-        for a4 in hierarchy.atoms():
-                  e4 = a4.element.upper()
-                  # See Fig.1 in paper "Halogen bond in biological molecules"
-                  if(e4[0] in ["C", "P", "S"]):
-                    if(not is_bonded(a2, a4, bond_proxies_simple)): continue
-                    if(not a2.is_in_same_conformer_as(a4)): continue
-                    # theta_2 angle in paper "Halogen bond in biological molecules"
-                    angle_214 = (a2.angle(a1, a4, deg = True))
-                    if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
+        if r.a3.name.strip().upper() == n3:
+         a1        = r.a1
+         a2        = r.a2
+         a3        = r.a3
+         d         = r.d_12
+         d_x_p     = r.d_x_p
+         sum_vdwr  = r.sum_vdwr
+         angle_312 = r.angle_312
+         a_124 = {}
+         for a4 in hierarchy.atoms():
+           e4 = a4.element.upper()
+           n4 = a4.name.strip().upper()
+           # See Fig.1 in paper "Halogen bond in biological molecules"
+           if(e4[0] in ["C", "P", "S"]):
+             if(not is_bonded(a2, a4, bond_proxies_simple)): continue
+             if(not a2.is_in_same_conformer_as(a4)): continue
+             # theta_2 angle in paper "Halogen bond in biological molecules"
+             angle_214 = (a2.angle(a1, a4, deg = True))
+             if(120 - angle_eps  < angle_214 < 120 + angle_eps): # theta_2 angle :
                                                                       # Geometry of X-bonds in paper
-                                                                      # "Halogen bond in biological molecules"
-                      result.append(group_args(
+               a_124[n4] = angle_214                                              # "Halogen bond in biological molecules"
+               result.append(group_args(
                         atom_1    = a1,
                         atom_2    = a2,
                         atom_3    = a3,
@@ -115,8 +119,12 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
                         d_x_p     = d_x_p,
                         angle_312 = angle_312,
                         angle_214 = angle_214))
+         for r in result:
+           if a_312[n4] == min(abs(120 - a_124.values())):
+             if r.a4.name.strip().upper() == n4:
+                 final_result.append(r)
 
-  return result
+  return final_result
 
 #Second step,find salt bridge in one pdb filess
 
