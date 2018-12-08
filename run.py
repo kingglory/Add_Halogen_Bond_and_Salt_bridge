@@ -84,7 +84,6 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
                     sum_vdwr   = sum_vdwr,
                     angle_312  = angle_312
                 ))
-
   for r in result_123:
    for values in a_312.values():
     angle1_eps[n3] = abs(180-values) # 2, line 29
