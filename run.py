@@ -153,7 +153,7 @@ def find_salt_bridge(model,eps = 0.3):
   negative_acids = ["ASP" , "GLU"]
   for a1 in hierarchy.atoms():
    for a3 in hierarchy.atoms():
-    result_13 = ideal_distance(a1, a3, model)
+    result_13 = is_bonded(a1, a3, model)
     if result_13 is not None:
      if (a1.parent().resname in positive_acide):
       if (a3.parent().resname in positive_acide):
@@ -165,8 +165,8 @@ def find_salt_bridge(model,eps = 0.3):
          if n3[0] == "H":
           for a2 in hierarchy.atoms():
             if (a2.parent().resname in negative_acids):
-              result_12 = ideal_distance(a1, a2, model)
-              result_32 = ideal_distance(a3, a2, model)
+              result_12 = is_bonded(a1, a2, model)
+              result_32 = is_bonded(a3, a2, model)
               if result_12 is not None:continue
               if result_32 is not None: continue
               #if (not a1.is_in_same_conformer_as(a2)): continue
@@ -211,15 +211,15 @@ def define_pi_system(hierarchy,vdwr,model,eps = 5):
         if (not atom_1.is_in_same_conformer_as(atom_4)): continue
         if (not atom_1.is_in_same_conformer_as(atom_5)): continue
         if (not atom_1.is_in_same_conformer_as(atom_6)): continue
-        result_12 = ideal_distance(atom_1, atom_2, model)
+        result_12 = is_bonded(atom_1, atom_2, model)
         if result_12 is None:continue
-        result_23 = ideal_distance(atom_2, atom_3, model)
+        result_23 = is_bonded(atom_2, atom_3, model)
         if result_23 is None: continue
-        result_34 = ideal_distance(atom_3, atom_4, model)
+        result_34 = is_bonded(atom_3, atom_4, model)
         if result_34 is None: continue
-        result_45 = ideal_distance(atom_4, atom_5, model)
+        result_45 = is_bonded(atom_4, atom_5, model)
         if result_45 is None: continue
-        result_56 = ideal_distance(atom_5, atom_6, model)
+        result_56 = is_bonded(atom_5, atom_6, model)
         if result_56 is None: continue
         angle1 = atom_1.angle(atom_2 , atom_6, degree = True)
         angle2 = atom_2.angle(atom_1 , atom_3, degree = True)
