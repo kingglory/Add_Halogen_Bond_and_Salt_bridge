@@ -47,6 +47,8 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
   pairs_atoms  = {}
   a_312        = {}
   final_result = []
+  angle1_eps   = {}
+  angle2_eps   = {}
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
     n1 = a1.name.strip().upper()
@@ -86,8 +88,10 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
                 ))
 
   for r in result_123:
-   if a_312[n3] == min(abs(180-a_312.values())):  # 2, line 29
-    if pairs_atoms[n2] == min(pairs_atoms.values()): # 1.line 27
+   for values in a_312.values():
+    angle1_eps[n3] = abs(180-values) # 2, line 29
+    if a_312[n3] == min(angle1_eps.values):
+     if pairs_atoms[n2] == min(pairs_atoms.values()): # 1.line 27
       if r.a2.name.strip().upper()== n2:
         if r.a3.name.strip().upper() == n3:
          a1        = r.a1
@@ -120,9 +124,11 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale = 0.6, angle_eps=40):
                         angle_312 = angle_312,
                         angle_214 = angle_214))
          for r in result:
-           if a_312[n4] == min(abs(120 - a_124.values())):
-             if r.a4.name.strip().upper() == n4:
-                 final_result.append(r)
+           for values in a_124.values():
+             angle2_eps[n4] = abs(120 - values)
+             if a_124[n4] == min(angle2_eps.values):
+              if r.a4.name.strip().upper() == n4:
+                  final_result.append(r)
 
   return final_result
 
