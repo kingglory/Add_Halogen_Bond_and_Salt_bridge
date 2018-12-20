@@ -30,8 +30,8 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    result = find_halogen_bonds(model = model)
-    for r in result:
+    final_result = find_halogen_bonds(model = model)
+    for r in final_result:
       print ("%4.2f"%r.d_12, r.angle_312,r.angle_214,r.atom_1.id_str(), r.atom_2.id_str(),
         r.atom_3.id_str(), r.atom_4.id_str())
 
