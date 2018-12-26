@@ -4,6 +4,7 @@ import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
 import iotbx.cif
+import time
 
 def get_model(pdb_file_name, cif_file_name):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
@@ -36,4 +37,8 @@ def exercise():
         r.atom_3.id_str(), r.atom_4.id_str())
 
 if __name__ == '__main__':
+  start = time.time()
   exercise()
+  end   = time.time()
+  time_cost = (end-start)
+  print "it cost % seconds"% time_cost

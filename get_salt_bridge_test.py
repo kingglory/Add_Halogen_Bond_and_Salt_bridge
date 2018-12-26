@@ -4,6 +4,7 @@ import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
 import iotbx.cif
+import time
 
 def get_model(pdb_file_name, cif_file_name):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
@@ -32,9 +33,14 @@ def exercise():
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
     result = find_salt_bridge(model = model)
+    """
     for r in result:
       print ("%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(),
         r.atom_3.id_str(), r.atom_4.id_str())
-
+"""
 if __name__ == '__main__':
-  exercise()
+    start = time.time()
+    exercise()
+    end = time.time()
+    time_cost = (end - start)
+    print "it cost % seconds" % time_cost
