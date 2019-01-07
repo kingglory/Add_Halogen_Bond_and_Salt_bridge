@@ -4,14 +4,11 @@ import iotbx.cif
 from libtbx import group_args
 from libtbx import easy_run
 
-def is_bonded(atom_1, atom_2, bond_proxies_simple):
-  result = False
-  for proxy in bond_proxies_simple:
-    i_seq, j_seq = proxy.i_seqs
-    if(atom_1.i_seq in proxy.i_seqs and atom_2.i_seq in proxy.i_seqs):
-      result = True
-      break
-  return result
+def is_bonded(atom_1, atom_2, bps_dict):
+  i12 = [atom_1.i_seq, atom_2.i_seq]
+  i12.sort()
+  if(not tuple(i12) in bps_dict): return False
+  else: return True
 
 # first step write codes to find halogen bond in one pdb file
 # define a function to try finding the halogen bond pairs
@@ -33,7 +30,7 @@ limations all fited,the bond distance more shorter ,more possible;
 5,theta_2 angle :Geometry of X-bonds in paper "Halogen bond in biological molecules"
 """
 
-def find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple):
+def find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bps_dict):
     """
     this function is help to short and complete the find X or H bonds function
     :param d: the distance between a1 and a2
@@ -44,7 +41,7 @@ def find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple):
     result_123 = []
     d_x_p = d / sum_vdwr
     for a3 in hierarchy.atoms():
-      if (not is_bonded(a1, a3, bond_proxies_simple)): continue
+      if (not is_bonded(a1, a3, bps_dict)): continue
       # theta_1 angle in paper "Halogen bond in biological molecules"
       angle_312 = (a1.angle(a2, a3, deg=True))
       # See Fig.1 in paper "Halogen bond in biological molecules"
@@ -58,72 +55,20 @@ def find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple):
                 sum_vdwr  = sum_vdwr,
                 angle_312 = angle_312
             ))
-    if result_123 is None:
-      for a3 in hierarchy.atoms():
-        if (not is_bonded(a1, a3, bond_proxies_simple)): continue
-        # theta_1 angle in paper "Halogen bond in biological molecules"
-        angle_312 = (a1.angle(a2, a3, deg=True))
-        # See Fig.1 in paper "Halogen bond in biological molecules"
-        if (90 < angle_312):
-          result_123.append(group_args(
-                    a1        = a1,
-                    a2        = a2,
-                    a3        = a3,
-                    d_12      = d,
-                    d_x_p     = d_x_p,
-                    sum_vdwr  = sum_vdwr,
-                    angle_312 = angle_312
-                ))
     return result_123
 
-def find_atom4(hierarchy,result_123, bond_proxies_simple, angle_eps):
-  result = []
-  result4 = None
-  for r_123 in result_123 :
-    a1        = r_123.a1
-    a2        = r_123.a2
-    a3        = r_123.a3
-    d         = r_123.d_12
-    d_x_p     = r_123.d_x_p
-    sum_vdwr  = r_123.sum_vdwr
-    angle_312 = r_123.angle_312
-    for a4 in hierarchy.atoms():
-      e4 = a4.element.upper()
-      # See Fig.1 in paper "Halogen bond in biological molecules"
-      if (e4[0] in ["C", "P", "S"]):
-        if (not is_bonded(a2, a4, bond_proxies_simple)): continue
-        # theta_2 angle in paper "Halogen bond in biological molecules"
-        angle_214 = (a2.angle(a1, a4, deg=True))
-        if (120 - angle_eps < angle_214 < 120 + angle_eps):  # 5,line32
-          result.append(group_args(
-                    atom_1    = a1,
-                    atom_2    = a2,
-                    atom_3    = a3,
-                    atom_4    = a4,
-                    d_12      = d,
-                    sum_vdwr  = sum_vdwr,
-                    d_x_p     = d_x_p,
-                    angle_312 = angle_312,
-                    angle_214 = angle_214))
-    diff_best = 1.e+9
-    for r in result:
-      diff = abs(120 - r.angle_214)
-      if(diff < diff_best):
-        diff_best = diff
-        result4 = r
-  return result4
-
-
-def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,emp_scale2 = 0.75, angle_eps=40):
+def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6, emp_scale2 = 0.75, 
+                       angle_eps = 40):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                sites_cart = model.get_sites_cart())
+    sites_cart = model.get_sites_cart())
+  bps_dict = {}
+  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   hierarchy = model.get_hierarchy()
   vdwr      = model.get_vdw_radii()
   halogens  = ["CL", "BR", "I", "F"]
   halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
-  atom2_list   = []
-  final_result = []
+  results = []
   for a1 in hierarchy.atoms():
     e1 = a1.element.upper()
     n1 = a1.name.strip().upper()
@@ -132,34 +77,52 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,emp_scale2 = 0.75, an
         e2 = a2.element.upper()
         n2 = a2.name.strip().upper()
         if(not a1.is_in_same_conformer_as(a2)): continue
-        if(is_bonded(a1,a2, bond_proxies_simple)): continue
+        if(is_bonded(a1, a2, bps_dict)): continue
         if(a1.parent().parent().resseq == a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
           # O2' in 3v04.pdb file will recognized as O2* ,so replace it
-          n1            = n1.replace("'","*")
-          n2            = n2.replace("'","*")
-          n2            = n2.replace("XT","")# 2yj8.pdb  vdwr can't recognize 'OXT'
-          d             = a1.distance(a2)
-          if n1 not in vdwr.keys(): continue
-          if n2 not in vdwr.keys(): continue
+          n1 = n1.replace("'","*")
+          n2 = n2.replace("'","*")
+          n2 = n2.replace("XT","") # 2yj8.pdb  vdwr can't recognize 'OXT'
+          d  = a1.distance(a2)
+          if(n1 not in vdwr.keys()): continue
+          if(n2 not in vdwr.keys()): continue
           sum_vdwr      = vdwr[n1] + vdwr[n2]
           sum_vdwr_min1 = sum_vdwr * emp_scale1
-          sum_vdwr_min2 = sum_vdwr*emp_scale2 #4 line 31
+          sum_vdwr_min2 = sum_vdwr * emp_scale2
+          d_x_p = d / sum_vdwr
           if(sum_vdwr_min2-eps < d < sum_vdwr+eps):# found HB pairs-candidates
-            result_123 = find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple)
-            if result_123 is None:continue
-            result4 = find_atom4(hierarchy, result_123, bond_proxies_simple, angle_eps)
-            if result4 is None:continue
-            final_result.append(result4)
-            atom2_list.append(a2)
-          if atom2_list is None:
-           if(sum_vdwr_min1-eps < d < sum_vdwr_min2-eps ):
-            result_123 = find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple)
-            if result_123 is None: continue
-            result4    = find_atom4(hierarchy,result_123, bond_proxies_simple, angle_eps)
-            if result4 is None: continue
-            final_result.append(result4)
-  return final_result
+            diff_best = 1.e+9
+            result = None
+            for a3 in hierarchy.atoms():
+              if(not is_bonded(a1, a3, bps_dict)): continue
+              # theta_1 angle in paper "Halogen bond in biological molecules"
+              angle_312 = (a1.angle(a2, a3, deg=True))
+              # Fig.1 in "Halogen bond in biological molecules"
+              if(130 < angle_312):
+                for a4 in hierarchy.atoms():
+                  e4 = a4.element.upper()
+                  # Fig.1 in "Halogen bond in biological molecules"
+                  if(e4[0] in ["C", "P", "S"]):
+                    if(not is_bonded(a2, a4, bps_dict)): continue
+                    # theta_2 angle in "Halogen bond in biological molecules"
+                    angle_214 = (a2.angle(a1, a4, deg=True))
+                    if(120 - angle_eps < angle_214 < 120 + angle_eps):
+                      diff = abs(120 - angle_214)
+                      if(diff < diff_best):
+                        diff_best = diff
+                        result = group_args(
+                          atom_1    = a1,
+                          atom_2    = a2,
+                          atom_3    = a3,
+                          atom_4    = a4,
+                          d_12      = d,
+                          sum_vdwr  = sum_vdwr,
+                          d_x_p     = d_x_p,
+                          angle_312 = angle_312,
+                          angle_214 = angle_214)
+            if(result is not None): results.append(result)
+  return results
 
 #Second step,find salt bridge in one pdb filess
 
@@ -251,6 +214,7 @@ def find_salt_bridge(model,eps = 0.3):
                               angle_132= angle_132))
   return result
 """
+
 def define_pi_system(model,eps = 5):
  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
  geometry = model.get_restraints_manager()
