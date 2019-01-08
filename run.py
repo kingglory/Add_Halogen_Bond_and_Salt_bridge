@@ -1,3 +1,4 @@
+from __future__ import print_function
 from __future__ import division
 import iotbx.pdb
 import iotbx.cif
@@ -194,13 +195,13 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
             if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):  # found HB pairs-candidates
               result_123 = find_atom_3(d_12, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple)
               atom2_list.append(a2)
-              if result_123 is None: continue
-              final_result.append(result_123)
+              if result_123 is not None:
+                 final_result.append(result_123)
             if atom2_list is None:
               if (sum_vdwr_min1 + eps < d_12 < sum_vdwr_min2 - eps):
                 result_123 = find_atom_3(d_12, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple)
-                if result_123 is None: continue
-                final_result.append(result_123)
+                if result_123 is not None:
+                  final_result.append(result_123)
     return final_result
 
 # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
@@ -237,20 +238,19 @@ def find_salt_bridge(model,eps = 0.3):
               if ( d_12 < sum_vdwr ):
                  atom2_list.append((a1.id_str(),a2.id_str()))
                  # ---to here,now find all the ions bonds
-                 print atom2_list
-                 """
-                 angle_132 = (a3.angle(a1, a2, deg=True))
-                 if(90< angle_132):
-                          result.append(group_args(
-                              atom_1   = a1,
-                              atom_2   = a2,
-                              atom_3   = a3,
-                              d_i      = d_i,
-                              d_h      = d_h,
-                              sum_vdwr = sum_vdwr,
-                              angle_132= angle_132))
-  return result
-"""
+                 #the above is about finding ions bond,the following is about finding hydrogen bond,the saltbridge
+                 final_result = find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75)
+                 for r in final_result:
+                    print(r)
+                    a1_h = r.atom_1
+                    a2_h = r.atom_2
+                    d1   =a1.distance(a1_h)
+                    d2   =a1.distance(a2_h)
+                    d3   =a2.distance(a1_h)
+                    d4   =a2.distance(a2_h)
+                    d_min=min(d1,d2,d3,d4)
+                    if d_min < 4:
+                     print ("find salt_bridge")
 def define_pi_system(model,eps = 5):
  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
  geometry = model.get_restraints_manager()
@@ -259,6 +259,10 @@ def define_pi_system(model,eps = 5):
  vdwr = model.get_vdw_radii()
  for proxy in planarity_proxies_simple :
    print (proxy.i_seqs)
+   print (dir(hierarchy))
+   for atom_group in hierarchy.atom_groups:
+     for res_group in atom_group:
+       print (dir(res_group))
 
 
 
