@@ -173,35 +173,27 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
                         angle_312=angle_312)
                     if (result is not None): results.append(result)
 
-                return results
-              """
-              atom2_list.append(a2)
-              if result_123 is None: continue
-              final_result.append(result_123)
-            if atom2_list is None:
-              if (sum_vdwr_min1 + eps < d_12 < sum_vdwr_min2 - eps):
-                result_123 = find_atom_3(d_12, sum_vdwr, hierarchy, a1, a2, bond_proxies_simple)
-                if result_123 is None: continue
-                final_result.append(result_123)
-    return final_result
-"""
+    return results
+
 # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
 #  with electrically charged side chains,the positive charged atom is N
 # there are some H atoms around this N atom
 # [asp,glu] are negative,the negative charged atom is O
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
-def find_salt_bridge(model,eps = 0.3):
+def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
         sites_cart=model.get_sites_cart())
-  hierarchy      = model.get_hierarchy()
-  vdwr           = model.get_vdw_radii()
-  result         = []
-  atom2_list     = []
-  positive_acide = ["ARG" , "HIS" , "LYS"]
-  negative_acids = ["ASP" , "GLU"]
-  H_acides       = ["LYS" , "ARG" , "HIS" , "SER" , "THR" , "TYP"]
+  bps_dict = {}
+  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+  hierarchy                 = model.get_hierarchy()
+  vdwr                      = model.get_vdw_radii()
+  results                   = []
+  ions_bonds_paris_list     = []
+  positive_acide            = ["ARG" , "HIS" , "LYS"]
+  negative_acids            = ["ASP" , "GLU"]
+  H_acides                  = ["LYS" , "ARG" , "HIS" , "SER" , "THR" , "TYP"]
   #first find ions bonds from the first following line to ---
   for a1 in hierarchy.atoms():
      if (a1.parent().resname in positive_acide):
@@ -217,22 +209,54 @@ def find_salt_bridge(model,eps = 0.3):
               d_12      = a1.distance(a2)
               sum_vdwr  = vdwr[n1] + vdwr[n2]
               if ( d_12 < sum_vdwr ):
-                 atom2_list.append((a1.id_str(),a2.id_str()))
-                 # ---to here,now find all the ions bonds
-                 print atom2_list
-                 """
-                 angle_132 = (a3.angle(a1, a2, deg=True))
-                 if(90< angle_132):
-                          result.append(group_args(
-                              atom_1   = a1,
-                              atom_2   = a2,
-                              atom_3   = a3,
-                              d_i      = d_i,
-                              d_h      = d_h,
-                              sum_vdwr = sum_vdwr,
-                              angle_132= angle_132))
-  return result
-"""
+                ions_bonds_paris_list.append((a1.id_str(), a2.id_str()))
+                # ---to here,now find all the ions bonds;
+                #the following is to find the hydrogen bonds beside the ions bonds
+                for a3 in hierarchy.atoms():
+                  e3 = a1.element.upper()
+                  n3 = a1.name.strip().upper()
+                  if (e3[0] == "H"):
+                    for a4 in hierarchy.atoms():
+                      n4 = a4.name.strip().upper()
+                      if (not a3.is_in_same_conformer_as(a4)): continue
+                      if (is_bonded(a3, a4, bps_dict)): continue
+                      dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
+                      if n4[0] in dict_h_bond_lengh.keys():
+                        #if the mins distance between ions atoms and hydrogen bonds paris atoms
+                        #  is longer than the longest distance between saltbridge :4,
+                        # it won't make up saltbridge
+                        d13 = a1.distance(a3)
+                        d14 = a1.distance(a4)
+                        d23 = a2.distance(a3)
+                        d24 = a2.distance(a4)
+                        if min(d13,d14,d23,d24)< 8:
+                          if n1 not in vdwr.keys(): continue
+                          if n2 not in vdwr.keys(): continue
+                          d_34 = a1.distance(a2)
+                          sum_vdwr = vdwr[n3] + vdwr[n4]
+                          d_x_p = d_12 / sum_vdwr
+                          sum_vdwr_min1 = dict_h_bond_lengh[n4[0]]
+                          sum_vdwr_min2 = sum_vdwr * emp_scale  # 4 line 31
+                          if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):  # found HB pairs-candidates
+                            for a5 in hierarchy.atoms():
+                              if (not is_bonded(a1, a3, bps_dict)): continue
+                              angle_534 = (a3.angle(a5, a4, deg=True))
+                              if (90 < angle_534):
+                                result = group_args(
+                                      atom_1=a1,
+                                      atom_2=a2,
+                                      atom_3=a3,
+                                      atom_4=a3,
+                                      atom_5=a3,
+                                      d_12=d_12,
+                                      d_34=d_34,
+                                      sum_vdwr=sum_vdwr,
+                                      d_x_p=d_x_p,
+                                      angle_534=angle_534)
+                                if (result is not None): results.append(result)
+
+  return results
+
 
 def define_pi_system(model,eps = 5):
  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]

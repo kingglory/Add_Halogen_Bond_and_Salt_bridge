@@ -5,7 +5,7 @@ import mmtbx.model
 from libtbx.utils import null_out
 import iotbx.cif
 import time
-from libtbx import easy_run
+
 
 
 
