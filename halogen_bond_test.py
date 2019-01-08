@@ -18,7 +18,7 @@ def get_model(pdb_file_name, cif_file_name):
     process_input     = True,
     log               = null_out())
   return model
-
+  
 def exercise():
   files = [["5v7d.pdb",None],
            ["2h79.pdb","2h79.ligands.cif"],
@@ -28,18 +28,17 @@ def exercise():
            ["2vag.pdb","2vag.ligands.cif"],
            #["2yj8.pdb","2yj8.ligands.cif"],
            ["3v04.pdb","3v04.ligands.cif"],
-           ["4e7r.pdb","4e7r.ligands.cif"]]
+           ["4e7r.pdb","4e7r.ligands.cif"]
+           ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    final_result = find_halogen_bonds(model = model)
-    for r in final_result:
-      print ("%4.2f"%r.d_12, r.angle_312,r.angle_214,r.atom_1.id_str(), r.atom_2.id_str(),
-        r.atom_3.id_str(), r.atom_4.id_str())
+    results = find_halogen_bonds(model = model)
+    for r in results:
+      print("%4.2f"%r.d_12, r.angle_312, r.angle_214,r.atom_1.id_str(), 
+        r.atom_2.id_str())
 
 if __name__ == '__main__':
-  start = time.time()
+  t0 = time.time()
   exercise()
-  end   = time.time()
-  time_cost = (end-start)
-  print "it cost % seconds"% time_cost
+  print "Time: %6.2f"%(time.time()-t0)

@@ -5,6 +5,11 @@ import mmtbx.model
 from libtbx.utils import null_out
 import iotbx.cif
 import time
+from libtbx import easy_run
+
+
+
+
 def get_model(pdb_file_name, cif_file_name):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
   restraint_objects = None
@@ -19,20 +24,19 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [["5v7dh.pdb",None],
-           ["2h79h.pdb","2h79h.ligands.cif"],
-           ["2itoh.pdb","2itoh.ligands.cif"],
-           ["2oxyh.pdb","2oxyh.ligands.cif"],
-           ["2vagh.pdb","2vagh.ligands.cif"],
-           ["3v04h.pdb","3v04h.ligands.cif"],
-           ["4e7rh.pdb","4e7rh.ligands.cif"]]
+  files = [["1f23h.pdb",None],
+           ["1jmhh.pdb",None],
+           ["1l04h.pdb",None],
+           ["1wqmh.pdb",None],
+           ["1wqoh.pdb",None],
+           ["1wqph.pdb",None]]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    final_result = find_hydrogen_bonds(model = model)
-    for r in final_result:
-      print ("%4.2f"%r.d_12, r.angle_312,r.angle_214,r.atom_1.id_str(), r.atom_2.id_str(),
-        r.atom_3.id_str(), r.atom_4.id_str())
+    results = find_hydrogen_bonds(model = model)
+    for r in results:
+      print ("%4.2f"%r.d_12, r.angle_312,r.atom_1.id_str(), r.atom_2.id_str(),
+        r.atom_3.id_str())
 
 if __name__ == '__main__':
     start = time.time()
