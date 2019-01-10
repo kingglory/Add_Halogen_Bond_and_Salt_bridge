@@ -26,6 +26,11 @@ def exercise():
            ["1cbrh.pdb",None],
            ["1pgah.pdb",None],
            ["1eq5h.pdb",None],
+           ["1eq4h.pdb",None],
+           ["1kv5h.pdb",None],
+           ["1l37h.pdb",None],
+           ["1mylh.pdb",None],
+           ["1s02h.pdb",None],
            ["2qmth.pdb","2qmth.ligands.cif"],
            ["2on8h.pdb",None],
            ["2onqh.pdb",None]]

@@ -24,7 +24,6 @@ def exercise():
            ["2h79.pdb","2h79.ligands.cif"],
            ["2ito.pdb","2ito.ligands.cif"],
            ["2oxy.pdb","2oxy.ligands.cif"],
-
            ["2vag.pdb","2vag.ligands.cif"],
            #["2yj8.pdb","2yj8.ligands.cif"],
            ["3v04.pdb","3v04.ligands.cif"],

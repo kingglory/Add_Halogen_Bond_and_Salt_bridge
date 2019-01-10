@@ -1,5 +1,6 @@
 from __future__ import division
 from run import define_pi_system
+from run import find_pi
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -49,19 +50,18 @@ def get_model(pdb_file_name, cif_file_name):
 def exercise():
   files = [["1c14.pdb","1c14.ligands.cif"],
            #["3az9.pdb",None]
+           ["2vb3.pdb",None]
           ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    ag    = find_pi(model)
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print ("%4.2f"%r.d12, r.atom_1.id_str(), r.atom_2.id_str(),
-        r.atom_3.id_str(), r.atom_4.id_str())
+      print ("%4.2f"%r.d_14, r.atom_1.id_str(), r.atom_4.id_str())
 
 if __name__ == '__main__':
-    start = time.time()
+    t0 = time.time()
     exercise()
-    end = time.time()
-    time_cost = (end - start)
-    print time_cost
+    print "Time: %6.2f" % (time.time() - t0)
