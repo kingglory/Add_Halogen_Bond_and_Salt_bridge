@@ -290,6 +290,7 @@ def define_pi_system(model,eps = 5):
  vdwr = model.get_vdw_radii()
  pps_dict = {}
  results = []
+ atom = hierarchy.atom
  [pps_dict.setdefault(p.i_seqs, True) for p in  planarity_proxies_simple]
  """
  Obviously, if the value of one of the three XYZ coordinates of a certain point 
@@ -299,30 +300,19 @@ def define_pi_system(model,eps = 5):
  is less than 8 (twice the limit of the interaction of two atoms),
  regardless of the dihedral angle of the two faces, we can say that the pi stack has appeared.
  """
- for a1 in hierarchy.atoms():
-     for a2 in hierarchy.atoms():
-         for a3 in hierarchy.atoms():
-             for a4 in hierarchy.atoms():
-               if (in_plain(a1,a2,a3,a4,pps_dict)):
-                 for a5 in hierarchy.atoms:
-                    for key in pps_dict.keys():
-                       if a5.i_seq in key:
-                         x1_diff = (a5.xyz[0] - a1.xyz[0])
-                         y1_diff = (a5.xyz[1] - a1.xyz[1])
-                         z1_diff = (a5.xyz[2] - a1.xyz[2])
-                         x2_diff = (a5.xyz[0] - a2.xyz[0])
-                         y2_diff = (a5.xyz[1] - a2.xyz[1])
-                         z2_diff = (a5.xyz[2] - a2.xyz[2])
-                         result = group_args(
-                                   atom1 = a1,
-                                   atom4 = a4)
-                         if (result is not None): results.append(result)
+ atom1_list = []
 
- return results
-
-
-
-
+   for key in pps_dict.keys():
+     if atom.i_seq == key[0]:
+       atom1_list[0] = atom
+     if atom.i_seq == key[1]:
+       atom1_list[1] = atom
+     if atom.i_seq == key[2]:
+       atom1_list[2] = atom
+     if atom.i_seq == key[3]:
+       atom1_list[3] = atom
+     if len(atom1_list) == 4:
+       print atom1_list
 
 
 
