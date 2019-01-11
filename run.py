@@ -256,8 +256,8 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
                       d23 = a2.distance(a3)
                       d24 = a2.distance(a4)
                       if min(d13,d14,d23,d24)< 8:
-                        if n1 not in vdwr.keys(): continue
-                        if n2 not in vdwr.keys(): continue
+                        if n3 not in vdwr.keys(): continue
+                        if n4 not in vdwr.keys(): continue
                         d_34 = a1.distance(a2)
                         sum_vdwr = vdwr[n3] + vdwr[n4]
                         d_x_p = d_12 / sum_vdwr
