@@ -1,0 +1,211 @@
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+KCR KCR "Unknown                  " ligand 32 15 . 
+#
+data_comp_KCR
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+KCR        N       N   NH2    0 .         -3.1910   -2.2146   -3.2889
+KCR        CA      C   CH1    0 .         -1.7542   -2.0121   -3.3262
+KCR        CB      C   CH2    0 .         -1.1976   -2.0524   -1.9052
+KCR        CG      C   CH2    0 .         -0.8044   -0.6424   -1.4725
+KCR        CD      C   CH2    0 .         -0.1747   -0.6936   -0.0831
+KCR        CE      C   CH2    0 .          0.1443    0.7247    0.3837
+KCR        NZ      N   NH1    0 .          1.0153    0.6679    1.5437
+KCR        CH      C   C      0 .          1.6220    1.8830    2.0554
+KCR        OH      O   O      0 .          1.2612    2.9386    1.6567
+KCR        CX      C   C1     0 .          2.7354    1.8002    3.0977
+KCR        CY      C   C1     0 .          2.6775    2.5430    4.1836
+KCR        CH3     C   CH3    0 .          1.4967    3.4875    4.4008
+KCR        C       C   C      0 .         -1.1061   -3.1164   -4.1583
+KCR        O       O   O      0 .         -0.4110   -2.8201   -5.1656
+KCR        O1      O   OC    -1 .         -1.2772   -4.3235   -3.8447
+KCR        H1      H   HNH2   0 .         -3.4386   -2.9672   -3.9034
+KCR        H2      H   HNH2   0 .         -3.6546   -1.3758   -3.5840
+KCR        H4      H   HCH1   0 .         -1.5367   -1.0489   -3.7722
+KCR        H5      H   HCH2   0 .         -1.9542   -2.4396   -1.2314
+KCR        H6      H   HCH2   0 .         -0.3247   -2.6959   -1.8769
+KCR        H7      H   HCH2   0 .         -0.0895   -0.2335   -2.1788
+KCR        H8      H   HCH2   0 .         -1.6873   -0.0129   -1.4463
+KCR        H9      H   HCH2   0 .         -0.8681   -1.1553    0.6113
+KCR        H10     H   HCH2   0 .          0.7400   -1.2758   -0.1218
+KCR        H11     H   HCH2   0 .         -0.7764    1.2343    0.6474
+KCR        H12     H   HCH2   0 .          0.6409    1.2653   -0.4153
+KCR        H13     H   HNH1   0 .          1.2224   -0.2129    1.9710
+KCR        H14     H   H      0 .          3.5728    1.1303    2.9437
+KCR        H15     H   H      0 .          3.4673    2.4842    4.9228
+KCR        H16     H   HCH3   0 .          1.5280    4.2823    3.6609
+KCR        H17     H   HCH3   0 .          1.5554    3.9173    5.3966
+KCR        H18     H   HCH3   0 .          0.5672    2.9344    4.2992
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+KCR  CH3     CY     single        1.528 0.020     1.528
+KCR  CY      CX     double        1.317 0.020     1.317
+KCR  CX      CH     single        1.527 0.020     1.527
+KCR  OH      CH     double        1.185 0.020     1.185
+KCR  CH      NZ     single        1.451 0.020     1.451
+KCR  NZ      CE     single        1.452 0.020     1.452
+KCR  CE      CD     single        1.527 0.020     1.527
+KCR  CG      CD     single        1.526 0.020     1.526
+KCR  CG      CB     single        1.526 0.020     1.526
+KCR  CB      CA     single        1.527 0.020     1.527
+KCR  N       CA     single        1.451 0.020     1.451
+KCR  CA      C      single        1.527 0.020     1.527
+KCR  O       C      deloc         1.259 0.020     1.259
+KCR  C       O1     deloc         1.259 0.020     1.259
+KCR  N       H1     single        0.890 0.020     1.040
+KCR  N       H2     single        0.890 0.020     1.040
+KCR  CA      H4     single        0.970 0.020     1.090
+KCR  CB      H5     single        0.970 0.020     1.090
+KCR  CB      H6     single        0.970 0.020     1.090
+KCR  CG      H7     single        0.970 0.020     1.090
+KCR  CG      H8     single        0.970 0.020     1.090
+KCR  CD      H9     single        0.970 0.020     1.090
+KCR  CD      H10    single        0.970 0.020     1.090
+KCR  CE      H11    single        0.970 0.020     1.090
+KCR  CE      H12    single        0.970 0.020     1.090
+KCR  NZ      H13    single        0.860 0.020     1.020
+KCR  CX      H14    single        0.930 0.020     1.080
+KCR  CY      H15    single        0.930 0.020     1.080
+KCR  CH3     H16    single        0.970 0.020     1.090
+KCR  CH3     H17    single        0.970 0.020     1.090
+KCR  CH3     H18    single        0.970 0.020     1.090
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+KCR  H2      N       H1           109.47 3.000
+KCR  H2      N       CA           109.47 3.000
+KCR  H1      N       CA           109.47 3.000
+KCR  H4      CA      C            109.47 3.000
+KCR  H4      CA      CB           109.47 3.000
+KCR  C       CA      CB           109.47 3.000
+KCR  H4      CA      N            109.47 3.000
+KCR  C       CA      N            109.47 3.000
+KCR  CB      CA      N            109.47 3.000
+KCR  H6      CB      H5           109.47 3.000
+KCR  H6      CB      CG           109.47 3.000
+KCR  H5      CB      CG           109.47 3.000
+KCR  H6      CB      CA           109.47 3.000
+KCR  H5      CB      CA           109.47 3.000
+KCR  CG      CB      CA           109.47 3.000
+KCR  H8      CG      H7           109.47 3.000
+KCR  H8      CG      CD           109.47 3.000
+KCR  H7      CG      CD           109.47 3.000
+KCR  H8      CG      CB           109.47 3.000
+KCR  H7      CG      CB           109.47 3.000
+KCR  CD      CG      CB           109.47 3.000
+KCR  H10     CD      H9           109.47 3.000
+KCR  H10     CD      CE           109.47 3.000
+KCR  H9      CD      CE           109.47 3.000
+KCR  H10     CD      CG           109.47 3.000
+KCR  H9      CD      CG           109.47 3.000
+KCR  CE      CD      CG           109.47 3.000
+KCR  H12     CE      H11          109.47 3.000
+KCR  H12     CE      NZ           109.47 3.000
+KCR  H11     CE      NZ           109.47 3.000
+KCR  H12     CE      CD           109.47 3.000
+KCR  H11     CE      CD           109.47 3.000
+KCR  NZ      CE      CD           109.47 3.000
+KCR  H13     NZ      CH           119.99 3.000
+KCR  H13     NZ      CE           119.99 3.000
+KCR  CH      NZ      CE           119.99 3.000
+KCR  CX      CH      OH           120.00 3.000
+KCR  OH      CH      NZ           120.00 3.000
+KCR  CX      CH      NZ           120.00 3.000
+KCR  H14     CX      CY           120.00 3.000
+KCR  H14     CX      CH           120.00 3.000
+KCR  CY      CX      CH           120.00 3.000
+KCR  H15     CY      CH3          120.00 3.000
+KCR  H15     CY      CX           120.00 3.000
+KCR  CH3     CY      CX           120.00 3.000
+KCR  H18     CH3     H17          109.47 3.000
+KCR  H18     CH3     H16          109.47 3.000
+KCR  H17     CH3     H16          109.47 3.000
+KCR  H18     CH3     CY           109.47 3.000
+KCR  H17     CH3     CY           109.47 3.000
+KCR  H16     CH3     CY           109.47 3.000
+KCR  O1      C       O            120.00 3.000
+KCR  O1      C       CA           120.00 3.000
+KCR  O       C       CA           120.00 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+KCR CONST_01      CX      CH      NZ      CE          -168.43   0.0 0
+KCR CONST_02      OH      CH      NZ      CE            10.95   0.0 0
+KCR CONST_03      H13     NZ      CH      OH          -171.16   0.0 0
+KCR Var_01        CH3     CY      CX      CH            -0.00   0.0 2
+KCR Var_02        CD      CG      CB      CA          -176.80  30.0 1
+KCR Var_03        CE      CD      CG      CB          -176.73  30.0 3
+KCR Var_04        NZ      CE      CD      CG          -166.72  30.0 1
+KCR Var_05        CH      NZ      CE      CD           170.86  30.0 1
+KCR Var_06        CY      CX      CH      NZ          -131.26  30.0 1
+KCR Var_07        H16     CH3     CY      CX           -67.17  30.0 3
+#
+loop_
+_chem_comp_plane_atom.comp_id
+_chem_comp_plane_atom.plane_id
+_chem_comp_plane_atom.atom_id
+_chem_comp_plane_atom.dist_esd
+KCR plan-1  CE     0.020
+KCR plan-1  NZ     0.020
+KCR plan-1  CH     0.020
+KCR plan-1  OH     0.020
+KCR plan-1  CX     0.020
+KCR plan-1  H13    0.020
+KCR plan-2  CA     0.020
+KCR plan-2  C      0.020
+KCR plan-2  O      0.020
+KCR plan-2  O1     0.020
+KCR plan-3  CH     0.020
+KCR plan-3  CX     0.020
+KCR plan-3  CY     0.020
+KCR plan-3  CH3    0.020
+KCR plan-3  H14    0.020
+KCR plan-3  H15    0.020
+#
+loop_
+_chem_comp_chir.comp_id
+_chem_comp_chir.id
+_chem_comp_chir.atom_id_centre
+_chem_comp_chir.atom_id_1
+_chem_comp_chir.atom_id_2
+_chem_comp_chir.atom_id_3
+_chem_comp_chir.volume_sign
+KCR chir_01  CA      CB      N       C      positiv

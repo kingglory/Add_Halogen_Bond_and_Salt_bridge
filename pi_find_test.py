@@ -50,12 +50,16 @@ def get_model(pdb_file_name, cif_file_name):
 def exercise():
   files = [["1c14.pdb","1c14.ligands.cif"],
            #["3az9.pdb",None]
-           ["2vb3.pdb",None]
+           ["2vb3.pdb",None],
+           ["4bfq.pdb","4bfq.ligands.cif"],
+           #["5yyf,pdb","5yyf.ligands.cif"],
+           ["6mil.pdb","6mil.ligands.cif"],
+           ["6mim.pdb","6mim.ligands.cif"],
+           ["6mio.pdb",None]
           ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    ag    = find_pi(model)
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
