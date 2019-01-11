@@ -240,6 +240,7 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
                 e3 = a3.element.upper()
                 n3 = a1.name.strip().upper()
                 if a3.element_is_hydrogen():
+                  if a1.distance(a3) > 8:continue
                   for a4 in hierarchy.atoms():
                     e4 = a4.element.upper()
                     n4 = a4.name.strip().upper()
@@ -300,19 +301,15 @@ def define_pi_system(model,eps = 5):
  is less than 8 (twice the limit of the interaction of two atoms),
  regardless of the dihedral angle of the two faces, we can say that the pi stack has appeared.
  """
- atom1_list = []
-
-   for key in pps_dict.keys():
-     if atom.i_seq == key[0]:
-       atom1_list[0] = atom
-     if atom.i_seq == key[1]:
-       atom1_list[1] = atom
-     if atom.i_seq == key[2]:
-       atom1_list[2] = atom
-     if atom.i_seq == key[3]:
-       atom1_list[3] = atom
-     if len(atom1_list) == 4:
-       print atom1_list
+ for a1 in hierarchy.atoms():
+   for a2 in hierarchy.atoms():
+     for a3 in hierarchy.atoms():
+       for a4 in hierarchy.atoms():
+         if (in_plain(a1, a2, a3, a4,pps_dict)):
+           for a5 in hierarchy.atoms():
+             for key in pps_dict.keys():
+               if a5.i_seq in key:
+                 print "to do"
 
 
 
