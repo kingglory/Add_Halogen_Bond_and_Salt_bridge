@@ -4,7 +4,7 @@ import iotbx.cif
 import scitbx
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
-#from scitbx.math import dihedral
+from scitbx.math import dihedral_angle
 from libtbx import easy_run
 
 def is_bonded(atom_1, atom_2, bps_dict):
@@ -310,6 +310,10 @@ def define_pi_system(model,eps = 5):
              for key in pps_dict.keys():
                if a5.i_seq in key:
                  print "to do"
+                 print "calculate the area of plane made by four atoms," \
+                       "then dihedral_angle between two planes" \
+                       "if area*dihedral_angle > 0 ,and distance between one atoms" \
+                       "in each plane is shorter than 8 ,maybe we can say we find the pi stacking"
 
 
 
