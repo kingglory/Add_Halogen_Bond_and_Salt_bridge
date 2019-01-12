@@ -56,35 +56,6 @@ the angle1 is more near 120,more possible;
 "Halogen bond in biological molecules"
 """
 
-def find_atom_3(d, sum_vdwr, hierarchy, a1, a2, bps_dict):
-    """
-    this function is help to short and complete
-    the find X or H bonds function
-    :param d: the distance between a1 and a2
-    :param sum_vdwr: the sum of (a1 and a2)'s vdwr
-    :param bond_proxies_simple: a object that will help to define
-    if it will make covalent bond between
-    :param result_123: the informations of a1 and a2 an a3
-    """
-    result_123 = []
-    d_x_p = d / sum_vdwr
-    for a3 in hierarchy.atoms():
-      if (not is_bonded(a1, a3, bps_dict)): continue
-      # theta_1 angle in paper "Halogen bond in biological molecules"
-      angle_312 = (a1.angle(a2, a3, deg=True))
-      # See Fig.1 in paper "Halogen bond in biological molecules"
-      if (130 < angle_312):
-        result_123.append(group_args(
-                a1        = a1,
-                a2        = a2,
-                a3        = a3,
-                d_12      = d,
-                d_x_p     = d_x_p,
-                sum_vdwr  = sum_vdwr,
-                angle_312 = angle_312)
-                        )
-    return result_123
-
 def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                        emp_scale2 = 0.75, angle_eps = 40):
   geometry = model.get_restraints_manager()
@@ -298,36 +269,16 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
 
 
 def define_pi_system(model,eps = 5):
- pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
- geometry = model.get_restraints_manager()
- planarity_proxies_simple = geometry.geometry.planarity_proxies
- hierarchy = model.get_hierarchy()
- vdwr = model.get_vdw_radii()
- pps_dict = {}
- results = []
- atom = hierarchy.atom
- [pps_dict.setdefault(p.i_seqs, True) for p in  planarity_proxies_simple]
- """
- Obviously, if the value of one of the three XYZ coordinates of a certain point 
- of the first PI is smaller than the corresponding coordinate of a certain point of the second PI,
- then there is a another point that is the opposite. 
- this is the intersection of the two plane projections! And the distance between these two points 
- is less than 8 (twice the limit of the interaction of two atoms),
- regardless of the dihedral angle of the two faces, we can say that the pi stack has appeared.
- """
- for a1 in hierarchy.atoms():
-   for a2 in hierarchy.atoms():
-     for a3 in hierarchy.atoms():
-       for a4 in hierarchy.atoms():
-         if (in_plain(a1, a2, a3, a4,pps_dict)):
-           for a5 in hierarchy.atoms():
-             for key in pps_dict.keys():
-               if a5.i_seq in key:
-                 print "to do"
-                 print "calculate the area of plane made by four atoms," \
-                       "then dihedral_angle between two planes" \
-                       "if area*dihedral_angle > 0 ,and distance between one atoms" \
-                       "in each plane is shorter than 8 ,maybe we can say we find the pi stacking"
+  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
+  geometry = model.get_restraints_manager()
+  hierarchy = model.get_hierarchy()
+  atoms = hierarchy.atoms()
+  planes = []
+  for proxy in geometry.geometry.planarity_proxies:
+    planes.append(atoms.select(proxy.i_seqs))
+    print [a.name for a in atoms.select(proxy.i_seqs)]
+  print len(planes)
+  STOP()
 
 
 
