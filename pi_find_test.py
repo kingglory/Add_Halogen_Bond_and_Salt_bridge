@@ -48,8 +48,7 @@ def get_model(pdb_file_name, cif_file_name):
 
 
 def exercise():
-  files = [["1c14.pdb","1c14.ligands.cif"],
-           #["3az9.pdb",None]
+  files = [
            ["2vb3.pdb",None],
            ["4bfq.pdb","4bfq.ligands.cif"],
            #["5yyf,pdb","5yyf.ligands.cif"],

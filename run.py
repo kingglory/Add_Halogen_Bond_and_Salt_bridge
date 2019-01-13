@@ -2,9 +2,10 @@ from __future__ import division
 import iotbx.pdb
 import iotbx.cif
 import scitbx
+import numpy as np
+import pandas as pd
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
-from scitbx.math import dihedral_angle
 from libtbx import easy_run
 
 def is_bonded(atom_1, atom_2, bps_dict):
@@ -81,7 +82,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
              a2.parent().parent().resseq): continue
         if(e2 in halogen_bond_pairs_atom):
           # O2' in 3v04.pdb file will recognized as O2* ,
-          # so replace it
+          #  so replace it
           n1 = n1.replace("'","*")
           n2 = n2.replace("'","*")
           n2 = n2.replace("XT","")
@@ -90,7 +91,6 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
           if(n1 not in vdwr.keys()): continue
           if(n2 not in vdwr.keys()): continue
           sum_vdwr = vdwr[n1] + vdwr[n2]
-          sum_vdwr_min1 = sum_vdwr * emp_scale1
           sum_vdwr_min2 = sum_vdwr * emp_scale2
           d_x_p = d / sum_vdwr
           if(sum_vdwr_min2-eps < d < sum_vdwr+eps):
@@ -129,8 +129,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                           d_x_p = d_x_p,
                           angle_312 = angle_312,
                           angle_214 = angle_214)
-                if(result is not None):
-                  results.append(result)
+                        if(result is not None):results.append(result)
   return results
 
 
@@ -189,10 +188,7 @@ def f_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                     atom_1=a1,
                     atom_2=a2,
                     atom_3=a3,
-                    atom_4=a4,
                     d_12=d,
-                    sum_vdwr=sum_vdwr,
-                    d_x_p=d_x_p,
                     angle_312=angle_312,
                     angle_214=angle_214)
             if (result is not None):results.append(result)
@@ -235,7 +231,7 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
                 if (not is_bonded(a1, a3, bps_dict)): continue
                 angle_312 = (a1.angle(a2, a3, deg=True))
                 if (90 < angle_312):
-                    result = group_args(
+                  result = group_args(
                         atom_1 = a1,
                         atom_2 = a2,
                         atom_3 = a3,
@@ -243,7 +239,7 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
                         sum_vdwr = sum_vdwr,
                         d_x_p = d_x_p,
                         angle_312 = angle_312)
-                    if (result is not None): results.append(result)
+                  if (result is not None): results.append(result)
 
     return results
 
@@ -267,9 +263,35 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
         atom1s.append(a)
       if e in dict_h_bond_lengh.keys():
         atom2s.append(a)
+    for a1 in atom1s:
+      for a2 in atom2s:
+        if (not a1.is_in_same_conformer_as(a2)): continue
+        if (is_bonded(a1, a2, bps_dict)): continue
+        n1 = a1.name.strip().upper()
+        n2 = a2.name.strip().upper()
+        if n1 not in vdwr.keys(): continue
+        if n2 not in vdwr.keys(): continue
+        d_12 = a1.distance(a2)
+        sum_vdwr = vdwr[n1] + vdwr[n2]
+        sum_vdwr_min2 = sum_vdwr * emp_scale
+        if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
+          for a3 in hierarchy.atoms():
+            if (not is_bonded(a1, a3, bps_dict)): continue
+            angle_312 = (a1.angle(a2, a3, deg=True))
+            if (90 < angle_312):
+              result = group_args(
+                atom_1=a1,
+                atom_2=a2,
+                atom_3=a3,
+                d_12=d_12,
+                angle_312=angle_312)
+              if (result is not None): results.append(result)
+
+    return results
 
 
-# in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
+
+    # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
 #  with electrically charged side chains,the positive charged atom is N
 # there are some H atoms around this N atom
 # [asp,glu] are negative,the negative charged atom is O
@@ -353,16 +375,45 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
                           if (result is not None): results.append(result)
   return results
 
+def distance_atomToArea(atom1_xyz, atom2_xyz, atom3_xyz, atom4_xyz):
+  """
+  Description: The distance from atom 4 to atom 1, atom 2, atom 3
+  Param atom1_xyz: row slices of data boxes, three-dimensional
+  Param atom2_xyz:
+  Param atom3_xyz:
+  Param atom_xyz:
+  Return: distance from atom to plane
+  """
+  #Let's assume that the X of the normal vector (x, y, z) is equal to 1.
+  x = 1# X coordinates of normal vectors
+  p1 = np.array(atom1_xyz)  #Conversion to Matrix
+  p2 = np.array(atom2_xyz)
+  p3 = np.array(atom3_xyz)
+  p4 = np.array(atom4_xyz)
+  v12 = p1 - p2  #Vectors from P1 to P2
+  v13 = p1 - p3  #Vectors from P1 to P3
+  X = np.vstack((v12, v13))
+  #Merge vectors V12 and V13 into 2*3 matrices
+  a = -X[:, 0] #The coefficient of a
+  yz = np.matrix(X[:, 1:]).I.dot(a)
+  #Multiply the inverse matrix of X by a
+  y = yz[0, 0]  #Y coordinates of normal vectors
+  z = yz[0, 1]  # Z coordinates of normal vectors
+  n = np.array([x, y, z])
+  #Normal vectors of the plane to which the first three atoms belong
+  v41 = p4 - p1  #Vectors from P4 to P1
+  return abs(v41.dot(n) / n.dot(n))
+
 
 def define_pi_system(model,eps = 5):
-  pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
+  #pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
   planes = []
   for proxy in geometry.geometry.planarity_proxies:
     planes.append(atoms.select(proxy.i_seqs))
-    print [a.name for a in atoms.select(proxy.i_seqs)]
+    print [a.xyz for a in atoms.select(proxy.i_seqs)]
   print len(planes)
   STOP()
 
