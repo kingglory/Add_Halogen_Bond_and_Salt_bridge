@@ -1,5 +1,6 @@
 from __future__ import division
 from run import find_halogen_bonds
+from run import f_halogen_bonds
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -13,10 +14,10 @@ def get_model(pdb_file_name, cif_file_name):
     cif_object = iotbx.cif.reader(cif_file_name).model()
     restraint_objects = [(cif_file_name, cif_object)]
   model = mmtbx.model.manager(
-    model_input       = pdb_inp,
-    restraint_objects = restraint_objects,
-    process_input     = True,
-    log               = null_out())
+                      model_input = pdb_inp,
+                      restraint_objects = restraint_objects,
+                      process_input = True,
+                      log = null_out())
   return model
   
 def exercise():
@@ -32,7 +33,8 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results = find_halogen_bonds(model = model)
+   # results = find_halogen_bonds(model = model)
+    results = f_halogen_bonds(model=model)
     for r in results:
       print("%4.2f"%r.d_12, r.angle_312, r.angle_214,r.atom_1.id_str(), 
         r.atom_2.id_str())

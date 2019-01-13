@@ -13,10 +13,10 @@ def get_model(pdb_file_name, cif_file_name):
     cif_object = iotbx.cif.reader(cif_file_name).model()
     restraint_objects = [(cif_file_name, cif_object)]
   model = mmtbx.model.manager(
-    model_input       = pdb_inp,
-    restraint_objects = restraint_objects,
-    process_input     = True,
-    log               = null_out())
+                      model_input = pdb_inp,
+                      restraint_objects = restraint_objects,
+                      process_input = True,
+                      log = null_out())
   return model
 
 
