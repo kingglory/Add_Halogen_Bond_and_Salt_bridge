@@ -405,17 +405,67 @@ def distance_atomToArea(atom1_xyz, atom2_xyz, atom3_xyz, atom4_xyz):
   return abs(v41.dot(n) / n.dot(n))
 
 
-def define_pi_system(model,eps = 5):
+
+
+def calculate_n(plane1):
+  p1_atoms = []
+  for atom1 in plane1:
+    p1_atoms.append(atom1)
+    if len(p1_atoms) == 3:
+      a1 = p1_atoms[0]
+      a2 = p1_atoms[1]
+      a3 = p1_atoms[2]
+      x = 1  # X coordinates of normal vectors
+      p1 = np.array(a1.xyz)  # Conversion to Matrix
+      p2 = np.array(a2.xyz)
+      p3 = np.array(a3.xyz)
+      v12 = p1 - p2  # Vectors from P1 to P2
+      v13 = p1 - p3  # Vectors from P1 to P3
+      X = np.vstack((v12, v13))
+      # Merge vectors V12 and V13 into 2*3 matrices
+      a = -X[:, 0]  # The coefficient of a
+      yz = np.matrix(X[:, 1:]).I.dot(a)
+      # Multiply the inverse matrix of X by a
+      y = yz[0, 0]  # Y coordinates of normal vectors
+      z = yz[0, 1]  # Z coordinates of normal vectors
+      n = np.array([x, y, z])
+      # Normal vectors of the plane to which the first three atoms belong
+    if len(p1_atoms) > 3: continue
+  return n
+
+def define_pi_system(model):
   #pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
+  results = []
   planes = []
+  d12_list     = []
   for proxy in geometry.geometry.planarity_proxies:
     planes.append(atoms.select(proxy.i_seqs))
-    print [a.xyz for a in atoms.select(proxy.i_seqs)]
-  print len(planes)
-  STOP()
+  for plane in planes:
+   plane1 = plane
+   n = calculate_n(plane1)#Calculate the normal vector of plane 1
+   for atom1 in plane1:
+     for plane in planes:
+       if plane == plane1: continue
+       plane2 = plane
+       for atom2 in plane2:
+         # Converting atomic coordinates into vectors
+         atom1_v = np.array(atom1.xyz)
+         atom2_v = np.array(atom2.xyz)
+         v_12 = atom1_v - atom2_v
+         # Vertors from atom1 to atom2
+         d_12 = abs(v_12.dot(n) / n.dot(n))
+         d12_list.append(d_12)
+         # calculate the average of distance from plane 1 atoms to plane 2 atoms
+       d_average = sum(d12_list) / len(d12_list)
+       if 2 < d_average < 5:
+         result = group_args(plane1 = plane1, plane2 = plane2)
+         if result in results:continue
+         if (result is not None): results.append(result)
+  return results
+
 
 
 

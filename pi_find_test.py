@@ -62,7 +62,7 @@ def exercise():
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print ("%4.2f"%r.d_14, r.atom_1.id_str(), r.atom_4.id_str())
+      print ( r.plane1, dir(r.plane2))
 
 if __name__ == '__main__':
     t0 = time.time()
