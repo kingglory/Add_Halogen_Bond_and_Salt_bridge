@@ -62,7 +62,7 @@ def exercise():
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print ( r.plane1, dir(r.plane2))
+      print ( r.plane1.extract_i_seq(), dir(r.plane2))
 
 if __name__ == '__main__':
     t0 = time.time()

@@ -70,11 +70,11 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
   results = []
   for a1 in hierarchy.atoms():
-    e1 = a1.element.upper()
+    e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
     if(e1 in halogens):
       for a2 in hierarchy.atoms():
-        e2 = a2.element.upper()
+        e2 = a2.element.strip().upper()
         n2 = a2.name.strip().upper()
         if(not a1.is_in_same_conformer_as(a2)): continue
         if(is_bonded(a1, a2, bps_dict)): continue
@@ -109,7 +109,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
               #from 90 to 130 degrees
               if(90 < angle_312):
                 for a4 in hierarchy.atoms():
-                  e4 = a4.element.upper()
+                  e4 = a4.element.strip().upper()
                   # Fig.1 in "Halogen bond in biological molecules"
                   if(e4 in ["C", "P", "S"]):
                     if(not is_bonded(a2, a4, bps_dict)): continue
@@ -149,11 +149,11 @@ def f_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   atom4s = []
   results = []
   for a in hierarchy.atoms():
-    if a.element.upper() in halogens:
+    if a.element.strip().upper() in halogens:
       atom1s.append(a)
-    if a.element.upper() in halogen_bond_pairs_atom:
+    if a.element.strip().upper() in halogen_bond_pairs_atom:
       atom2s.append(a)
-    if a.element.upper() in ["C","P","S"]:
+    if a.element.strip().upper() in ["C","P","S"]:
       atom4s.append(a)
   for a1 in atom1s:
     for a2 in atom2s:
@@ -212,7 +212,7 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
       n1 = a1.name.strip().upper()
       if a1.element_is_hydrogen():
         for a2 in hierarchy.atoms():
-          e2 = a2.element.upper()
+          e2 = a2.element.strip().upper()
           n2 = a2.name.strip().upper()
           if (not a1.is_in_same_conformer_as(a2)): continue
           if (is_bonded(a1, a2, bps_dict)): continue
@@ -232,13 +232,13 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
                 angle_312 = (a1.angle(a2, a3, deg=True))
                 if (90 < angle_312):
                   result = group_args(
-                        atom_1 = a1,
-                        atom_2 = a2,
-                        atom_3 = a3,
-                        d_12 = d_12,
-                        sum_vdwr = sum_vdwr,
-                        d_x_p = d_x_p,
-                        angle_312 = angle_312)
+                    atom_1 = a1,
+                    atom_2 = a2,
+                    atom_3 = a3,
+                    d_12 = d_12,
+                    sum_vdwr = sum_vdwr,
+                    d_x_p = d_x_p,
+                    angle_312 = angle_312)
                   if (result is not None): results.append(result)
 
     return results
@@ -258,7 +258,7 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
     results = []
     dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
     for a in hierarchy.atoms():
-      e = a.element.upper()
+      e = a.element.strip().upper()
       if a.element_is_hydrogen():
         atom1s.append(a)
       if e in dict_h_bond_lengh.keys():
@@ -286,7 +286,6 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
                 d_12=d_12,
                 angle_312=angle_312)
               if (result is not None): results.append(result)
-
     return results
 
 
@@ -313,12 +312,12 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
   #first find ions bonds from the first following line to ---
   for a1 in hierarchy.atoms():
     #if (a1.parent().resname in positive_acide):
-    e1 = a1.element.upper()
+    e1 = a1.element.strip().upper()
     n1 = filter(str.isalpha, a1.name.upper())
     if e1 == "N" :
       for a2 in hierarchy.atoms():
         #if (a2.parent().resname in negative_acids):
-        if (is_bonded(a1, a2, bond_proxies_simple)): continue
+        if (is_bonded(a1, a2, bps_dict)): continue
         if (not a1.is_in_same_conformer_as(a2)): continue
         n2 = filter(str.isalpha, a2.name.upper())
         if n1 not in vdwr.keys(): continue
@@ -327,6 +326,7 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
         sum_vdwr = vdwr[n1] + vdwr[n2]
         if ( d_12 < sum_vdwr ):
           ions_bonds_paris_list.append((a1.id_str(), a2.id_str()))
+          print ions_bonds_paris_list
           # ---to here,now find all the ions bonds;
           #the following is to find the hydrogen bonds beside the ions bonds
           for a3 in hierarchy.atoms():
@@ -334,7 +334,7 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
             if a3.element_is_hydrogen():
               if a1.distance(a3) > 8:continue
               for a4 in hierarchy.atoms():
-                e4 = a4.element.upper()
+                e4 = a4.element.strip().upper()
                 n4 = a4.name.strip().upper()
                 if (not a3.is_in_same_conformer_as(a4)): continue
                 if (is_bonded(a3, a4, bps_dict)): continue
@@ -353,7 +353,6 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
                     d_34 = a1.distance(a2)
                     sum_vdwr = vdwr[n3] + vdwr[n4]
                     d_x_p = d_12 / sum_vdwr
-                    sum_vdwr_min1 = dict_h_bond_lengh[n4[0]]
                     sum_vdwr_min2 = sum_vdwr * emp_scale  # 4 line 31
                     if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
                       # found HB pairs-candidates
@@ -362,18 +361,68 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
                         angle_534 = (a3.angle(a5, a4, deg=True))
                         if (90 < angle_534):
                           result = group_args(
-                                      atom_1 = a1,
-                                      atom_2 = a2,
-                                      atom_3 = a3,
-                                      atom_4 = a3,
-                                      atom_5 = a3,
-                                      d_12 = d_12,
-                                      d_34 = d_34,
-                                      sum_vdwr = sum_vdwr,
-                                      d_x_p = d_x_p,
-                                      angle_534 = angle_534)
+                            atom_1 = a1,
+                            atom_2 = a2,
+                            atom_3 = a3,
+                            atom_4 = a4,
+                            atom_5 = a5,
+                            d_12 = d_12,
+                            d_34 = d_34,
+                            sum_vdwr = sum_vdwr,
+                            d_x_p = d_x_p,
+                            angle_534 = angle_534)
                           if (result is not None): results.append(result)
   return results
+def f_ions_bonds(model):
+  geometry = model.get_restraints_manager()
+  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+    sites_cart=model.get_sites_cart())
+  bps_dict = {}
+  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+  hierarchy = model.get_hierarchy()
+  vdwr = model.get_vdw_radii()
+  ions_bonds_paris_list = []
+  for a1 in hierarchy.atoms():
+    e1 = a1.element.strip().upper()
+    n1 = a1.name.strip().upper()
+    if e1 == "N":
+      for a2 in hierarchy.atoms():
+        if a2.element_is_hydrogen():continue
+        if (is_bonded(a1, a2, bond_proxies_simple)): continue
+        if (not a1.is_in_same_conformer_as(a2)): continue
+        n2 = a2.name.strip().upper()
+        if n1 not in vdwr.keys(): continue
+        if n2 not in vdwr.keys(): continue
+        d_12 = a1.distance(a2)
+        sum_vdwr = vdwr[n1] + vdwr[n2]
+        if (d_12 < sum_vdwr):
+          if a1 is None:continue
+          if a2 is None:continue
+          ions_bonds_paris_list.append((a1, a2))
+  return ions_bonds_paris_list
+def f_salt_bridge(model):
+  ions_bonds_paris_list = f_ions_bonds(model)
+  results = f_hydrogen_bonds(model=model)
+  for r in results:
+    a3 = r.atom_1
+    a4 = r.atom_2
+    for ions in ions_bonds_paris_list:
+      a1 = ions[0]
+      a2 = ions[1]
+      d13 = a1.distance(a3)
+      d14 = a1.distance(a4)
+      d23 = a2.distance(a3)
+      d24 = a2.distance(a4)
+      d_average = sum( d13, d14, d23, d24)/len(d13, d14, d23, d24)
+      if d_average <=4:
+        result = group_args(
+          atom_1=a1,
+          atom_2=a2,
+          atom_3=a3,
+          atom_4=a4)
+        if (result is not None): results.append(result)
+  return results
+
 
 def distance_atomToArea(atom1_xyz, atom2_xyz, atom3_xyz, atom4_xyz):
   """
@@ -440,7 +489,7 @@ def define_pi_system(model):
   atoms = hierarchy.atoms()
   results = []
   planes = []
-  d12_list     = []
+  d12_list = []
   for proxy in geometry.geometry.planarity_proxies:
     planes.append(atoms.select(proxy.i_seqs))
   for plane in planes:
