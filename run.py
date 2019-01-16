@@ -22,26 +22,6 @@ def in_plain(atom1,atom2,atom3,atom4,pps_dict):
 
 # first step write codes to find halogen bond in one pdb file
 # define a function to try finding the halogen bond pairs
-def find_water(hierarchy):
-  get_class = iotbx.pdb.common_residue_names_get_class
-  for model in hierarchy.models():
-    for chain in model.chains():
-      for rg in chain.residue_groups():
-        for ag in rg.atom_groups():
-          if (get_class(ag.resname)=="water"):
-            print  ("water here :",ag)
-            return ag
-
-def find_pi(model):
-  hierarchy = model.get_hierarchy()
-  get_class = iotbx.pdb.common_residue_names_get_class
-  for model in hierarchy.models():
-    for chain in model.chains():
-      for rg in chain.residue_groups():
-        for ag in rg.atom_groups():
-          if (get_class(ag.resname)=="pi"):
-            print  ("pi here :",ag)
-            return ag
 
 """
 1,when one halogen atoms make halogen bond when other atom,
