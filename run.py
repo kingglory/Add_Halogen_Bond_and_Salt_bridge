@@ -255,6 +255,7 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
     vdwr = model.get_vdw_radii()
     atom1s = []
     atom2s = []
+    atom3s = []
     results = []
     dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
     for a in hierarchy.atoms():
@@ -263,6 +264,8 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
         atom1s.append(a)
       if e in dict_h_bond_lengh.keys():
         atom2s.append(a)
+      if not a.element_is_hydrogen():
+        atom3s.append(a)
     for a1 in atom1s:
       for a2 in atom2s:
         if (not a1.is_in_same_conformer_as(a2)): continue
@@ -275,7 +278,7 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
         sum_vdwr = vdwr[n1] + vdwr[n2]
         sum_vdwr_min2 = sum_vdwr * emp_scale
         if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
-          for a3 in hierarchy.atoms():
+          for a3 in atom3s:
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (90 < angle_312):
@@ -399,6 +402,7 @@ def f_ions_bonds(model):
           if a1 is None:continue
           if a2 is None:continue
           ions_bonds_paris_list.append((a1, a2))
+  print ions_bonds_paris_list
   return ions_bonds_paris_list
 def f_salt_bridge(model):
   ions_bonds_paris_list = f_ions_bonds(model)
@@ -413,7 +417,8 @@ def f_salt_bridge(model):
       d14 = a1.distance(a4)
       d23 = a2.distance(a3)
       d24 = a2.distance(a4)
-      d_average = sum( d13, d14, d23, d24)/len(d13, d14, d23, d24)
+      d_ions_H = [d13, d14, d23, d24]
+      d_average = sum(d_ions_H)/len(d_ions_H)
       if d_average <=4:
         result = group_args(
           atom_1=a1,
@@ -479,7 +484,7 @@ def calculate_n(plane1):
       z = yz[0, 1]  # Z coordinates of normal vectors
       n = np.array([x, y, z])
       # Normal vectors of the plane to which the first three atoms belong
-    if len(p1_atoms) > 3: continue
+    #if len(p1_atoms) > 3: continue
   return n
 
 def define_pi_system(model):
