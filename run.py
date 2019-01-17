@@ -3,10 +3,11 @@ import iotbx.pdb
 import iotbx.cif
 import scitbx
 import numpy as np
-import pandas as pd
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
 from libtbx import easy_run
+import math
+import scitbx.matrix
 
 def is_bonded(atom_1, atom_2, bps_dict):
   i12 = [atom_1.i_seq, atom_2.i_seq]
@@ -462,7 +463,7 @@ def calculate_n(plane1):
     if len(p1_atoms) > 3: continue
   return n
 
-def define_pi_system(model):
+def define_pi_system(model, dist_cutoff=5):
   #pi_amino_acids = ["HIS","PRO","PHE","TYR","TYP"]
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
@@ -472,27 +473,58 @@ def define_pi_system(model):
   d12_list = []
   for proxy in geometry.geometry.planarity_proxies:
     planes.append(atoms.select(proxy.i_seqs))
-  for plane in planes:
-   plane1 = plane
-   n = calculate_n(plane1)#Calculate the normal vector of plane 1
-   for atom1 in plane1:
-     for plane in planes:
-       if plane == plane1: continue
-       plane2 = plane
-       for atom2 in plane2:
-         # Converting atomic coordinates into vectors
-         atom1_v = np.array(atom1.xyz)
-         atom2_v = np.array(atom2.xyz)
-         v_12 = atom1_v - atom2_v
-         # Vertors from atom1 to atom2
-         d_12 = abs(v_12.dot(n) / n.dot(n))
-         d12_list.append(d_12)
-         # calculate the average of distance from plane 1 atoms to plane 2 atoms
-       d_average = sum(d12_list) / len(d12_list)
-       if 2 < d_average < 5:
-         result = group_args(plane1 = plane1, plane2 = plane2)
-         if result in results:continue
-         if (result is not None): results.append(result)
+  for i, pi in enumerate(planes):
+    for j, pj in enumerate(planes):
+      if(j<=i): continue
+      xyzi = pi.extract_xyz()
+      xyzj = pj.extract_xyz()
+      ni = list(pi.extract_name())
+      nj = list(pj.extract_name())
+      if(' CA ' in ni and len(ni)==4): continue
+      if(' CA ' in nj and len(nj)==4): continue
+      cmi = xyzi.mean()
+      cmj = xyzj.mean()
+      dist = math.sqrt(
+        (cmi[0]-cmj[0])**2+
+        (cmi[1]-cmj[1])**2+
+        (cmi[2]-cmj[2])**2)
+      if(dist>dist_cutoff): continue
+      ai,bi,ci,di = scitbx.matrix.plane_equation(
+        point_1=scitbx.matrix.col(xyzi[0]), 
+        point_2=scitbx.matrix.col(xyzi[1]), 
+        point_3=scitbx.matrix.col(xyzi[2]))
+      aj,bj,cj,dj = scitbx.matrix.plane_equation(
+        point_1=scitbx.matrix.col(xyzj[0]), 
+        point_2=scitbx.matrix.col(xyzj[1]), 
+        point_3=scitbx.matrix.col(xyzj[2]))
+      # https://math.tutorvista.com/geometry/angle-between-two-planes.html
+      cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
+        (aj**2+bj**2+cj**2)**0.5
+      angle = math.acos(cos_a)*180/math.pi
+      print angle, dist, list(pi.extract_name()), list(pj.extract_name())
+  
+  STOP()
+  #for plane in planes:
+  # plane1 = plane
+  # n = calculate_n(plane1)#Calculate the normal vector of plane 1
+  # for atom1 in plane1:
+  #   for plane in planes:
+  #     if plane == plane1: continue
+  #     plane2 = plane
+  #     for atom2 in plane2:
+  #       # Converting atomic coordinates into vectors
+  #       atom1_v = np.array(atom1.xyz)
+  #       atom2_v = np.array(atom2.xyz)
+  #       v_12 = atom1_v - atom2_v
+  #       # Vertors from atom1 to atom2
+  #       d_12 = abs(v_12.dot(n) / n.dot(n))
+  #       d12_list.append(d_12)
+  #       # calculate the average of distance from plane 1 atoms to plane 2 atoms
+  #     d_average = sum(d12_list) / len(d12_list)
+  #     if 2 < d_average < 5:
+  #       result = group_args(plane1 = plane1, plane2 = plane2)
+  #       if result in results:continue
+  #       if (result is not None): results.append(result)
   return results
 
 

@@ -1,6 +1,5 @@
 from __future__ import division
 from run import define_pi_system
-from run import find_pi
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
