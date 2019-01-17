@@ -1,6 +1,5 @@
 from __future__ import division
 from run import define_pi_system
-from run import find_pi
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -62,7 +61,7 @@ def exercise():
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print ( r.plane1.extract_i_seq(), dir(r.plane2))
+      print ( r.angle, r.dist, r.p_i, r.p_j, r.pi_atoms_name, r.pj_atoms_name)
 
 if __name__ == '__main__':
     t0 = time.time()
