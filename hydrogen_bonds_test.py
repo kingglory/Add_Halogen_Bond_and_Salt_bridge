@@ -37,8 +37,7 @@ def exercise():
     #results = find_hydrogen_bonds(model = model)
     results = f_hydrogen_bonds(model=model)
     for r in results:
-      print ("%4.2f"%r.d_12, r.angle_312,r.atom_1.id_str(), r.atom_2.id_str(),
-        r.atom_3.id_str())
+      print ("%4.2f"%r.d_12, r.atom_1.id_str(), r.atom_2.id_str())
 
 if __name__ == '__main__':
     start = time.time()

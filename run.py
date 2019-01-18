@@ -226,36 +226,29 @@ def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
 
 
 
-def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
+def f_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
     bps_dict = {}
     [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
     hierarchy = model.get_hierarchy()
-    vdwr = model.get_vdw_radii()
     atom1s = []
     atom2s = []
     results = []
-    dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
+    dict_h_bond_lengh = ["O", "N", "F"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
       if a.element_is_hydrogen():
         atom1s.append(a)
-      if e in dict_h_bond_lengh.keys():
+      if e in dict_h_bond_lengh:
         atom2s.append(a)
     for a1 in atom1s:
       for a2 in atom2s:
         if (not a1.is_in_same_conformer_as(a2)): continue
         if (is_bonded(a1, a2, bps_dict)): continue
-        n1 = a1.name.strip().upper()
-        n2 = a2.name.strip().upper()
-        if n1 not in vdwr.keys(): continue
-        if n2 not in vdwr.keys(): continue
         d_12 = a1.distance(a2)
-        sum_vdwr = vdwr[n1] + vdwr[n2]
-        sum_vdwr_min2 = sum_vdwr * emp_scale
-        if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
+        if (eps1 < d_12 < eps2):
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
@@ -263,9 +256,8 @@ def f_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
               result = group_args(
                 atom_1=a1,
                 atom_2=a2,
-                atom_3=a3,
-                d_12=d_12,
-                angle_312=angle_312)
+                d_12=d_12
+              )
               if (result is not None): results.append(result)
     return results
 
@@ -385,7 +377,7 @@ def f_salt_bridge(model,dist_cutoff=4):
     for ions in ions_bonds_paris_list:
       a1 = ions[0]
       a2 = ions[1]
-      if (a1.distance(a3)>4): continue
+      if (a1.distance(a3)>dist_cutoff): continue
       result = group_args(
         atom_1=a1,
         atom_2=a2,
