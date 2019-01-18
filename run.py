@@ -287,17 +287,12 @@ def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
   vdwr = model.get_vdw_radii()
   results = []
   ions_bonds_paris_list = []
-  positive_acide = ["ARG" , "HIS" , "LYS"]
-  negative_acids = ["ASP" , "GLU"]
-  H_acides = ["LYS" , "ARG" , "HIS" , "SER" , "THR" , "TYP"]
   #first find ions bonds from the first following line to ---
   for a1 in hierarchy.atoms():
-    #if (a1.parent().resname in positive_acide):
     e1 = a1.element.strip().upper()
     n1 = filter(str.isalpha, a1.name.upper())
     if e1 == "N" :
       for a2 in hierarchy.atoms():
-        #if (a2.parent().resname in negative_acids):
         if (is_bonded(a1, a2, bps_dict)): continue
         if (not a1.is_in_same_conformer_as(a2)): continue
         n2 = filter(str.isalpha, a2.name.upper())
@@ -385,18 +380,12 @@ def f_salt_bridge(model,dist_cutoff=4):
   ions_bonds_paris_list = f_ions_bonds(model)
   results = f_hydrogen_bonds(model=model)
   for r in results:
-    a3 = list(r.atom_1)
-    a4 = list(r.atom_2)
-    cm1 = np.array(list[a3, a4]).mean()
+    a3 = r.atom_1
+    a4 = r.atom_2
     for ions in ions_bonds_paris_list:
       a1 = ions[0]
       a2 = ions[1]
-      cm2 = (a1, a2).mean()
-      dist = math.sqrt(
-        (cm1[0] - cm2[0]) ** 2 +
-        (cm1[1] - cm2[1]) ** 2 +
-        (cm1[2] - cm2[2]) ** 2)
-      if (dist > dist_cutoff): continue
+      if (a1.distance(a3)>4): continue
       result = group_args(
         atom_1=a1,
         atom_2=a2,
