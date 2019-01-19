@@ -143,6 +143,13 @@ angle2          =  ８３．８０ degrees
    58 N 55 o
    12 n 23 o
    39 n 35 o
+
+1CBR:
+  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
+  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
+1IFR:
+  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
+  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
    
   PI FILE TEST :
   ["1c14.pdb","3Az9.pdb"]

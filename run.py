@@ -6,7 +6,7 @@ import numpy as np
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
 from libtbx import easy_run
-import math
+import math, time
 import scitbx.matrix
 
 def is_bonded(atom_1, atom_2, bps_dict):
@@ -180,53 +180,7 @@ Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR",
                "ASN","GLU","CYS","SEC","GLY","PRO","ALA",
                "VAL","ILE","LEU","MET","PHE","TYR","TRP"]
 
-def find_hydrogen_bonds(model, eps = 0.15,emp_scale = 0.75):
-    geometry = model.get_restraints_manager()
-    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                     sites_cart=model.get_sites_cart())
-    bps_dict = {}
-    [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-    hierarchy = model.get_hierarchy()
-    vdwr = model.get_vdw_radii()
-    results = []
-    for a1 in hierarchy.atoms():
-      n1 = a1.name.strip().upper()
-      if a1.element_is_hydrogen():
-        for a2 in hierarchy.atoms():
-          e2 = a2.element.strip().upper()
-          n2 = a2.name.strip().upper()
-          if (not a1.is_in_same_conformer_as(a2)): continue
-          if (is_bonded(a1, a2, bps_dict)): continue
-          dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
-          if e2 in dict_h_bond_lengh.keys():
-            if n1 not in vdwr.keys(): continue
-            if n2 not in vdwr.keys(): continue
-            d_12 = a1.distance(a2)
-            sum_vdwr = vdwr[n1] + vdwr[n2]
-            d_x_p = d_12 / sum_vdwr
-            sum_vdwr_min1 = dict_h_bond_lengh[n2[0]]
-            sum_vdwr_min2 = sum_vdwr * emp_scale  # 4 line 31
-            if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
-              # found HB pairs-candidates
-              for a3 in hierarchy.atoms():
-                if (not is_bonded(a1, a3, bps_dict)): continue
-                angle_312 = (a1.angle(a2, a3, deg=True))
-                if (90 < angle_312):
-                  result = group_args(
-                    atom_1 = a1,
-                    atom_2 = a2,
-                    atom_3 = a3,
-                    d_12 = d_12,
-                    sum_vdwr = sum_vdwr,
-                    d_x_p = d_x_p,
-                    angle_312 = angle_312)
-                  if (result is not None): results.append(result)
-
-    return results
-
-
-
-def f_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
+def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -269,6 +223,7 @@ def f_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
 # [asp,glu] are negative,the negative charged atom is O
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
+
 def f_ions_bonds(model,eps = 0.15):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -278,30 +233,48 @@ def f_ions_bonds(model,eps = 0.15):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
-  for a1 in hierarchy.atoms():
+  second_atom_in_pair = ["O"]
+  
+  main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  atoms = list(hierarchy.atoms())
+  
+  for i, a1 in enumerate(atoms):
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
-    if e1 == "N":
-      for a2 in hierarchy.atoms():
-        if a2.element_is_hydrogen():continue
-        if (is_bonded(a1, a2, bond_proxies_simple)): continue
-        if (not a1.is_in_same_conformer_as(a2)): continue
-        n2 = a2.name.strip().upper()
-        if n1 not in vdwr.keys(): continue
-        if n2 not in vdwr.keys(): continue
-        d_12 = a1.distance(a2)
-        sum_vdwr = vdwr[n1] + vdwr[n2]
-        if (d_12 < sum_vdwr-eps):
-          if a1 is None:continue
-          if a2 is None:continue
-          ions_bonds_paris_list.append((a1, a2))
+    if(n1 in main_chain_atoms_plus): continue
+    if(not e1 in ["N","O"]): continue
+    for j, a2 in enumerate(atoms):
+      if(j<i): continue
+      n2 = a2.name.strip().upper()
+      e2 = a2.element.strip().upper()
+      if(not e2 in ["N","O"]): continue
+      if(n2 in main_chain_atoms_plus): continue
+      if(a2.element_is_hydrogen()): continue
+      if(n1 not in vdwr.keys()): continue
+      if(n2 not in vdwr.keys()): continue
+      sum_vdwr = vdwr[n1] + vdwr[n2]
+      d_12 = a1.distance(a2)
+      if(d_12 >= sum_vdwr-eps): continue
+      if(is_bonded(a1, a2, bond_proxies_simple)): continue
+      if(not a1.is_in_same_conformer_as(a2)): continue
+      if(not n2 in second_atom_in_pair): continue
+      if(a1 is None): continue
+      if(a2 is None): continue
+      ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
+  
 def f_salt_bridge(model,dist_cutoff=4):
   ions_bonds_paris_list = f_ions_bonds(model)
-  results = f_hydrogen_bonds(model=model)
+  results = find_hydrogen_bonds(model=model)
   for r in results:
     a3 = r.atom_1
     a4 = r.atom_2
+    
+    center = flex.vec3_double([a3.xyz,a4.xyz]).mean()
+    
+    d = model.crystal_symmetry().unit_cell().distance(a3.xyz, a4.xyz)
+    
+    
     for ions in ions_bonds_paris_list:
       a1 = ions[0]
       a2 = ions[1]
