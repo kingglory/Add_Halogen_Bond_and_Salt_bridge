@@ -1,6 +1,4 @@
 from __future__ import division
-from run import find_salt_bridge
-from run import f_ions_bonds
 from run import f_salt_bridge
 import iotbx.pdb
 import mmtbx.model
@@ -39,8 +37,6 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    #results = find_salt_bridge(model = model)
-    #ions_bonds_paris_list = f_ions_bonds(model)
     results = f_salt_bridge(model=model)
     for r in results:
       print ("%4.2f"% r.atom_1.id_str(), r.atom_2.id_str(),

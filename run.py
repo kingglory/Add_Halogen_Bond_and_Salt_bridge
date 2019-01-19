@@ -269,79 +269,7 @@ def f_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
 # [asp,glu] are negative,the negative charged atom is O
 # the N atom and the O atom will make up the iron bond,the o atom and
 # one of the H atom make up the H bond
-def find_salt_bridge(model, eps = 0.15,emp_scale = 0.75):
-  geometry = model.get_restraints_manager()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                  sites_cart=model.get_sites_cart())
-  bps_dict = {}
-  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  results = []
-  ions_bonds_paris_list = []
-  #first find ions bonds from the first following line to ---
-  for a1 in hierarchy.atoms():
-    e1 = a1.element.strip().upper()
-    n1 = filter(str.isalpha, a1.name.upper())
-    if e1 == "N" :
-      for a2 in hierarchy.atoms():
-        if (is_bonded(a1, a2, bps_dict)): continue
-        if (not a1.is_in_same_conformer_as(a2)): continue
-        n2 = filter(str.isalpha, a2.name.upper())
-        if n1 not in vdwr.keys(): continue
-        if n2 not in vdwr.keys(): continue
-        d_12 = a1.distance(a2)
-        sum_vdwr = vdwr[n1] + vdwr[n2]
-        if ( d_12 < sum_vdwr ):
-          ions_bonds_paris_list.append((a1.id_str(), a2.id_str()))
-          print ions_bonds_paris_list
-          # ---to here,now find all the ions bonds;
-          #the following is to find the hydrogen bonds beside the ions bonds
-          for a3 in hierarchy.atoms():
-            n3 = a1.name.strip().upper()
-            if a3.element_is_hydrogen():
-              if a1.distance(a3) > 8:continue
-              for a4 in hierarchy.atoms():
-                e4 = a4.element.strip().upper()
-                n4 = a4.name.strip().upper()
-                if (not a3.is_in_same_conformer_as(a4)): continue
-                if (is_bonded(a3, a4, bps_dict)): continue
-                dict_h_bond_lengh = {"O": 0.98, "N": 1.01, "F": 0.92}
-                if e4 in dict_h_bond_lengh.keys():
-                  #if the mins distance between ions atoms and hydrogen bonds paris atoms
-                  #  is longer than the longest distance between saltbridge :4,
-                  # it won't make up saltbridge
-                  d13 = a1.distance(a3)
-                  d14 = a1.distance(a4)
-                  d23 = a2.distance(a3)
-                  d24 = a2.distance(a4)
-                  if min(d13,d14,d23,d24)< 8:
-                    if n3 not in vdwr.keys(): continue
-                    if n4 not in vdwr.keys(): continue
-                    d_34 = a1.distance(a2)
-                    sum_vdwr = vdwr[n3] + vdwr[n4]
-                    d_x_p = d_12 / sum_vdwr
-                    sum_vdwr_min2 = sum_vdwr * emp_scale  # 4 line 31
-                    if (sum_vdwr_min2 - eps < d_12 < sum_vdwr + eps):
-                      # found HB pairs-candidates
-                      for a5 in hierarchy.atoms():
-                        if (not is_bonded(a1, a3, bps_dict)): continue
-                        angle_534 = (a3.angle(a5, a4, deg=True))
-                        if (90 < angle_534):
-                          result = group_args(
-                            atom_1 = a1,
-                            atom_2 = a2,
-                            atom_3 = a3,
-                            atom_4 = a4,
-                            atom_5 = a5,
-                            d_12 = d_12,
-                            d_34 = d_34,
-                            sum_vdwr = sum_vdwr,
-                            d_x_p = d_x_p,
-                            angle_534 = angle_534)
-                          if (result is not None): results.append(result)
-  return results
-def f_ions_bonds(model):
+def f_ions_bonds(model,eps = 0.15):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -363,7 +291,7 @@ def f_ions_bonds(model):
         if n2 not in vdwr.keys(): continue
         d_12 = a1.distance(a2)
         sum_vdwr = vdwr[n1] + vdwr[n2]
-        if (d_12 < sum_vdwr):
+        if (d_12 < sum_vdwr-eps):
           if a1 is None:continue
           if a2 is None:continue
           ions_bonds_paris_list.append((a1, a2))
