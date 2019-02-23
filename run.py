@@ -119,6 +119,8 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
       for a2 in atom2s:
         if (not a1.is_in_same_conformer_as(a2)): continue
         if (is_bonded(a1, a2, bps_dict)): continue
+        if (a1.parent().parent().resseq ==
+              a2.parent().parent().resseq): continue
         d_12 = a1.distance(a2)
         if (eps1 < d_12 < eps2):
           for a3 in hierarchy.atoms():
@@ -143,7 +145,7 @@ def find_ions_bonds(model,eps = 0.15):
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
   second_atom_in_pair = ["O","S","N","P"]
-  main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  #main_chain_atoms_plus = ["CA","N","O","C","CB"]
   atoms = list(hierarchy.atoms())
   for i, a1 in enumerate(atoms):
     e1 = a1.element.strip().upper()
@@ -157,6 +159,8 @@ def find_ions_bonds(model,eps = 0.15):
       if (not e2 in second_atom_in_pair): continue
       #if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
+      if (a1.parent().parent().resseq ==
+            a2.parent().parent().resseq): continue
       if(n1 not in vdwr.keys()): continue
       if(n2 not in vdwr.keys()): continue
       sum_vdwr = vdwr[n1] + vdwr[n2]
@@ -169,19 +173,33 @@ def find_ions_bonds(model,eps = 0.15):
       ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
   
-def f_salt_bridge(model,dist_cutoff=4):
+def f_salt_bridge(model,dist_cutoff=1):
+  geometry = model.get_restraints_manager()
+  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+    sites_cart=model.get_sites_cart())
+  bps_dict = {}
+  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   ions_bonds_paris_list = find_ions_bonds(model)
   results = find_hydrogen_bonds(model=model)
   result1= []
   for r in results:
     a3 = r.atom_1
     a4 = r.atom_2
-    center_1 = tuple(flex.vec3_double([a3.xyz,a4.xyz]).mean())
+   # center_1 = tuple(flex.vec3_double([a3.xyz,a4.xyz]).mean())
     for ions in ions_bonds_paris_list:
       a1 = ions[0]
       a2 = ions[1]
-      center_2 = tuple(flex.vec3_double([a1.xyz, a2.xyz]).mean())
-      d = model.crystal_symmetry().unit_cell().distance(center_1, center_2)
+      #center_2 = tuple(flex.vec3_double([a1.xyz, a2.xyz]).mean())
+      #d = model.crystal_symmetry().unit_cell().distance(center_1, center_2)
+      if (not is_bonded(a3, a1, bps_dict)): continue
+      if (not a1.is_in_same_conformer_as(a3)): continue
+      if (not a2.is_in_same_conformer_as(a4)): continue
+      mid_hydrogen_bond = ((a3.xyz[0]+a4.xyz[0])/2,(a3.xyz[1]+a4.xyz[1])/2,(a3.xyz[2]+a4.xyz[2])/2)
+      mid_ions_bond = ((a1.xyz[0]+a2.xyz[0])/2,(a1.xyz[1]+a2.xyz[1])/2,(a1.xyz[2]+a2.xyz[2])/2)
+      d = math.sqrt(
+        (mid_hydrogen_bond[0] - mid_ions_bond[0]) ** 2+
+        (mid_hydrogen_bond[1] - mid_ions_bond[1]) ** 2+
+        (mid_hydrogen_bond[2] - mid_ions_bond[2]) ** 2)
       if (d >dist_cutoff): continue
       result = group_args(
         atom1=a1,
