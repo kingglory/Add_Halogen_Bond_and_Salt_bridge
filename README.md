@@ -207,20 +207,20 @@ angle2          =  83.80 degrees
  [“2X7G.pdb”，“1Jvu.pdb”，“4X7N.pdb","3ALP.pdb"]
 
 
-                2X7G:
+                pdb:2X7G
   Salt bridge #1: chain A, ARG 632 <> chain A, So4 1700
   
   Salt bridge #2: chain A, ARG 642 <> chain A, So4 1700
   
   Salt bridge #3: chain A, ARG 637 <> chain A, So4 1700
   
-                1JVU:
+                pdb:1JVU
   Salt bridge #1: chain A, THR 45 <> chain A, C2P 130
   
-                4X7N:
+                pdb:4X7N
   Salt bridge #1: chain A, ARG 903 <> chain A, TLA 1102
   
-                3ALP:
+                pdb:3ALP
   Salt bridge #1: chain A, ARG 101 <> chain A, CIT 1
   
   Salt bridge #2: chain B, ARG 101 <> chain B, CIT 2
@@ -228,10 +228,10 @@ angle2          =  83.80 degrees
   PI FILE TEST :
   ["1p5j.pdb","2ovp.pdb","3cuk.pdb"]
 
-                1p5j:
+                pdb:1p5j
   pi stacking #1: chain A,TRP 1159 <> chain A,HIS 2359
   
-                20vp:
+                pdb:20vp
   pi stacking #1: chain A,TRY 55 <> chain A,TRY 314
   
   pi stacking #2: chain B,TRY 55 <> chain B,TRY 314
@@ -240,7 +240,7 @@ angle2          =  83.80 degrees
   
   pi stacking #4: chain D,TRY 55 <> chain D,TRY 314
   
-                3cuk:
+                pdb:3cuk
   pi stacking #1: chain A,PHE 40 <> chain A,PLP 941
  
    
