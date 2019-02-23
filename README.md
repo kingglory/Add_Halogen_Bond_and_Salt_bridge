@@ -150,5 +150,16 @@ angle2          =  ８３．８０ degrees
   Salt bridge #2: chain B, ARG 101 <> chain B, CIT 2
    
   PI FILE TEST :
-  ["1c14.pdb","3Az9.pdb"]
+  ["1p5j.pdb","2ovp.pdb","3cuk.pdb"]
+
+1p5j:
+  pi stacking #1: chain A,TRP 1159 <> chain A,HIS 2359
+20vp:
+  pi stacking #1: chain A,TRY 55 <> chain A,TRY 314
+  pi stacking #2: chain B,TRY 55 <> chain B,TRY 314
+  pi stacking #3: chain C,TRY 55 <> chain C,TRY 314
+  pi stacking #4: chain D,TRY 55 <> chain D,TRY 314
+3cuk:
+  pi stacking #1: chain A,PHE 40 <> chain A,PLP 941
+ 
    
