@@ -134,22 +134,20 @@ angle2          =  ８３．８０ degrees
 
  
  SALT BRIDGE FILE TEST：
- ["1ifr.pdb","1cbr.pdb","1pga.pdb","2qmt.pdb","1EQ5.pdb","1mio.pdb","2on8.pdb","2onq.pdb"]
-   1CBR.pdb
-   Arg 131 N 
-   Retinoic Acid  O
-   bond_N_O = 3.58
-   1CBR.pdb
-   58 N 55 o
-   12 n 23 o
-   39 n 35 o
+ [“2X7G.pdb”，“1Jvu.pdb”，“4X7N.pdb","3ALP.pdb"]
 
-1CBR:
-  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
-  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
-1IFR:
-  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
-  Salt bridge #1: chain A, resseq 123 <> chain A, resseq 321
+
+2X7G:
+  Salt bridge #1: chain A, ARG 632 <> chain A, So4 1700
+  Salt bridge #2: chain A, ARG 642 <> chain A, So4 1700
+  Salt bridge #3: chain A, ARG 637 <> chain A, So4 1700
+1JVU:
+  Salt bridge #1: chain A, THR 45 <> chain A, C2P 130
+4X7N:
+  Salt bridge #1: chain A, ARG 903 <> chain A, TLA 1102
+3ALP:
+  Salt bridge #1: chain A, ARG 101 <> chain A, CIT 1
+  Salt bridge #2: chain B, ARG 101 <> chain B, CIT 2
    
   PI FILE TEST :
   ["1c14.pdb","3Az9.pdb"]
