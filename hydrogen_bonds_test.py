@@ -1,6 +1,5 @@
 from __future__ import division
 from run import find_hydrogen_bonds
-from run import f_hydrogen_bonds
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out

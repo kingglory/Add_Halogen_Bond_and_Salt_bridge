@@ -22,26 +22,27 @@ def get_model(pdb_file_name, cif_file_name):
 
 
 def exercise():
-  files = [#["1ifrh.pdb",None],
+  files = [["1ifrh.pdb",None],
            ["1cbrh.pdb",None],
-           #["1pgah.pdb",None],
-           #["1eq5h.pdb",None],
-           #["1eq4h.pdb",None],
-           #["1kv5h.pdb",None],
-           #["1l37h.pdb",None],
-           #["1mylh.pdb",None],
-           #["1s02h.pdb",None],
-           #["2qmth.pdb","2qmth.ligands.cif"],
-           #["2on8h.pdb",None],
-           #["2onqh.pdb",None]
+           ["1pgah.pdb",None],
+           ["1eq5h.pdb",None],
+           ["1eq4h.pdb",None],
+           ["1kv5h.pdb",None],
+           ["1l37h.pdb",None],
+           ["1mylh.pdb",None],
+           ["1s02h.pdb",None],
+           ["2qmth.pdb","2qmth.ligands.cif"],
+           ["2on8h.pdb",None],
+           ["2onqh.pdb",None]
            ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results = f_salt_bridge(model=model)
-    for r in results:
-      print ("%4.2f"% r.atom_1.id_str(), r.atom_2.id_str(),
-        r.atom_3.id_str(), r.atom_4.id_str())
+    result1 = f_salt_bridge(model=model)
+    for r in result1:
+      print r
+     # print ("%4.2f"% r.atom_1.id_str(), r.atom_2.id_str(),
+       # r.atom_3.id_str(), r.atom_4.id_str())
       # assert  XXX
 
 if __name__ == '__main__':

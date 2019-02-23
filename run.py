@@ -2,6 +2,7 @@ from __future__ import division
 import iotbx.pdb
 import iotbx.cif
 import scitbx
+from scitbx.array_family import flex
 import numpy as np
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
@@ -21,9 +22,6 @@ def in_plain(atom1,atom2,atom3,atom4,pps_dict):
   if (not tuple(i1234) in pps_dict):return False
   else:return True
 
-# first step write codes to find halogen bond in one pdb file
-# define a function to try finding the halogen bond pairs
-
 """
 1,when one halogen atoms make halogen bond when other atom,
 when the distance and angle limations all fited,
@@ -38,83 +36,8 @@ the angle1 is more near 120,more possible;
 "Halogen bond in biological molecules"
 """
 
+
 def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
-                       emp_scale2 = 0.75, angle_eps = 40):
-  geometry = model.get_restraints_manager()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                sites_cart = model.get_sites_cart())
-  bps_dict = {}
-  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", "O", "N","F","CL","BR","I"]
-  results = []
-  for a1 in hierarchy.atoms():
-    e1 = a1.element.strip().upper()
-    n1 = a1.name.strip().upper()
-    if(e1 in halogens):
-      for a2 in hierarchy.atoms():
-        e2 = a2.element.strip().upper()
-        n2 = a2.name.strip().upper()
-        if(not a1.is_in_same_conformer_as(a2)): continue
-        if(is_bonded(a1, a2, bps_dict)): continue
-        if(a1.parent().parent().resseq ==
-             a2.parent().parent().resseq): continue
-        if(e2 in halogen_bond_pairs_atom):
-          # O2' in 3v04.pdb file will recognized as O2* ,
-          #  so replace it
-          n1 = n1.replace("'","*")
-          n2 = n2.replace("'","*")
-          n2 = n2.replace("XT","")
-          # 2yj8.pdb  vdwr can't recognize 'OXT'
-          d  = a1.distance(a2)
-          if(n1 not in vdwr.keys()): continue
-          if(n2 not in vdwr.keys()): continue
-          sum_vdwr = vdwr[n1] + vdwr[n2]
-          sum_vdwr_min2 = sum_vdwr * emp_scale2
-          d_x_p = d / sum_vdwr
-          if(sum_vdwr_min2-eps < d < sum_vdwr+eps):
-            # found HB pairs-candidates
-            diff_best = 1.e+9
-            result = None
-            for a3 in hierarchy.atoms():
-              if(not is_bonded(a1, a3, bps_dict)): continue
-              # theta_1 angle in paper "Halogen bond in biological molecules"
-              angle_312 = (a1.angle(a2, a3, deg=True))
-              # Fig.1 in "Halogen bond in biological molecules"
-              #for most cases,the angle 1 is between from 130 to 180,
-              # we can search in this range
-              #if find something ,done!if didn't find something .
-              # searching the following range
-              #from 90 to 130 degrees
-              if(90 < angle_312):
-                for a4 in hierarchy.atoms():
-                  e4 = a4.element.strip().upper()
-                  # Fig.1 in "Halogen bond in biological molecules"
-                  if(e4 in ["C", "P", "S"]):
-                    if(not is_bonded(a2, a4, bps_dict)): continue
-                    # theta_2 angle in "Halogen bond in biological molecules"
-                    angle_214 = (a2.angle(a1, a4, deg=True))
-                    if(120 - angle_eps < angle_214 < 120 + angle_eps):
-                      diff = abs(120 - angle_214)
-                      if(diff < diff_best):
-                        diff_best = diff
-                        result = group_args(
-                          atom_1 = a1,
-                          atom_2 = a2,
-                          atom_3 = a3,
-                          atom_4 = a4,
-                          d_12 = d,
-                          sum_vdwr = sum_vdwr,
-                          d_x_p = d_x_p,
-                          angle_312 = angle_312,
-                          angle_214 = angle_214)
-                        if(result is not None):results.append(result)
-  return results
-
-
-def f_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                        emp_scale2 = 0.75, angle_eps = 40):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -149,7 +72,6 @@ def f_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
       if (n2 not in vdwr.keys()): continue
       sum_vdwr = vdwr[n1] + vdwr[n2]
       sum_vdwr_min2 = sum_vdwr * emp_scale2
-      d_x_p = d / sum_vdwr
       if (sum_vdwr_min2 - eps < d < sum_vdwr + eps):
         diff_best = 1.e+9
         result = None
@@ -174,11 +96,7 @@ def f_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                     angle_214=angle_214)
             if (result is not None):results.append(result)
   return results
-#Second step,find salt bridge in one pdb filess
 
-Amino_Acids = ["ARG","HIS","LYS","ASP","GLU","SER","THR",
-               "ASN","GLU","CYS","SEC","GLY","PRO","ALA",
-               "VAL","ILE","LEU","MET","PHE","TYR","TRP"]
 
 def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
     geometry = model.get_restraints_manager()
@@ -215,16 +133,7 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
               if (result is not None): results.append(result)
     return results
 
-
-
-    # in the twenty one Amino Acids,[arg,his,lys] are positive Amino Acids
-#  with electrically charged side chains,the positive charged atom is N
-# there are some H atoms around this N atom
-# [asp,glu] are negative,the negative charged atom is O
-# the N atom and the O atom will make up the iron bond,the o atom and
-# one of the H atom make up the H bond
-
-def f_ions_bonds(model,eps = 0.15):
+def find_ions_bonds(model,eps = 0.15):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -234,20 +143,18 @@ def f_ions_bonds(model,eps = 0.15):
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
   second_atom_in_pair = ["O"]
-  
   main_chain_atoms_plus = ["CA","N","O","C","CB"]
   atoms = list(hierarchy.atoms())
-  
   for i, a1 in enumerate(atoms):
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
     if(n1 in main_chain_atoms_plus): continue
-    if(not e1 in ["N","O"]): continue
+    #if(not e1 in ["N","O"]): continue
     for j, a2 in enumerate(atoms):
-      if(j<i): continue
+      if (j<i): continue
       n2 = a2.name.strip().upper()
       e2 = a2.element.strip().upper()
-      if(not e2 in ["N","O"]): continue
+      #if(not e2 in ["N","O"]): continue
       if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
       if(n1 not in vdwr.keys()): continue
@@ -264,28 +171,26 @@ def f_ions_bonds(model,eps = 0.15):
   return ions_bonds_paris_list
   
 def f_salt_bridge(model,dist_cutoff=4):
-  ions_bonds_paris_list = f_ions_bonds(model)
+  ions_bonds_paris_list = find_ions_bonds(model)
   results = find_hydrogen_bonds(model=model)
+  result1= []
   for r in results:
     a3 = r.atom_1
     a4 = r.atom_2
-    
-    center = flex.vec3_double([a3.xyz,a4.xyz]).mean()
-    
-    d = model.crystal_symmetry().unit_cell().distance(a3.xyz, a4.xyz)
-    
-    
+    center_1 = tuple(flex.vec3_double([a3.xyz,a4.xyz]).mean())
     for ions in ions_bonds_paris_list:
       a1 = ions[0]
       a2 = ions[1]
-      if (a1.distance(a3)>dist_cutoff): continue
+      center_2 = tuple(flex.vec3_double([a1.xyz, a2.xyz]).mean())
+      d = model.crystal_symmetry().unit_cell().distance(center_1, center_2)
+      if (d >dist_cutoff): continue
       result = group_args(
-        atom_1=a1,
-        atom_2=a2,
-        atom_3=a3,
-        atom_4=a4)
-      if (result is not None): results.append(result)
-  return results
+        atom1=a1,
+        atom2=a2,
+        atom3=a3,
+        atom4=a4)
+      if (result is not None): result1.append(result)
+  return result1
 
 def define_pi_system(model, dist_cutoff=5):
   geometry = model.get_restraints_manager()
