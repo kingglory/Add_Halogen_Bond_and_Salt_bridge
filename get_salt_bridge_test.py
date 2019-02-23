@@ -45,6 +45,7 @@ def exercise():
        # r.atom_3.id_str(), r.atom_4.id_str())
       # assert  XXX
 
+
 if __name__ == '__main__':
     t0 = time.time()
     exercise()
