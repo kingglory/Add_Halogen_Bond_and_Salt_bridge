@@ -47,7 +47,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", "O", "N", "F", "CL", "BR", "I"]
+  halogen_bond_pairs_atom = ["S", "O", "P","N", "F", "CL", "BR", "I"]
   atom1s = []
   atom2s = []
   atom4s = []
@@ -142,29 +142,28 @@ def find_ions_bonds(model,eps = 0.15):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
-  second_atom_in_pair = ["O"]
+  second_atom_in_pair = ["O","S","N","P"]
   main_chain_atoms_plus = ["CA","N","O","C","CB"]
   atoms = list(hierarchy.atoms())
   for i, a1 in enumerate(atoms):
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
-    if(n1 in main_chain_atoms_plus): continue
-    #if(not e1 in ["N","O"]): continue
+    #if(n1 in main_chain_atoms_plus): continue
+    if(not (e1 == "N")): continue
     for j, a2 in enumerate(atoms):
       if (j<i): continue
       n2 = a2.name.strip().upper()
       e2 = a2.element.strip().upper()
-      #if(not e2 in ["N","O"]): continue
-      if(n2 in main_chain_atoms_plus): continue
+      if (not e2 in second_atom_in_pair): continue
+      #if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
       if(n1 not in vdwr.keys()): continue
       if(n2 not in vdwr.keys()): continue
       sum_vdwr = vdwr[n1] + vdwr[n2]
       d_12 = a1.distance(a2)
-      if(d_12 >= sum_vdwr-eps): continue
+      if(d_12 > sum_vdwr): continue
       if(is_bonded(a1, a2, bond_proxies_simple)): continue
       if(not a1.is_in_same_conformer_as(a2)): continue
-      if(not n2 in second_atom_in_pair): continue
       if(a1 is None): continue
       if(a2 is None): continue
       ions_bonds_paris_list.append((a1, a2))

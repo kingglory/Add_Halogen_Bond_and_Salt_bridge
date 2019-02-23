@@ -24,12 +24,11 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [["1f23h.pdb",None],
-           ["1jmhh.pdb",None],
-           ["1l04h.pdb",None],
-           ["1wqmh.pdb",None],
-           ["1wqoh.pdb",None],
-           ["1wqph.pdb",None]]
+  files = [["1jvuh.pdb","1jvuh.ligands.cif"],
+           ["2x7gh.pdb","2x7gh.ligands.cif"],
+           ["3alph.pdb","3alph.ligands.cif"],
+           ["4x7nh.pdb","4x7nh.ligands.cif"]
+           ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
