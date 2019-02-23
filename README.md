@@ -121,16 +121,16 @@ angle2          =  126.81 degrees
 
 
 
-          pdb:4e7r(not sure,coot result is strange)
-C３７　　Ｈ３０２　ＯＮＷ
-ＣＬ２　　Ｈ３０２　　ＯＮＷ
-Ｏ　　　Ｈ　９８　　　ＡＳＮ
-Ｃ　　　Ｈ　９８　　　ＡＳＮ
-X_bond_distance =  3.２１
-sum_vdwr        =  3.１５
-percentages     =  １．０２
-angle1          =  1５７．８４ degrees
-angle2          =  ８３．８０ degrees
+          pdb:4e7r
+C37　　H 302　ONW
+CL2　　H 302　ONW
+O　　　H 98 　ASN
+C　　　H 98   ASN
+X_bond_distance =  3.21
+sum_vdwr        =  3.15
+percentages     =  1.02
+angle1          =  157.84 degrees
+angle2          =  83.80 degrees
 
  
  SALT BRIDGE FILE TEST：
@@ -141,10 +141,13 @@ angle2          =  ８３．８０ degrees
   Salt bridge #1: chain A, ARG 632 <> chain A, So4 1700
   Salt bridge #2: chain A, ARG 642 <> chain A, So4 1700
   Salt bridge #3: chain A, ARG 637 <> chain A, So4 1700
+  
                 1JVU:
   Salt bridge #1: chain A, THR 45 <> chain A, C2P 130
+  
                 4X7N:
   Salt bridge #1: chain A, ARG 903 <> chain A, TLA 1102
+  
                 3ALP:
   Salt bridge #1: chain A, ARG 101 <> chain A, CIT 1
   Salt bridge #2: chain B, ARG 101 <> chain B, CIT 2
@@ -154,11 +157,13 @@ angle2          =  ８３．８０ degrees
 
                 1p5j:
   pi stacking #1: chain A,TRP 1159 <> chain A,HIS 2359
+  
                 20vp:
   pi stacking #1: chain A,TRY 55 <> chain A,TRY 314
   pi stacking #2: chain B,TRY 55 <> chain B,TRY 314
   pi stacking #3: chain C,TRY 55 <> chain C,TRY 314
   pi stacking #4: chain D,TRY 55 <> chain D,TRY 314
+  
                 3cuk:
   pi stacking #1: chain A,PHE 40 <> chain A,PLP 941
  
