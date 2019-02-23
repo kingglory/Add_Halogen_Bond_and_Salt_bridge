@@ -21,13 +21,21 @@ HALOGEN BONGS FILE TEST:
 
           pdb:5v7d
 CE2    A  18  BYR;
+
 BR     A  18  BYR;
+
 O      A  28  GLY;
+
 C      A  28  GLY;
+
 X_bond_distance =  2.88
+
 sum_vdwr        =  3.28
+
 percentages     =  0.8780
+
 angle1          =  150.78 degrees
+
 angle2          =  115.49 degrees
 
 
