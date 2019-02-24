@@ -24,10 +24,15 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [["1jvuh.pdb","1jvuh.ligands.cif"],
-           ["2x7gh.pdb","2x7gh.ligands.cif"],
-           ["3alph.pdb","3alph.ligands.cif"],
-           ["4x7nh.pdb","4x7nh.ligands.cif"],
+  files = [#["1jvuh.pdb","1jvuh.ligands.cif"],
+           #["2x7gh.pdb","2x7gh.ligands.cif"],
+           #["3alph.pdb","3alph.ligands.cif"],
+           #["4x7nh.pdb","4x7nh.ligands.cif"],
+           ["1aieh.pdb",None],
+           ["1kych.pdb",None],
+           ["3q8jh.pdb",None],
+           ["4gifh.pdb",None],
+           ["5c11h.pdb",None],
            ["2ona.updated.pdb",None],
            ["2ona_complete_occH0_qm_refined.pdb",None]
            ]

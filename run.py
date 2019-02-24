@@ -109,9 +109,12 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
     atom2s = []
     results = []
     dict_h_bond_lengh = ["O", "N", "F"]
+    main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
       if a.element_is_hydrogen():
+        n = a.name.strip().upper()
+        if (n in main_chain_atoms_plus): continue
         atom1s.append(a)
       if e in dict_h_bond_lengh:
         atom2s.append(a)
