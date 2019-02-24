@@ -122,7 +122,7 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
         if (a1.parent().parent().resseq ==
               a2.parent().parent().resseq): continue
         d_12 = a1.distance(a2)
-        if (eps1 < d_12 < eps2):
+        if (eps1-0.1 < d_12 < eps2+0.1):
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
@@ -145,19 +145,19 @@ def find_ions_bonds(model,eps = 0.15):
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
   second_atom_in_pair = ["O","S","N","P"]
-  #main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  main_chain_atoms_plus = ["CA","N","O","C","CB"]
   atoms = list(hierarchy.atoms())
   for i, a1 in enumerate(atoms):
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
-    #if(n1 in main_chain_atoms_plus): continue
-    if(not (e1 == "N")): continue
+    if(n1 in main_chain_atoms_plus): continue
+    if(not (e1 in ["C","N"])): continue
     for j, a2 in enumerate(atoms):
       if (j<i): continue
       n2 = a2.name.strip().upper()
       e2 = a2.element.strip().upper()
       if (not e2 in second_atom_in_pair): continue
-      #if(n2 in main_chain_atoms_plus): continue
+      if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
       if (a1.parent().parent().resseq ==
             a2.parent().parent().resseq): continue
@@ -173,7 +173,7 @@ def find_ions_bonds(model,eps = 0.15):
       ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
   
-def f_salt_bridge(model,dist_cutoff=1.2):
+def f_salt_bridge(model,dist_cutoff=1):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
