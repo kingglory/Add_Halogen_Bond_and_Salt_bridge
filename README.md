@@ -221,7 +221,7 @@ angle2          =  83.80 degrees
   Salt bridge #1: chain A, ARG 903 <> chain A, TLA 1102
   
                 pdb:3ALP
-  Salt bridge #1: chain A, ARG 101 <> chain A, CIT 1
+  Salt bridge #1: chain A, ARG 101 <> chain A, CIT 
   
   Salt bridge #2: chain B, ARG 101 <> chain B, CIT 2
    
