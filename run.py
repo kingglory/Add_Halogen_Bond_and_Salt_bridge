@@ -94,7 +94,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
+def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.1):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -108,11 +108,12 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
     main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
+      n = a.name.strip().upper()
+      if (n in main_chain_atoms_plus): continue
       if a.element_is_hydrogen():
-        n = a.name.strip().upper()
-        if (n in main_chain_atoms_plus): continue
         atom1s.append(a)
       if e in dict_h_bond_lengh:
+        if a.parent().resname == "HOH":continue
         atom2s.append(a)
     for a1 in atom1s:
       for a2 in atom2s:
@@ -121,15 +122,14 @@ def find_hydrogen_bonds(model, eps1 = 1.7, eps2 = 2.2):
         if (a1.parent().parent().resseq ==
               a2.parent().parent().resseq): continue
         d_12 = a1.distance(a2)
-        if (eps1-0.1 < d_12 < eps2+0.1):
+        if (min-eps < d_12 < max+eps):
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (90 < angle_312):
               result = group_args(
                 atom_1=a1,
-                atom_2=a2,
-                d_12=d_12
+                atom_2=a2
               )
               if (result is not None): results.append(result)
     return results
@@ -180,6 +180,7 @@ def f_salt_bridge(model,dist_cutoff=1):
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   ions_bonds_paris_list = find_ions_bonds(model)
   results = find_hydrogen_bonds(model=model)
+  main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
   result1= []
   for r in results:
     a3 = r.atom_1
@@ -208,7 +209,7 @@ def f_salt_bridge(model,dist_cutoff=1):
       if (result is not None): result1.append(result)
   return result1
 
-def define_pi_system(model, dist_cutoff=5):
+def define_pi_system(model, dist_cutoff=4):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
