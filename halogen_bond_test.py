@@ -29,15 +29,32 @@ def exercise():
            ["3v04.pdb","3v04.ligands.cif"],
            ["4e7r.pdb","4e7r.ligands.cif"]
            ]
+  Halogen_atom_pairs = [
+    ('pdb="BR  ABYR A  18 "', 'pdb=" N   GLY A  28 "'),
+    ('pdb="BR  ABYR A  18 "', 'pdb=" O   GLY A  28 "'),
+    ('pdb=" I1   T3 A   1 "', 'pdb=" O   PHE A 218 "'),
+    ('pdb=" I2   T3 A   1 "', 'pdb=" O   GLY A 290 "'),
+    ('pdb=" FAB IRE A2020 "', 'pdb=" SD  MET A 766 "'),
+    ('pdb="CL   IRE A2020 "', 'pdb=" O   LEU A 788 "'),
+    ('pdb="BR1  K17 A1001 "', 'pdb=" O   VAL A 116 "'),
+    ('pdb="BR1  K17 B1002 "', 'pdb=" O   VAL B 116 "'),
+    ('pdb="CL2  V25 A1482 "', 'pdb=" O   GLU A 242 "'),
+    ('pdb=" I1  V04 A 501 "', 'pdb=" O   VAL A 127 "'),
+    ('pdb="CL2  0NW H 302 "', 'pdb=" O   ASN H  98 "'),
+    ('pdb="CL2  0NW G1302 "', 'pdb=" O   ASN G1098 "')
+  ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
     results = find_halogen_bonds(model=model)
     for r in results:
-      print("%4.2f"%r.d_12, r.angle_312, r.angle_214,r.atom_1.id_str(), 
-        r.atom_2.id_str())
+      assert (r.atom_1.id_str(), r.atom_2.id_str()) in Halogen_atom_pairs
+      #print ("%s" % r.atom_1.id_str(), r.atom_2.id_str())
+
 
 if __name__ == '__main__':
-  t0 = time.time()
+  start = time.time()
   exercise()
-  print "Time: %6.2f"%(time.time()-t0)
+  end = time.time()
+  time_cost = (end - start)
+  print "it cost % seconds" % time_cost

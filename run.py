@@ -89,11 +89,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                   diff_best = diff
                   result = group_args(
                     atom_1=a1,
-                    atom_2=a2,
-                    atom_3=a3,
-                    d_12=d,
-                    angle_312=angle_312,
-                    angle_214=angle_214)
+                    atom_2=a2)
             if (result is not None):results.append(result)
   return results
 
