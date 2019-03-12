@@ -213,7 +213,7 @@ def f_salt_bridge(model,dist_cutoff=1):
       if (result is not None): result1.append(result)
   return result1
 
-def define_pi_system(model, dist_cutoff=5):
+def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
@@ -250,9 +250,9 @@ def define_pi_system(model, dist_cutoff=5):
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
       # for T type,the angle should be near to 90,but 30 deviation is ok
-      if angle < 60:continue
+      if angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
-      if 150> angle > 120:continue
+      if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
       result = group_args( angle = angle,
                            dist = dist,
                            p_i = list(pi.extract_i_seq()),
