@@ -38,7 +38,7 @@ the angle1 is more near 120,more possible;
 
 
 def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
-                       emp_scale2 = 0.75, angle_eps = 40):
+                       emp_scale2 = 0.75, angle_eps = 30):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -98,7 +98,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.1):
+def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.2):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -130,7 +130,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.1):
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
-            if (90 < angle_312):
+            if (100 < angle_312):
               result = group_args(
                 atom_1=a1,
                 atom_2=a2
@@ -213,7 +213,7 @@ def f_salt_bridge(model,dist_cutoff=1):
       if (result is not None): result1.append(result)
   return result1
 
-def define_pi_system(model, dist_cutoff=4):
+def define_pi_system(model, dist_cutoff=5):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
@@ -249,8 +249,8 @@ def define_pi_system(model, dist_cutoff=4):
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
-      if angle < 0:continue
-      if angle > 90:continue
+      if angle < 60:continue
+      if 150> angle > 120:continue
       result = group_args( angle = angle,
                            dist = dist,
                            p_i = list(pi.extract_i_seq()),
