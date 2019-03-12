@@ -249,7 +249,9 @@ def define_pi_system(model, dist_cutoff=5):
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
+      # for T type,the angle should be near to 90,but 30 deviation is ok
       if angle < 60:continue
+      # for P type,the angle shuld be near to 180,but 30 deviaton is ok
       if 150> angle > 120:continue
       result = group_args( angle = angle,
                            dist = dist,
