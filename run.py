@@ -185,6 +185,102 @@ def find_ions_bonds(model,eps = 0.15):
       if(a2 is None): continue
       ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
+
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
+  geometry = model.get_restraints_manager()
+  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+    sites_cart=model.get_sites_cart())
+  bps_dict = {}
+  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+  hierarchy = model.get_hierarchy()
+  vdwr = model.get_vdw_radii()
+  positive_residues = ["ARG", "HIS", "LYS"]
+  negative_residues = ["ASP", "GLU”，“HIS"]
+  main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  positive_atoms = []
+  atom1s = []
+  atom3s = []
+  # select out the pasitive atoms 、hydrogen atoms and negative atoms
+  # to lists
+  for a in hierarchy.atoms():
+    e1 = a1.element.strip().upper()
+    n1 = a1.name.strip().upper()
+    if(n1 in main_chain_atoms_plus): continue
+    if a.element_is_hydrogen():
+      atom1s.append(a)
+    if e1 == "O":
+      if not (a.parent().resname().strip().upper() in negative_residues):continue
+      atom3s.append(a)
+    if e1 == "N":
+      if not (a.parent().resname().strip().upper() in positive_residues):continue
+      positive_atoms.append(a)
+      
+  """ select out N H pairs in pasitive sites
+   if there are more than three hydrohen atoms
+   make covalent bond with N in side chains
+   then the N atom could be positive atom
+  """
+  i = 0
+  a1_a2_pairs = []
+  N_H_pairs = []
+  for a2 in positive_atoms:
+    for a1 in atom1s:
+      if (not is_bonded(a1, a2, bps_dict)): continue
+        i = i+1
+        a1_a2_pairs.append((a1,a2))
+    if i >=3:
+      if a1_a2_pairs is None:continue
+      N_H_pairs.extend(a1_a2_pairs)
+      
+  """ select out the negative site that opposite the positive site,
+    if the O atom in negative is close enough with N (positive atom),
+    and they didn't make covalent bond ,they will have chance to make
+    electrostatic interaction.and the negative also will have chance 
+    to make hydrogen bonds with th hydrogen atoms nearby the positive
+    N atom.then the eletrostatic interaction will make salt bridge
+    with hydrogen bonds.
+  """
+  for r in N_H_pairs:
+    a1 = r[0]
+    a2 = r[1]
+    result = None
+    diff_best = 1.e+9
+    for a3 in atom3s:
+      if (is_bonded(a3, a2, bps_dict)): continue
+      if (not a3.is_in_same_conformer_as(a2)): continue
+      if (a3.parent().parent().resseq ==
+              a2.parent().parent().resseq): continue
+      n2 = a2.name.strip().upper()
+      n3 = a3.name.strip().upper()
+      if(n3 not in vdwr.keys()): continue
+      if(n2 not in vdwr.keys()): continue
+      sum_vdwr = vdwr[n3] + vdwr[n2]
+      d_32 = a3.distance(a2)
+      if(d_32 > sum_vdwr): continue
+      d_13 = a1.distance(a3)
+      if (min-eps < d_13 < max+eps):
+        angle_312 = (a1.angle(a2, a3, deg=True))
+        if (100 < angle_312):
+          diff = abs(180 - angle_312)
+          if (diff < diff_best):
+            diff_best = diff
+            result = group_args(atom_1 = a1,
+                                atom_2 = a2,
+                                atom_3 = a3 )
+    if (result is not None): results.append(result)
+  return results
+        
+      
+       
+      
+      
+    
+          
+      
+      
+    
+    
+  
   
 def f_salt_bridge(model,dist_cutoff=1):
   geometry = model.get_restraints_manager()
@@ -196,30 +292,25 @@ def f_salt_bridge(model,dist_cutoff=1):
   results = find_hydrogen_bonds(model=model)
   main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
   result1= []
+  atom3s = []
+  for a in hierarchy.atoms():
+    e = a.element.strip().upper()
+    if (not (e == "N")):continue
+    atom3s.append(a)
   for r in results:
-    a3 = r.atom_1
-    a4 = r.atom_2
-   # center_1 = tuple(flex.vec3_double([a3.xyz,a4.xyz]).mean())
-    for ions in ions_bonds_paris_list:
-      a1 = ions[0]
-      a2 = ions[1]
-      #center_2 = tuple(flex.vec3_double([a1.xyz, a2.xyz]).mean())
-      #d = model.crystal_symmetry().unit_cell().distance(center_1, center_2)
+    a1 = r.atom_1
+    a2 = r.atom_2
+    i = 0
+    for a3 in atom3s:
       if (not is_bonded(a3, a1, bps_dict)): continue
       if (not a1.is_in_same_conformer_as(a3)): continue
-      if (not a2.is_in_same_conformer_as(a4)): continue
-      mid_hydrogen_bond = ((a3.xyz[0]+a4.xyz[0])/2,(a3.xyz[1]+a4.xyz[1])/2,(a3.xyz[2]+a4.xyz[2])/2)
-      mid_ions_bond = ((a1.xyz[0]+a2.xyz[0])/2,(a1.xyz[1]+a2.xyz[1])/2,(a1.xyz[2]+a2.xyz[2])/2)
-      d = math.sqrt(
-        (mid_hydrogen_bond[0] - mid_ions_bond[0]) ** 2+
-        (mid_hydrogen_bond[1] - mid_ions_bond[1]) ** 2+
-        (mid_hydrogen_bond[2] - mid_ions_bond[2]) ** 2)
-      if (d >dist_cutoff): continue
+      i = i + 1
+      if i >=3:
+      
       result = group_args(
         atom1=a1,
         atom2=a2,
-        atom3=a3,
-        atom4=a4)
+        atom3=a3)
       if (result is not None): result1.append(result)
   return result1
 
