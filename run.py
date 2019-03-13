@@ -38,7 +38,7 @@ the angle1 is more near 120,more possible;
 
 
 def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
-                       emp_scale2 = 0.75, angle_eps = 40):
+                       emp_scale2 = 0.75, angle_eps = 30):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
