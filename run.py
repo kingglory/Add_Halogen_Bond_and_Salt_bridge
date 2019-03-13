@@ -56,8 +56,6 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   atom4s = []
   results = []
   for a in hierarchy.atoms():
-    n = a.name.strip().upper()
-    if (n in main_chain_atoms_plus): continue
     if a.element.strip().upper() in halogens:
       atom1s.append(a)
     if a.element.strip().upper() in halogen_bond_pairs_atom:
