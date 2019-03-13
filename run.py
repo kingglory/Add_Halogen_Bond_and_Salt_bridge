@@ -76,10 +76,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
       n2 = a2.name.strip().upper()
       if (n1 not in vdwr.keys()): continue
       if (n2 not in vdwr.keys()): continue
-      if not n1 == "F":continue
-      if not n2 == "O":continue
       sum_vdwr = vdwr[n1] + vdwr[n2]
-      print sum_vdwr
       sum_vdwr_min2 = sum_vdwr * emp_scale2
       if (sum_vdwr_min2 - eps < d < sum_vdwr + eps):
         diff_best = 1.e+9
