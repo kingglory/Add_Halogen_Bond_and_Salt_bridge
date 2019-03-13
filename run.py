@@ -79,7 +79,8 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
         diff_best = 1.e+9
         result = None
         for a3 in hierarchy.atoms():
-          if （not (a3.element.strip().upper() == "C")):continue
+          e3 = a3.element.strip().upper()
+          if (not ( e3 == "C")):continue
           if (not is_bonded(a1, a3, bps_dict)): continue
           angle_312 = (a1.angle(a2, a3, deg=True))
           if (90 < angle_312):
