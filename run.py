@@ -144,47 +144,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
       if (result is not None): results.append(result)
     return results
 
-def find_ions_bonds(model,eps = 0.15):
-  geometry = model.get_restraints_manager()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart=model.get_sites_cart())
-  bps_dict = {}
-  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
-  ions_bonds_paris_list = []
-  positive_residues = ["ARG", "HIS", "LYS"]
-  negative_residues = ["ASP", "GLU", "HIS"]
-  second_atom_in_pair = ["O","S","N","P"]
-  main_chain_atoms_plus = ["CA","N","O","C","CB"]
-  atoms = list(hierarchy.atoms())
-  for i, a1 in enumerate(atoms):
-    e1 = a1.element.strip().upper()
-    n1 = a1.name.strip().upper()
-    if(n1 in main_chain_atoms_plus): continue
-    if(not (a1.parent().resname in positive_residues)):continue
-    if(not (e1 == "N")): continue
-    for j, a2 in enumerate(atoms):
-      if (j<i): continue
-      n2 = a2.name.strip().upper()
-      e2 = a2.element.strip().upper()
-      if(not (a2.parent().resname in negative_residues)):continue
-      if (not (e2 == "O")): continue
-      if(n2 in main_chain_atoms_plus): continue
-      if(a2.element_is_hydrogen()): continue
-      if (a1.parent().parent().resseq ==
-            a2.parent().parent().resseq): continue
-      if(n1 not in vdwr.keys()): continue
-      if(n2 not in vdwr.keys()): continue
-      sum_vdwr = vdwr[n1] + vdwr[n2]
-      d_12 = a1.distance(a2)
-      if(d_12 > sum_vdwr): continue
-      if(is_bonded(a1, a2, bond_proxies_simple)): continue
-      if(not a1.is_in_same_conformer_as(a2)): continue
-      if(a1 is None): continue
-      if(a2 is None): continue
-      ions_bonds_paris_list.append((a1, a2))
-  return ions_bonds_paris_list
+
 
 def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
   geometry = model.get_restraints_manager()
@@ -244,12 +204,12 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
     N atom.then the eletrostatic interaction will make salt bridge
     with hydrogen bonds.
   """
-  for r in N_H_pairs:
-    a1 = r[0]
-    a2 = r[1]
+  for a3 in atom3s:
     result = None
     diff_best = 1.e+9
-    for a3 in atom3s:
+    for r in N_H_pairs:
+      a1 = r[0]
+      a2 = r[1]
       if (is_bonded(a3, a2, bps_dict)): continue
       if (not a3.is_in_same_conformer_as(a2)): continue
       if (a3.parent().parent().resseq ==
@@ -274,48 +234,6 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
     if (result is not None): results.append(result)
   return results
         
-      
-       
-      
-      
-    
-          
-      
-      
-    
-    
-  
-  
-def f_salt_bridge(model,dist_cutoff=1):
-  geometry = model.get_restraints_manager()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart=model.get_sites_cart())
-  bps_dict = {}
-  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  ions_bonds_paris_list = find_ions_bonds(model)
-  results = find_hydrogen_bonds(model=model)
-  main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
-  result1= []
-  atom3s = []
-  for a in hierarchy.atoms():
-    e = a.element.strip().upper()
-    if (not (e == "N")):continue
-    atom3s.append(a)
-  for r in results:
-    a1 = r.atom_1
-    a2 = r.atom_2
-    i = 0
-    for a3 in atom3s:
-      if (not is_bonded(a3, a1, bps_dict)): continue
-      if (not a1.is_in_same_conformer_as(a3)): continue
-      i = i + 1
-      if i >=3:
-        result = group_args(
-        atom1=a1,
-        atom2=a2,
-        atom3=a3)
-      if (result is not None): result1.append(result)
-  return result1
 
 def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
   geometry = model.get_restraints_manager()
