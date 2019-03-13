@@ -186,7 +186,7 @@ def find_ions_bonds(model,eps = 0.15):
       ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
 
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.3 ):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -211,12 +211,13 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
     if(n in main_chain_atoms_plus): continue
     if a.element_is_hydrogen():
       atom1s.append(a)
-    if e == "O":
-      if not (a.parent().resname in negative_residues):continue
-      atom3s.append(a)
     if e == "N":
       if not (a.parent().resname in positive_residues):continue
       positive_atoms.append(a)
+    if e == "O":
+      if not (a.parent().resname in negative_residues):continue
+      atom3s.append(a)
+   
       
   """ select out N H pairs in pasitive sites
    if there are more than three hydrohen atoms
@@ -259,9 +260,9 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
       if(n2 not in vdwr.keys()): continue
       sum_vdwr = vdwr[n3] + vdwr[n2]
       d_32 = a3.distance(a2)
-      if(d_32 > sum_vdwr): continue
+      if(d_32 > sum_vdwr - eps2): continue
       d_13 = a1.distance(a3)
-      if (min-eps < d_13 < max+eps):
+      if (min-eps1 < d_13 < max+eps1):
         angle_312 = (a1.angle(a2, a3, deg=True))
         if (100 < angle_312):
           diff = abs(180 - angle_312)
