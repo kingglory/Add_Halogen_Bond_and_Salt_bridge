@@ -262,7 +262,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.3 ):
       d_32 = a3.distance(a2)
       if(d_32 > sum_vdwr - eps1): continue
       d_13 = a1.distance(a3)
-      if (min-eps2 < d_13 < max+eps2):
+      if (min-eps1 < d_13 < max+eps1):
         angle_312 = (a1.angle(a2, a3, deg=True))
         if (100 < angle_312):
           diff = abs(180 - angle_312)
