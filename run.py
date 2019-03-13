@@ -127,15 +127,18 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
               a2.parent().parent().resseq): continue
         d_12 = a1.distance(a2)
         if (min-eps < d_12 < max+eps):
+          diff_best = 1.e+9
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (100 < angle_312):
-              result = group_args(
-                atom_1=a1,
-                atom_2=a2
-              )
-              if (result is not None): results.append(result)
+              diff = abs(180 - angle_312)
+              if (diff < diff_best):
+                  diff_best = diff
+                  result = group_args(
+                    atom_1=a1,
+                    atom_2=a2)
+          if (result is not None): results.append(result)
     return results
 
 def find_ions_bonds(model,eps = 0.15):
