@@ -24,8 +24,7 @@ def exercise():
            ["2h79.pdb","2h79.ligands.cif"],
            ["2ito.pdb","2ito.ligands.cif"],
            ["2oxy.pdb","2oxy.ligands.cif"],
-           ["3v04.pdb","3v04.ligands.cif"],
-           ["4e7r.pdb","4e7r.ligands.cif"]
+           ["3v04.pdb","3v04.ligands.cif"]
            ]
   Halogen_atom_pairs = [
     ('pdb="BR  ABYR A  18 "', 'pdb=" N   GLY A  28 "'),
@@ -36,8 +35,7 @@ def exercise():
     ('pdb="CL   IRE A2020 "', 'pdb=" O   LEU A 788 "'),
     ('pdb="BR1  K17 A1001 "', 'pdb=" O   VAL A 116 "'),
     ('pdb="BR1  K17 B1002 "', 'pdb=" O   VAL B 116 "'),
-    ('pdb=" I1  V04 A 501 "', 'pdb=" O   VAL A 127 "'),
-    ('pdb="CL2  0NW G1302 "', 'pdb=" O   ASN G1098 "')
+    ('pdb=" I1  V04 A 501 "', 'pdb=" O   VAL A 127 "')
   ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
