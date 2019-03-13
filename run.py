@@ -46,6 +46,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
+  main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
   halogens = ["CL", "BR", "I", "F"]
   halogen_bond_pairs_atom = ["S", "O","N", "F", "CL", "BR", "I"]
   acceptor_pair = ["C","N","P","S"]
@@ -55,6 +56,8 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   atom4s = []
   results = []
   for a in hierarchy.atoms():
+    n = a.name.strip().upper()
+    if (n in main_chain_atoms_plus): continue
     if a.element.strip().upper() in halogens:
       atom1s.append(a)
     if a.element.strip().upper() in halogen_bond_pairs_atom:
