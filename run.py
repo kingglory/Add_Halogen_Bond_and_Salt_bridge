@@ -205,11 +205,11 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
     with hydrogen bonds.
   """
   for a3 in atom3s:
-    for r[0] in H_N_pairs:
+    for r in H_N_pairs:
       a1 = r[0]
       result = None
       diff_best = 1.e+9
-      for r[1] in H_N_pairs:
+      for r in H_N_pairs:
         a2 = r[1]
         if (is_bonded(a3, a2, bps_dict)): continue
         if (not a3.is_in_same_conformer_as(a2)): continue
