@@ -98,7 +98,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.2):
+def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
