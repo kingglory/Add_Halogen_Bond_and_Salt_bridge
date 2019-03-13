@@ -195,7 +195,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   positive_residues = ["ARG", "HIS", "LYS"]
-  negative_residues = ["ASP", "GLU”, “HIS"]
+  negative_residues = ["ASP", "GLU”, "HIS"]
   main_chain_atoms_plus = ["CA","N","O","C","CB"]
   positive_atoms = []
   atom1s = []
