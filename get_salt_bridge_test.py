@@ -32,9 +32,7 @@ def exercise():
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
     result1 = find_salt_bridge(model=model)
     for r in result1:
-      print r
-     # print ("%4.2f"% r.atom_1.id_str(), r.atom_2.id_str(),
-       # r.atom_3.id_str(), r.atom_4.id_str())
+      print ("%s"% r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str())
       # assert  XXX
 
 
