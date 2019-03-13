@@ -31,7 +31,7 @@ def exercise():
     ('pdb="BR  ABYR A  18 "', 'pdb=" O   GLY A  28 "'),
     ('pdb=" I1   T3 A   1 "', 'pdb=" O   PHE A 218 "'),
     ('pdb=" I2   T3 A   1 "', 'pdb=" O   GLY A 290 "'),
-    ('pdb=" FAB IRE A2020 "', 'pdb=" SD  MET A 766 "'),
+    ('pdb=" FAB IRE A2020 "', 'pdb=" OE2 GLU A 762 "'),
     ('pdb="CL   IRE A2020 "', 'pdb=" O   LEU A 788 "'),
     ('pdb="BR1  K17 A1001 "', 'pdb=" O   VAL A 116 "'),
     ('pdb="BR1  K17 B1002 "', 'pdb=" O   VAL B 116 "'),
