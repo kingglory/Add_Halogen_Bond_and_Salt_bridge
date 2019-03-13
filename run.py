@@ -235,7 +235,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
   return results
         
 
-def define_pi_system(model, dist_cutoff=4,T_angle = 90,P_angle = 180,eps_angle = 30):
+def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
