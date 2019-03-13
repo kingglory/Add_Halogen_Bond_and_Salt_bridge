@@ -241,6 +241,7 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
   atoms = hierarchy.atoms()
   results = []
   planes = []
+  # first limition: the pi is a plane
   for proxy in geometry.geometry.planarity_proxies:
     planes.append(atoms.select(proxy.i_seqs))
   for i, pi in enumerate(planes):
@@ -252,6 +253,9 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
       nj = list(pj.extract_name())
       if(' CA ' in ni and len(ni)==4): continue
       if(' CA ' in nj and len(nj)==4): continue
+      """ second limition: the mean distance between two plane 
+      is short than 5
+      """
       cmi = xyzi.mean()
       cmj = xyzj.mean()
       dist = math.sqrt(
@@ -267,7 +271,12 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
         point_1=scitbx.matrix.col(xyzj[0]), 
         point_2=scitbx.matrix.col(xyzj[1]), 
         point_3=scitbx.matrix.col(xyzj[2]))
-      # https://math.tutorvista.com/geometry/angle-between-two-planes.html
+      """third limition : Dihedral angle
+      for T(perpendicular)is 180
+      for P(In parallel) is 90
+      30° angular offset
+       https://math.tutorvista.com/geometry/angle-between-two-planes.html
+      """
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
