@@ -276,7 +276,6 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
       for P(In parallel) is 90
       30° angular offset
       """
-      #https://math.tutorvista.com/geometry/angle-between-two-planes.html
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
