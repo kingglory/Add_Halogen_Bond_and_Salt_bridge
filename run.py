@@ -200,8 +200,10 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
   positive_atoms = []
   atom1s = []
   atom3s = []
-  # select out the pasitive atoms 、hydrogen atoms and negative atoms
-  # to lists
+  
+  """ select out the pasitive atoms and hydrogen atoms 
+  and negative atoms to lists
+  """
   for a in hierarchy.atoms():
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
