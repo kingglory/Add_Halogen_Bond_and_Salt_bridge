@@ -153,6 +153,8 @@ def find_ions_bonds(model,eps = 0.15):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
+  positive_residues = ["ARG", "HIS", "LYS"]
+  negative_residues = ["ASP", "GLU", "HIS"]
   second_atom_in_pair = ["O","S","N","P"]
   main_chain_atoms_plus = ["CA","N","O","C","CB"]
   atoms = list(hierarchy.atoms())
@@ -160,12 +162,14 @@ def find_ions_bonds(model,eps = 0.15):
     e1 = a1.element.strip().upper()
     n1 = a1.name.strip().upper()
     if(n1 in main_chain_atoms_plus): continue
-    if(not (e1 in ["C","N"])): continue
+    if(not (a1.parent().resname in positive_residues)):continue
+    if(not (e1 == "N")): continue
     for j, a2 in enumerate(atoms):
       if (j<i): continue
       n2 = a2.name.strip().upper()
       e2 = a2.element.strip().upper()
-      if (not e2 in second_atom_in_pair): continue
+      if(not (a2.parent().resname in negative_residues)):continue
+      if (not (e2 == "O"): continue
       if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
       if (a1.parent().parent().resseq ==
