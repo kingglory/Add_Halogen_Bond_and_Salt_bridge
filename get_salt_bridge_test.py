@@ -1,5 +1,5 @@
 from __future__ import division
-from run import f_salt_bridge
+from run import find_salt_bridge
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -30,7 +30,7 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    result1 = f_salt_bridge(model=model)
+    result1 = find_salt_bridge(model=model)
     for r in result1:
       print r
      # print ("%4.2f"% r.atom_1.id_str(), r.atom_2.id_str(),
