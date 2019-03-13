@@ -120,6 +120,8 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
     for a2 in atom2s:
+      result = None
+      diff_best = 1.e+9
       for a1 in atom1s:
         if (not a1.is_in_same_conformer_as(a2)): continue
         if (is_bonded(a1, a2, bps_dict)): continue
@@ -127,7 +129,6 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
               a2.parent().parent().resseq): continue
         d_12 = a1.distance(a2)
         if (min-eps < d_12 < max+eps):
-          diff_best = 1.e+9
           for a3 in hierarchy.atoms():
             if (not is_bonded(a1, a3, bps_dict)): continue
             angle_312 = (a1.angle(a2, a3, deg=True))
