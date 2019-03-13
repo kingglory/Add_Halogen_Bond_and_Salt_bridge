@@ -153,7 +153,6 @@ def find_ions_bonds(model,eps = 0.15):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
-  results = []
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
   second_atom_in_pair = ["O","S","N","P"]
@@ -198,6 +197,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
   main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  results = []
   positive_atoms = []
   atom1s = []
   atom3s = []
