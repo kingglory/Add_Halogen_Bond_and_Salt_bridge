@@ -57,7 +57,7 @@ def exercise():
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print (r.pi_atoms_name, r.pj_atoms_name)
+      print (r.p_i, r.p_j)
 
 if __name__ == '__main__':
     t0 = time.time()
