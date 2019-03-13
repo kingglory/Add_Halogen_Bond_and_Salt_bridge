@@ -186,7 +186,7 @@ def find_ions_bonds(model,eps = 0.15):
       ions_bonds_paris_list.append((a1, a2))
   return ions_bonds_paris_list
 
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.3 ):
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
