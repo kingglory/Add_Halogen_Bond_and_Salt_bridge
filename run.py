@@ -119,8 +119,8 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
       if e in dict_h_bond_lengh:
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
-    for a1 in atom1s:
-      for a2 in atom2s:
+    for a2 in atom1s:
+      for a1 in atom2s:
         if (not a1.is_in_same_conformer_as(a2)): continue
         if (is_bonded(a1, a2, bps_dict)): continue
         if (a1.parent().parent().resseq ==
@@ -138,7 +138,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
                   result = group_args(
                     atom_1=a1,
                     atom_2=a2)
-          if (result is not None): results.append(result)
+      if (result is not None): results.append(result)
     return results
 
 def find_ions_bonds(model,eps = 0.15):
