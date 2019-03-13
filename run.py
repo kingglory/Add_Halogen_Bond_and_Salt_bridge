@@ -146,7 +146,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
 
 
 
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.25 ):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
