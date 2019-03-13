@@ -37,7 +37,6 @@ def exercise():
     ('pdb="BR1  K17 A1001 "', 'pdb=" O   VAL A 116 "'),
     ('pdb="BR1  K17 B1002 "', 'pdb=" O   VAL B 116 "'),
     ('pdb=" I1  V04 A 501 "', 'pdb=" O   VAL A 127 "'),
-    ('pdb="CL2  0NW H 302 "', 'pdb=" O   ASN H  98 "'),
     ('pdb="CL2  0NW G1302 "', 'pdb=" O   ASN G1098 "')
   ]
   for (pdb_file_name, cif_file_name) in files:
