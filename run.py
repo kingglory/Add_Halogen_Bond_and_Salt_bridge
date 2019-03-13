@@ -153,6 +153,7 @@ def find_ions_bonds(model,eps = 0.15):
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
   ions_bonds_paris_list = []
+  results = []
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
   second_atom_in_pair = ["O","S","N","P"]
