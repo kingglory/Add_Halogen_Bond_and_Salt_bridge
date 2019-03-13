@@ -169,7 +169,7 @@ def find_ions_bonds(model,eps = 0.15):
       n2 = a2.name.strip().upper()
       e2 = a2.element.strip().upper()
       if(not (a2.parent().resname in negative_residues)):continue
-      if (not (e2 == "O"): continue
+      if (not (e2 == "O")): continue
       if(n2 in main_chain_atoms_plus): continue
       if(a2.element_is_hydrogen()): continue
       if (a1.parent().parent().resseq ==
