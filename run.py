@@ -146,7 +146,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
 
 
 
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.25 ):
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -220,7 +220,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.25 ):
       if(n2 not in vdwr.keys()): continue
       sum_vdwr = vdwr[n3] + vdwr[n2]
       d_32 = a3.distance(a2)
-      if(d_32 > sum_vdwr - eps1): continue
+      if(d_32 > shutoff): continue
       d_13 = a1.distance(a3)
       if (min-eps2 < d_13 < max+eps2):
         angle_312 = (a1.angle(a2, a3, deg=True))
