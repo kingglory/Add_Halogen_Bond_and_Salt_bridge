@@ -205,15 +205,15 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
   and negative atoms to lists
   """
   for a in hierarchy.atoms():
-    e1 = a1.element.strip().upper()
-    n1 = a1.name.strip().upper()
-    if(n1 in main_chain_atoms_plus): continue
+    e = a.element.strip().upper()
+    n = a.name.strip().upper()
+    if(n in main_chain_atoms_plus): continue
     if a.element_is_hydrogen():
       atom1s.append(a)
-    if e1 == "O":
+    if e == "O":
       if not (a.parent().resname().strip().upper() in negative_residues):continue
       atom3s.append(a)
-    if e1 == "N":
+    if e == "N":
       if not (a.parent().resname().strip().upper() in positive_residues):continue
       positive_atoms.append(a)
       
