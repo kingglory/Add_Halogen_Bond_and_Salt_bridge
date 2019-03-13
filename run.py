@@ -119,8 +119,8 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
       if e in dict_h_bond_lengh:
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
-    for a2 in atom1s:
-      for a1 in atom2s:
+    for a2 in atom2s:
+      for a1 in atom1s:
         if (not a1.is_in_same_conformer_as(a2)): continue
         if (is_bonded(a1, a2, bps_dict)): continue
         if (a1.parent().parent().resseq ==
