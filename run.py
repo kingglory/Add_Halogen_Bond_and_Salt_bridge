@@ -308,8 +308,7 @@ def f_salt_bridge(model,dist_cutoff=1):
       if (not a1.is_in_same_conformer_as(a3)): continue
       i = i + 1
       if i >=3:
-      
-      result = group_args(
+        result = group_args(
         atom1=a1,
         atom2=a2,
         atom3=a3)
