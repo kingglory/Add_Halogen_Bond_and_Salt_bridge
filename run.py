@@ -48,7 +48,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   vdwr = model.get_vdw_radii()
   main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
   halogens = ["CL", "BR", "I", "F"]
-  halogen_bond_pairs_atom = ["S", "O","N", "F", "CL", "BR", "I"]
+  halogen_bond_pairs_atom = [ "O", "S", "N", "F", "CL", "BR", "I"]
   acceptor_pair = ["C","N","P","S"]
   atom1s = []
   atom2s = []
