@@ -211,10 +211,10 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
     if a.element_is_hydrogen():
       atom1s.append(a)
     if e == "O":
-      if not (a.parent().resname().strip().upper() in negative_residues):continue
+      if not (a.parent().resname in negative_residues):continue
       atom3s.append(a)
     if e == "N":
-      if not (a.parent().resname().strip().upper() in positive_residues):continue
+      if not (a.parent().resname in positive_residues):continue
       positive_atoms.append(a)
       
   """ select out N H pairs in pasitive sites
