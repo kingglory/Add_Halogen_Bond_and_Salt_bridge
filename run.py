@@ -186,7 +186,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
   """
   i = 0
   a1_a2_pairs = []
-  N_H_pairs = []
+  H_N_pairs = []
   for a2 in positive_atoms:
     for a1 in atom1s:
       if (not is_bonded(a1, a2, bps_dict)): continue
@@ -194,7 +194,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
       a1_a2_pairs.append((a1,a2))
     if i >=3:
       if a1_a2_pairs is None:continue
-      N_H_pairs.extend(a1_a2_pairs)
+      H_N_pairs.extend(a1_a2_pairs)
       
   """ select out the negative site that opposite the positive site,
     if the O atom in negative is close enough with N (positive atom),
@@ -205,33 +205,34 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.2 ):
     with hydrogen bonds.
   """
   for a3 in atom3s:
-    result = None
-    diff_best = 1.e+9
-    for r in N_H_pairs:
+    for r[0] in H_N_pairs:
       a1 = r[0]
-      a2 = r[1]
-      if (is_bonded(a3, a2, bps_dict)): continue
-      if (not a3.is_in_same_conformer_as(a2)): continue
-      if (a3.parent().parent().resseq ==
+      result = None
+      diff_best = 1.e+9
+      for r[1] in H_N_pairs:
+        a2 = r[1]
+        if (is_bonded(a3, a2, bps_dict)): continue
+        if (not a3.is_in_same_conformer_as(a2)): continue
+        if (a3.parent().parent().resseq ==
               a2.parent().parent().resseq): continue
-      n2 = a2.name.strip().upper()
-      n3 = a3.name.strip().upper()
-      if(n3 not in vdwr.keys()): continue
-      if(n2 not in vdwr.keys()): continue
-      sum_vdwr = vdwr[n3] + vdwr[n2]
-      d_32 = a3.distance(a2)
-      if(d_32 > sum_vdwr - eps1): continue
-      d_13 = a1.distance(a3)
-      if (min-eps2 < d_13 < max+eps2):
-        angle_312 = (a1.angle(a2, a3, deg=True))
-        if (100 < angle_312):
-          diff = abs(180 - angle_312)
-          if (diff < diff_best):
-            diff_best = diff
-            result = group_args(atom_1 = a1,
+        n2 = a2.name.strip().upper()
+        n3 = a3.name.strip().upper()
+        if(n3 not in vdwr.keys()): continue
+        if(n2 not in vdwr.keys()): continue
+        sum_vdwr = vdwr[n3] + vdwr[n2]
+        d_32 = a3.distance(a2)
+        if(d_32 > sum_vdwr - eps1): continue
+        d_13 = a1.distance(a3)
+        if (min-eps2 < d_13 < max+eps2):
+          angle_312 = (a1.angle(a2, a3, deg=True))
+          if (100 < angle_312):
+            diff = abs(180 - angle_312)
+            if (diff < diff_best):
+              diff_best = diff
+              result = group_args(atom_1 = a1,
                                 atom_2 = a2,
                                 atom_3 = a3 )
-    if (result is not None): results.append(result)
+      if (result is not None): results.append(result)
   return results
         
 
