@@ -285,8 +285,7 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
       if angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
       if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
-      result = group_args( angle = angle,
-                           dist = dist,
+      result = group_args( 
                            p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
                            pi_atoms_name = list(pi.extract_name()),
