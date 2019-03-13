@@ -271,10 +271,12 @@ def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle =
         point_1=scitbx.matrix.col(xyzj[0]), 
         point_2=scitbx.matrix.col(xyzj[1]), 
         point_3=scitbx.matrix.col(xyzj[2]))
-      """third limition : Dihedral angle
+      """
+      third limition : Dihedral angle
       for T(perpendicular)is 180
       for P(In parallel) is 90
-      30° angular offset
+      30 degree angular offset
+      https://math.tutorvista.com/geometry/angle-between-two-planes.html
       """
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
