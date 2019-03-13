@@ -228,8 +228,8 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps = 0.3 ):
   for a2 in positive_atoms:
     for a1 in atom1s:
       if (not is_bonded(a1, a2, bps_dict)): continue
-        i = i+1
-        a1_a2_pairs.append((a1,a2))
+      i = i+1
+      a1_a2_pairs.append((a1,a2))
     if i >=3:
       if a1_a2_pairs is None:continue
       N_H_pairs.extend(a1_a2_pairs)
