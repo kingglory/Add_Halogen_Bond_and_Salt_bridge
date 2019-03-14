@@ -59,6 +59,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
     if a.element.strip().upper() in halogens:
       atom1s.append(a)
     if a.element.strip().upper() in halogen_bond_pairs_atom:
+      if a.parent().resname == "HOH":continue
       atom2s.append(a)
     if a.element.strip().upper() in acceptor_pair:
       atom4s.append(a)
