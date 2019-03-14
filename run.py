@@ -170,11 +170,13 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
     n = a.name.strip().upper()
     if(n in main_chain_atoms_plus): continue
     if a.element_is_hydrogen():
+      if a.parent().resname == "HOH":continue
       atom1s.append(a)
     if e == "N":
       if not (a.parent().resname in positive_residues):continue
       positive_atoms.append(a)
     if e == "O":
+      if a.parent().resname == "HOH":continue
       if not (a.parent().resname in negative_residues):continue
       atom3s.append(a)
    
