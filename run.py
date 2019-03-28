@@ -46,7 +46,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   hierarchy = model.get_hierarchy()
   vdwr = model.get_vdw_radii()
-  main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
+  #main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
   halogens = ["CL", "BR", "I", "F"]
   halogen_bond_pairs_atom = [ "O", "S", "N", "F", "CL", "BR", "I"]
   acceptor_pair = ["C","N","P","S"]
@@ -101,7 +101,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
+def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -110,30 +110,30 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
     hierarchy = model.get_hierarchy()
     atom1s = []
     atom2s = []
+    atom3s = []
     results = []
-    dict_h_bond_lengh = ["O", "N", "F"]
-    main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
-      n = a.name.strip().upper()
-      if (n in main_chain_atoms_plus): continue
       if a.element_is_hydrogen():
         atom1s.append(a)
-      if e in dict_h_bond_lengh:
+      if e == "O":
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
+      if e == "C":
+        atom3s.append(a)
+
     for a2 in atom2s:
       result = None
       diff_best = 1.e+9
-      for a1 in atom1s:
-        if (not a1.is_in_same_conformer_as(a2)): continue
-        if (is_bonded(a1, a2, bps_dict)): continue
-        if (a1.parent().parent().resseq ==
+      for a3 in atom2s:
+        for a1 in atom1s:
+          if (not a1.is_in_same_conformer_as(a2)): continue
+          if (not is_bonded(a1, a3, bps_dict)): continue
+          if (is_bonded(a1, a2, bps_dict)): continue
+          if (a1.parent().parent().resseq ==
               a2.parent().parent().resseq): continue
-        d_12 = a1.distance(a2)
-        if (min-eps < d_12 < max+eps):
-          for a3 in hierarchy.atoms():
-            if (not is_bonded(a1, a3, bps_dict)): continue
+          d_12 = a1.distance(a2)
+          if (min-eps < d_12 < max+eps):
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (100 < angle_312):
               diff = abs(180 - angle_312)
@@ -142,7 +142,28 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.3):
                   result = group_args(
                     atom_1=a1,
                     atom_2=a2)
-      if (result is not None): results.append(result)
+        if (result in results):continue
+        if (result is not None): results.append(result)
+      if (result is None):
+        for a3 in atom3s:
+          for a1 in atom1s:
+            if (not a1.is_in_same_conformer_as(a2)): continue
+            if (not is_bonded(a1, a3, bps_dict)): continue
+            if (is_bonded(a1, a2, bps_dict)): continue
+            if (a1.parent().parent().resseq ==
+                  a2.parent().parent().resseq): continue
+            d_12 = a1.distance(a2)
+            if (min - eps < d_12 < max + eps):
+              angle_312 = (a1.angle(a2, a3, deg=True))
+              if (100 < angle_312):
+                diff = abs(180 - angle_312)
+                if (diff < diff_best):
+                  diff_best = diff
+                  result = group_args(
+                    atom_1=a1,
+                    atom_2=a2)
+        if (result in results): continue
+        if (result is not None): results.append(result)
     return results
 
 

@@ -1,0 +1,40 @@
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  K   and altid A and chain A and resname K and resseq  208
+    atom_selection_2 = name  O   and chain A and resname HOH and resseq  348
+    distance_ideal = 2.640000
+    sigma = 0.370
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  K   and altid A and chain A and resname K and resseq  208
+    atom_selection_2 = name  O   and chain A and resname HOH and resseq  532
+    distance_ideal = 2.640000
+    sigma = 0.370
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  K   and altid A and chain A and resname K and resseq  208
+    atom_selection_2 = name  O   and chain A and resname HOH and resseq  379
+    distance_ideal = 2.640000
+    sigma = 0.370
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  K   and altid A and chain A and resname K and resseq  208
+    atom_selection_2 = name  O   and chain A and resname GLU and resseq   11
+    distance_ideal = 2.820000
+    sigma = 0.100
+  }
+}

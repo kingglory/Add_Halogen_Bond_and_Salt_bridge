@@ -25,38 +25,39 @@ def get_model(pdb_file_name, cif_file_name):
 
 def exercise():
   files = [
-           ["1aieh.pdb",None],
-           ["1kych.pdb",None],
-           ["3q8jh.pdb",None],
-           ["4gifh.pdb",None],
-           ["5c11h.pdb",None],
-           ["2ona_complete_occH0_qm_refined.pdb",None]
+           ["1kych1.pdb",None],
+           ["1kych2.pdb",None],
+           ["1kych3.pdb",None],
+           ["3q8jh1.pdb",None],
+           ["3q8jh2.pdb",None],
+           ["3q8jh3.pdb",None]
            ]
-  Hydrogen_atom_pairs = [
-    ('pdb=" HD3BARG A 342 "', 'pdb=" OE2 GLU A 346 "'),
-    ('pdb=" HG3 LYS A 351 "', 'pdb=" OXT GLY A 356 "'),
-    ('pdb="HH22 ARG A  13 "', 'pdb=" OE1 GLU A   9 "'),
-    ('pdb="HH21 ARG A  15 "', 'pdb=" O3  SO4 A 101 "'),
-    ('pdb=" H   ARG A   4 "', 'pdb=" O1  SIN A   0 "'),
-    ('pdb="HH21 ARG A   4 "', 'pdb=" O4  SIN A   0 "'),
-    ('pdb=" HB3 PHE A  14 "', 'pdb=" OE  PCA A   1 "'),
-    ('pdb=" H   PHE A   5 "', 'pdb=" OE1 GLU A   8 "'),
-    ('pdb=" H   PHE A  14 "', 'pdb=" OD1 ASN A  11 "'),
-    ('pdb="HD21 ASN A  11 "', 'pdb=" OD1 ASP A  31 "'),
-    ('pdb=" H   GLU A 706 "', 'pdb=" OG  SER A 703 "'),
-    ('pdb=" H   SER A 703 "', 'pdb=" OE2 GLU A 706 "'),
-    ('pdb=" HD2 ARG A 712 "', 'pdb=" OH  TYR A 708 "'),
-    ('pdb="HE21 GLN B   5 "', 'pdb=" OD1 ASP A  17 "'),
-    ('pdb=" H   TYR A  46 "', 'pdb=" OD2 ASP A  22 "'),
-    ('pdb=" HB3 SER A  37 "', 'pdb=" OE2 GLU A  39 "'),
-    ('pdb=" H2  HOH B   7 "', 'pdb=" OXT VAL B   6 "')
-  ]
+  Ideal_Hydrogen_Bonds_files = {"1kych1.pdb":[('pdb=" HA  ARG A   5 "', 'pdb=" OE1 GLU A   8 "'),
+                                              ('pdb=" H   GLU A   8 "', 'pdb=" O   ARG A   4 "'),
+                                              ('pdb=" HB2 ARG A   5 "', 'pdb=" OE2 GLU A   1 "'),
+                                              ('pdb=" H   ARG A   5 "', 'pdb=" O   GLU A   1 "')],
+                                "1kych2.pdb":[('pdb=" HA  GLU A   8 "', 'pdb=" OE1 GLU A  11 "'),
+                                              ('pdb=" H   ARG A  12 "', 'pdb=" O   GLU A   8 "'),
+                                              ('pdb=" HB2 ARG A  12 "', 'pdb=" O   GLU A   9 "'),
+                                              ('pdb=" HD2 ARG A  12 "', 'pdb=" OE1 GLU A   9 "')],
+                                "1kych3.pdb":[('pdb="HH21 ARG A  15 "', 'pdb=" O3  SO4 A 101 "'),
+                                              ('pdb=" HE  ARG A  15 "', 'pdb=" O2  SO4 A 101 "')],
+                                "3q8jh1.pdb":[('pdb=" H   PHE A   5 "', 'pdb=" OE1 GLU A   8 "'),
+                                              ('pdb=" H   GLU A   8 "', 'pdb=" O   PHE A   5 "'),
+                                              ('pdb=" HG2 GLU A   8 "', 'pdb=" O   SER A   9 "')],
+                                "3q8jh2.pdb":[('pdb=" H   ASN A  11 "', 'pdb=" O   TYR A  15 "'),
+                                              ('pdb=" H   TYR A  15 "', 'pdb=" O   ASN A  11 "'),
+                                              ('pdb=" H   GLN A  13 "', 'pdb=" OD1 ASN A  11 "'),
+                                              ('pdb=" H   PHE A  14 "', 'pdb=" OD1 ASN A  11 "')],
+                                "3q8jh3.pdb":[('pdb="HD13 LEU A  23 "', 'pdb=" O   CYS A  18 "'),
+                                              ('pdb=" HG  LEU A  21 "', 'pdb=" O   PRO A  19 "')]}
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
     results = find_hydrogen_bonds(model=model)
     for r in results:
-      assert (r.atom_1.id_str(), r.atom_2.id_str()) in Hydrogen_atom_pairs
+      Hydrogen_bond_pairs = Ideal_Hydrogen_Bonds_files[pdb_file_name]
+      #assert (r.atom_1.id_str(), r.atom_2.id_str()) in Hydrogen_bond_pairs
       print ("%s"% r.atom_1.id_str(), r.atom_2.id_str())
 
 if __name__ == '__main__':
