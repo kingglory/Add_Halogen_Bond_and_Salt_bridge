@@ -101,7 +101,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
+def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -111,7 +111,9 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
     atom1s = []
     atom2s = []
     atom3s = []
+    atom4s = []
     results = []
+    Accepter_H_pair = ["O","N"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
       if a.element_is_hydrogen():
@@ -119,13 +121,15 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
       if e == "O":
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
+      if e in Accepter_H_pair:
+        atom4s.append(a)
       if e == "C":
         atom3s.append(a)
 
     for a2 in atom2s:
       result = None
       diff_best = 1.e+9
-      for a3 in atom2s:
+      for a3 in atom4s:
         for a1 in atom1s:
           if (not a1.is_in_same_conformer_as(a2)): continue
           if (not is_bonded(a1, a3, bps_dict)): continue
@@ -136,7 +140,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
           if (min-eps < d_12 < max+eps):
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (100 < angle_312):
-              diff = abs(180 - angle_312)
+              diff = abs( 2 - d_12 )
               if (diff < diff_best):
                   diff_best = diff
                   result = group_args(
@@ -164,11 +168,27 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.85):
                     atom_2=a2)
         if (result in results): continue
         if (result is not None): results.append(result)
+    # one O atom can make two hydrogen bonds,but one hydrogen atom can just one
+
+    for i,ri in enumerate(results):
+      for j,rj in enumerate(results):
+        if (j <= i): continue
+        ai1 = ri.atom_1
+        ai2 = ri.atom_2
+        aj1 = rj.atom_1
+        aj2 = rj.atom_2
+        if ri.atom_1 == rj.atom_1:
+          di = ai1.distance(ai2)
+          dj = aj1.distance(aj2)
+          if di < dj:
+            results.remove(rj)
+          else:
+            results.remove(ri)
+
     return results
 
 
-
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
+def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=model.get_sites_cart())
@@ -178,19 +198,16 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
   vdwr = model.get_vdw_radii()
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
-  main_chain_atoms_plus = ["CA","N","O","C","CB"]
+  #main_chain_atoms_plus = ["CA","N","O","C","CB"]
   results = []
   positive_atoms = []
   atom1s = []
   atom3s = []
-  
   """ select out the pasitive atoms and hydrogen atoms 
   and negative atoms to lists
   """
   for a in hierarchy.atoms():
     e = a.element.strip().upper()
-    n = a.name.strip().upper()
-    if(n in main_chain_atoms_plus): continue
     if a.element_is_hydrogen():
       if a.parent().resname == "HOH":continue
       atom1s.append(a)
@@ -216,7 +233,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
       if (not is_bonded(a1, a2, bps_dict)): continue
       i = i+1
       a1_a2_pairs.append((a1,a2))
-    if i >=3:
+    if i >=2:
       if a1_a2_pairs is None:continue
       H_N_pairs.extend(a1_a2_pairs)
       
@@ -238,15 +255,10 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, shutoff = 4 ):
       if (not a3.is_in_same_conformer_as(a2)): continue
       if (a3.parent().parent().resseq ==
               a2.parent().parent().resseq): continue
-      n2 = a2.name.strip().upper()
-      n3 = a3.name.strip().upper()
-      if(n3 not in vdwr.keys()): continue
-      if(n2 not in vdwr.keys()): continue
-      sum_vdwr = vdwr[n3] + vdwr[n2]
       d_32 = a3.distance(a2)
       if(d_32 > shutoff - eps1): continue
       d_13 = a1.distance(a3)
-      if (min-eps1 < d_13 < max+eps1):
+      if (min-eps1 < d_13 < max+eps2):
         angle_312 = (a1.angle(a2, a3, deg=True))
         if (100 < angle_312):
           diff = abs(180 - angle_312)
