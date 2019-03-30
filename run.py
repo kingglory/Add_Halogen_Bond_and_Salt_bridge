@@ -16,10 +16,10 @@ def is_bonded(atom_1, atom_2, bps_dict):
   if(not tuple(i12) in bps_dict): return False
   else: return True
 
-def in_plain(atom1,atom2,atom3,atom4,pps_dict):
-  i1234 = [atom1.i_seq,atom2.i_seq,atom3.i_seq,atom4.i_seq]
-  i1234.sort()
-  if (not tuple(i1234) in pps_dict):return False
+def in_plain(atom1,atom2,atom3,atom4,atom5,pps_dict):
+  i12345 = [atom1.i_seq,atom2.i_seq,atom3.i_seq,atom4.i_seq,atom5.iseq]
+  i12345.sort()
+  if (not tuple(i12345) in pps_dict):return False
   else:return True
 
 """
@@ -271,14 +271,20 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shuto
   return results
         
 
-def define_pi_system(model, dist_cutoff=4.5,T_angle = 90,P_angle = 180,eps_angle = 30):
+def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   atoms = hierarchy.atoms()
   results = []
   planes = []
+  #Ring_containing_amino_acid(Ring_CAA)
+  Ring_CAA = ["HIS","PRO","PHE","TYR","TRP"]
   # first limition: the pi is a plane
   for proxy in geometry.geometry.planarity_proxies:
+    """for a in atoms:
+      print dir(atoms)
+      if (not a.parent().resname in Ring_CAA):atoms.remove(a)
+      """
     planes.append(atoms.select(proxy.i_seqs))
   for i, pi in enumerate(planes):
     for j, pj in enumerate(planes):
@@ -287,8 +293,8 @@ def define_pi_system(model, dist_cutoff=4.5,T_angle = 90,P_angle = 180,eps_angle
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
-      if(' CA ' in ni and len(ni)==4): continue
-      if(' CA ' in nj and len(nj)==4): continue
+      if(' CA ' in ni and len(ni) < 6): continue
+      if(' CA ' in nj and len(nj) < 6): continue
       """ second limition: the mean distance between two plane 
       is short than 5
       """
@@ -321,8 +327,9 @@ def define_pi_system(model, dist_cutoff=4.5,T_angle = 90,P_angle = 180,eps_angle
       if angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
       if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
-      result = group_args( 
-                           p_i = list(pi.extract_i_seq()),
+      #print type(xyzi), xyzi[1], len(xyzi), "xyzi"
+      #print pi.extract_i_seq()
+      result = group_args( p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
                            pi_atoms_name = list(pi.extract_name()),
                            pj_atoms_name = list(pj.extract_name())
