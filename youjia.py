@@ -87,7 +87,8 @@ def get_CNCO_bond_angle(model):
 
 def exercise():
   pdb_file_name = raw_input("pdb file name here:")
-  #easy_run.call("phenix.ready_set {0}".format(pdb_file_name))
+  easy_run.call("phenix.fetch_pdb {0}".format(pdb_file_name[0:4]))
+  easy_run.call("phenix.ready_set {0}".format(pdb_file_name))
   cif_file_name = pdb_file_name[0:4] + ".ligands.cif"
   model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
   results = get_CNCO_bond_angle(model)
