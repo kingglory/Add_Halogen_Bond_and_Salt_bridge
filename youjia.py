@@ -99,8 +99,8 @@ def exercise():
 
 
 if __name__ == '__main__':
-    start = time.time()
-    exercise()
-    end = time.time()
-    time_cost = (end - start)
-    print "it cost % seconds" % time_cost
+  start = time.time()
+  exercise()
+  end = time.time()
+  time_cost = (end - start)
+  print "it cost % seconds" % time_cost
