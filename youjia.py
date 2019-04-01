@@ -1,9 +1,11 @@
 from __future__ import division
 import iotbx.pdb
 import iotbx.cif
+import re
 import scitbx
 from scitbx.array_family import flex
 import numpy as np
+import pandas as pd
 import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
 from libtbx import easy_run
@@ -76,25 +78,44 @@ def get_CNCO_bond_angle(model):
                               atom_2 = a2,
                               atom_3 = a3,
                               atom_4 = a4,
-                              d12 = d12,
-                              d23 = d23,
-                              d24 = d24,
-                              a123 = angle123,
-                              a124 = angle124,
-                              a324 = angle324)
+                              d_C_L_N = d12,
+                              d_O_N = d23,
+                              d_C_R_N = d24,
+                              a_C_L_N_O = angle123,
+                              a_C_N_C = angle124,
+                              a_C_R_N_O = angle324)
           if (result is not None): results.append(result)
   return results
 
 def exercise():
-  pdb_file_name = raw_input("pdb file name here:")
-  easy_run.call("phenix.fetch_pdb {0}".format(pdb_file_name[0:4]))
-  easy_run.call("phenix.ready_set {0}".format(pdb_file_name))
-  cif_file_name = pdb_file_name[0:4] + ".ligands.cif"
-  model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-  results = get_CNCO_bond_angle(model)
-  for r in results:
-    print ("%s" %r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str(), r.atom_4.id_str(),
-             r.d12, r.d23, r.d24, r.a123, r.a124, r.a324)
+  pdb_file_names = raw_input("pdb file name here:")
+  p_f = pdb_file_names.split(' ')
+  for pdb_file_name in p_f:
+    easy_run.call("phenix.fetch_pdb {0}".format(pdb_file_name[0:4]))
+    easy_run.call("phenix.ready_set {0}".format(pdb_file_name))
+    print (pdb_file_name, "-" * 50)
+    cif_file_name = pdb_file_name[0:4] + ".ligands.cif"
+    model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    results = get_CNCO_bond_angle(model)
+    for r in results:
+      '''print dir(r.atom_1.chain())
+      MTN = {"id":["CSN values"],"O-N":[1.272],"C(L)-N":[1.482],
+            "C(R)R-N":[1.482],"C-N-C":[115.232],"C(L)-N-O":[122.384],
+            "C(R)-N-O":[122.384]}
+      df = pd.DataFrame(MTN,columns = ["id","O-N","C(L)-N",
+            "C(R)R-N","C-N-C","C(L)-N-O","C(R)-N-O"],index=["one"])
+      Series = pd.Series({"O-N":r.d23,"C(L)-N":r.d12,
+            "C(R)R-N":r.d24,"C-N-C":r.a124,"C(L)-N-O":r.a123,
+            "C(R)-N-O":r.a324})
+      data = pd.DataFrame()
+      Series = [[r.d12, r.d23, r.d24, r.a123, r.a124, r.a324]]
+      df = data.append(Series,ignore_index=True)
+
+        print df
+       '''
+
+      print ("%s" %r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str(),
+         r.atom_4.id_str(),r.d_O_N, r.d_C_L_N, r.d_C_R_N, r.a_C_N_C, r.a_C_L_N_O, r.a_C_R_N_O)
 
 
 
