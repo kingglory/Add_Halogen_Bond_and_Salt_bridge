@@ -2,6 +2,7 @@ from __future__ import division
 import iotbx.pdb
 import iotbx.cif
 import scitbx
+import matplotlib as np
 from scitbx.array_family import flex
 import numpy as np
 import mmtbx.hydrogens.build_hydrogens
@@ -272,19 +273,22 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shuto
         
 
 def define_pi_system(model, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
-  geometry = model.get_restraints_manager()
-  hierarchy = model.get_hierarchy()
-  atoms = hierarchy.atoms()
   results = []
   planes = []
   #Ring_containing_amino_acid(Ring_CAA)
-  Ring_CAA = ["HIS","PRO","PHE","TYR","TRP"]
+  Ring_CAA = ["resname HIS","resname PRO","resname PHE","resname TYR","resname TRP"]
+  #  asc = hierarchy.atom_selection_cache()
+  ss = " or ".join(Ring_CAA)
+  #  hierarchys = hierarchy.select(asc.selection(ss))
+  m_sel = model.selection(ss)
+  new_model = model.select(~m_sel)
+  hierarchy = new_model.get_hierarchy()
+  hierarchy.atoms().reset_i_seq()
+  #hierarchy.write_pdb_file(file_name="test.pdb")
+  geometry = new_model.get_restraints_manager()
   # first limition: the pi is a plane
+  atoms = hierarchy.atoms()
   for proxy in geometry.geometry.planarity_proxies:
-    """for a in atoms:
-      print dir(atoms)
-      if (not a.parent().resname in Ring_CAA):atoms.remove(a)
-      """
     planes.append(atoms.select(proxy.i_seqs))
   for i, pi in enumerate(planes):
     for j, pj in enumerate(planes):
