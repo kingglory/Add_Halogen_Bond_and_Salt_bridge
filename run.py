@@ -272,7 +272,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shuto
   return results
         
 
-def define_pi_system(model,pdb_file_name, dist_cutoff=5,T_angle = 90,P_angle = 180,eps_angle = 30):
+def define_pi_system(model,pdb_file_name, dist_cutoff=6,T_angle = 90,P_angle = 180,eps_angle = 30):
   results = []
   planes = []
   #Ring_containing_amino_acid(Ring_CAA)
@@ -281,10 +281,11 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=5,T_angle = 90,P_angle = 1
   ss = " or ".join(Ring_CAA)
   #  hierarchys = hierarchy.select(asc.selection(ss))
   m_sel = model.selection(ss)
-  new_model = model.select(~m_sel)
+  new_model = model.select(m_sel)
   hierarchy = new_model.get_hierarchy()
   #hierarchy.atoms().reset_i_seq()
-  hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb")
+  crystal_symmetry = new_model.crystal_symmetry()
+  hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",crystal_symmetry=crystal_symmetry)
   geometry = new_model.get_restraints_manager()
   # first limition: the pi is a plane
   atoms = hierarchy.atoms()
@@ -297,11 +298,11 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=5,T_angle = 90,P_angle = 1
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
-      if((' CA ' in ni) and ( len(ni) < 6 ) ): continue
-      if((' CA ' in nj) and (len(nj) < 6) ): continue
-      # The first atom name must be CG in a protein ring
       if (' CG ' not in ni): continue
       if (' CG ' not in nj): continue
+      if((' CA ' in ni) and ( len(ni) < 5 ) ): continue
+      if((' CA ' in nj) and (len(nj) < 5) ): continue
+      # The first atom name must be CG in a protein ring
       """ second limition: the mean distance between two plane 
       is short than 5
       """

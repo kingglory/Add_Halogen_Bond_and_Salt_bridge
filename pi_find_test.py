@@ -8,6 +8,7 @@ import os
 import time
 from libtbx import easy_run
 # prepare the cif file if the pdb file needs
+'''
 def prepare_cif_for_pdb_file():
   pi_file = ["1c14.pdb","3az9.pdb"]
   for pdb_file in pi_file:
@@ -27,7 +28,7 @@ def list_cif_and_pdb_file():
     pi_file[i] = [pdb_file,None]
   i = i + 1
  return  pi_file
-
+'''
 def get_model(pdb_file_name, cif_file_name):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
   restraint_objects = None
@@ -41,11 +42,6 @@ def get_model(pdb_file_name, cif_file_name):
     log = null_out())
   return model
 
-
-
-
-
-
 def exercise():
   files = [  ["1p5j.pdb", None],
              ["2ovp.pdb", None],
@@ -55,7 +51,7 @@ def exercise():
   pi_sites = [
 
       ]
-  ''''''
+
 
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
