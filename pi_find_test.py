@@ -47,24 +47,20 @@ def get_model(pdb_file_name, cif_file_name):
 
 
 def exercise():
-  files = [#["1p5j.pdb", None],
-           ["1p5j1.pdb", None],
-           #["1p5j2.pdb", None],
-           #["1p5j3.pdb", None],
-           ["1p5j4.pdb", None],
-           #["1p5j5.pdb", None],
-           #["2ovp.pdb", None],
-           ["3cuk.pdb", "3cuk.ligands.cif"]
+  files = [  ["1p5j.pdb", None],
+             ["2ovp.pdb", None],
+             ["3cuk.pdb", "3cuk.ligands.cif"],
+             ["6mip.pdb","6mip.ligands.cif"]
           ]
   pi_sites = [
 
       ]
-
+  ''''''
 
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    result = define_pi_system(model = model)
+    result = define_pi_system(model = model,pdb_file_name = pdb_file_name)
     if result is not None:
      for r in result:
       print (r.p_i, r.p_j)
