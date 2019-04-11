@@ -43,8 +43,10 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    result1 = find_salt_bridge(model=model,pdb_file_name=pdb_file_name)
-    for r in result1:
+    results = find_salt_bridge(model=model,pdb_file_name=pdb_file_name)
+    print results
+    for r in results:
+      #print r
       Salt_Bridge_sites = Ideal_Salt_Bridge_files[pdb_file_name]
       print ("%s"% r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str())
       #assert  (r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str()) in  Salt_Bridge_sites

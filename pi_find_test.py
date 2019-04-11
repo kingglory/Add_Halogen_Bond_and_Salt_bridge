@@ -24,7 +24,8 @@ def get_model(pdb_file_name, cif_file_name):
 def exercise():
   files = [  ["1p5j.pdb", None],
              ["2ovp.pdb", None],
-             ["3cuk.pdb", "3cuk.ligands.cif"],
+             ["5yyf.pdb","5yyf.ligands.cif"],
+             #["3cuk.pdb", "3cuk.ligands.cif"],
              ["6mip.pdb","6mip.ligands.cif"]
           ]
   pi_sites = [
