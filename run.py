@@ -189,14 +189,21 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
     return results
 
 
-def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
-  geometry = model.get_restraints_manager()
+def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
+  salt_bridge_res = ["resname ARG", "resname HIS",
+                     "resname LYS", "resname ASP", "resname GLU"]
+  ss = " or ".join(salt_bridge_res)
+  m_sel = model.selection(ss)
+  new_model = model.select(m_sel)
+  hierarchy = new_model.get_hierarchy()
+  #hierarchy.atoms().reset_i_seq()
+  crystal_symmetry = new_model.crystal_symmetry()
+  hierarchy.write_pdb_file(file_name=pdb_file_name[0:6] + "new.pdb", crystal_symmetry=crystal_symmetry)
+  geometry = new_model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart=model.get_sites_cart())
+    sites_cart=new_model.get_sites_cart())
   bps_dict = {}
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  hierarchy = model.get_hierarchy()
-  vdwr = model.get_vdw_radii()
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
   #main_chain_atoms_plus = ["CA","N","O","C","CB"]
@@ -210,13 +217,13 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shuto
   for a in hierarchy.atoms():
     e = a.element.strip().upper()
     if a.element_is_hydrogen():
-      if a.parent().resname == "HOH":continue
+      #if a.parent().resname == "HOH":continue
       atom1s.append(a)
     if e == "N":
       if not (a.parent().resname in positive_residues):continue
       positive_atoms.append(a)
     if e == "O":
-      if a.parent().resname == "HOH":continue
+      #if a.parent().resname == "HOH":continue
       if not (a.parent().resname in negative_residues):continue
       atom3s.append(a)
    
@@ -272,7 +279,7 @@ def find_salt_bridge(model, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shuto
   return results
         
 
-def define_pi_system(model,pdb_file_name, dist_cutoff=6,T_angle = 90,P_angle = 180,eps_angle = 30):
+def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle = 180,eps_angle = 30):
   results = []
   planes = []
   #Ring_containing_amino_acid(Ring_CAA)
@@ -283,7 +290,7 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6,T_angle = 90,P_angle = 1
   m_sel = model.selection(ss)
   new_model = model.select(m_sel)
   hierarchy = new_model.get_hierarchy()
-  #hierarchy.atoms().reset_i_seq()
+  hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
   hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",crystal_symmetry=crystal_symmetry)
   geometry = new_model.get_restraints_manager()
@@ -298,10 +305,14 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6,T_angle = 90,P_angle = 1
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
+      if (' CA ' in ni): continue
+      if (' CA ' in nj): continue
       if (' CG ' not in ni): continue
       if (' CG ' not in nj): continue
-      if((' CA ' in ni) and ( len(ni) < 5 ) ): continue
-      if((' CA ' in nj) and (len(nj) < 5) ): continue
+      #if (' CD2 ' not in ni): continue
+      #if (' CD2 ' not in nj): continue
+      #if((' CA ' in ni) and (len(ni) < 5) ): continue
+      #if((' CA ' in nj) and (len(nj) < 5) ): continue
       # The first atom name must be CG in a protein ring
       """ second limition: the mean distance between two plane 
       is short than 5

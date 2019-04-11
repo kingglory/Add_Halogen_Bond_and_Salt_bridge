@@ -7,28 +7,7 @@ import iotbx.cif
 import os
 import time
 from libtbx import easy_run
-# prepare the cif file if the pdb file needs
-'''
-def prepare_cif_for_pdb_file():
-  pi_file = ["1c14.pdb","3az9.pdb"]
-  for pdb_file in pi_file:
-    easy_run.call(" phenix.ready_set %s " %pdb_file)
 
-
-# prepare the cif file if the pdb file needs
-def list_cif_and_pdb_file():
- pi_file = ["1c14.pdb","3az9.pdb"]
- i = 0
- for pdb_file in pi_file:
-  pdb_file = pdb_file[0:4] + ".updated.pdb"
-  pdb_cif = pdb_file[0:4] + ".ligands.cif"
-  if os.path.exists(pdb_cif):
-    pi_file[i] = [pdb_file, pdb_cif]
-  else:
-    pi_file[i] = [pdb_file,None]
-  i = i + 1
- return  pi_file
-'''
 def get_model(pdb_file_name, cif_file_name):
   pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
   restraint_objects = None
