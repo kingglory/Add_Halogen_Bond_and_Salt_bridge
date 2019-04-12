@@ -273,12 +273,11 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2, eps1 = 0.15, ep
           diff = abs(180 - angle_312)
           if (diff < diff_best):
             diff_best = diff
-            print a1.id_str()
-            result = group_args(atom_1 = a1,
-                                atom_2 = a2,
-                                atom_3 = a3 )
+            result = group_args(atom_1 = a1.id_str(),
+                                atom_2 = a2.id_str(),
+                                atom_3 = a3.id_str())
     if (result is not None): results.append(result)
-  print results
+
   return results
         
 
@@ -293,7 +292,7 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
   m_sel = model.selection(ss)
   new_model = model.select(m_sel)
   hierarchy = new_model.get_hierarchy()
-  hierarchy.atoms().reset_i_seq()
+  #hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
   hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",crystal_symmetry=crystal_symmetry)
   geometry = new_model.get_restraints_manager()
@@ -361,6 +360,7 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
                            )
       if result in results:continue
       if (result is not None): results.append(result)
+
   return results
 
 
