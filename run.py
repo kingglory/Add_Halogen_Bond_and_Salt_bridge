@@ -327,6 +327,7 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
         (cmi[1]-cmj[1])**2+
         (cmi[2]-cmj[2])**2)
       if(dist>dist_cutoff): continue
+      '''
       ai,bi,ci,di = scitbx.matrix.plane_equation(
         point_1=scitbx.matrix.col(xyzi[0]), 
         point_2=scitbx.matrix.col(xyzi[1]), 
@@ -345,12 +346,14 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
+      print angle
       # for T type,the angle should be near to 90,but 30 deviation is ok
-      if angle < (T_angle - eps_angle):continue
+      #if angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
-      if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
+      #if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
       #print type(xyzi), xyzi[1], len(xyzi), "xyzi"
       #print pi.extract_i_seq()
+      '''
       result = group_args( p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
                            pi_atoms_name = list(pi.extract_name()),
