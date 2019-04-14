@@ -42,7 +42,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                        emp_scale2 = 0.75, angle_eps = 30):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart=model.get_sites_cart())
+                                  sites_cart=model.get_sites_cart())
   bps_dict = {}
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   hierarchy = model.get_hierarchy()
@@ -169,7 +169,8 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
                     atom_2=a2)
         if (result in results): continue
         if (result is not None): results.append(result)
-    # one O atom can make two hydrogen bonds,but one hydrogen atom can just one
+    # one O atom can make two hydrogen bonds,
+    # but one hydrogen atom can just one
 
     for i,ri in enumerate(results):
       for j,rj in enumerate(results):
@@ -189,7 +190,8 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
     return results
 
 
-def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2, eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
+def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
+                     eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
   salt_bridge_res = ["resname ARG", "resname HIS",
                      "resname LYS", "resname ASP", "resname GLU"]
   ss = " or ".join(salt_bridge_res)
@@ -198,7 +200,8 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2, eps1 = 0.15, ep
   hierarchy = new_model.get_hierarchy()
   hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
-  hierarchy.write_pdb_file(file_name=pdb_file_name[0:6] + "new.pdb", crystal_symmetry=crystal_symmetry)
+  hierarchy.write_pdb_file(file_name=pdb_file_name[0:6] + "new.pdb",
+                           crystal_symmetry=crystal_symmetry)
   geometry = new_model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
     sites_cart=new_model.get_sites_cart())
@@ -281,11 +284,14 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2, eps1 = 0.15, ep
   return results
         
 
-def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle = 180,eps_angle = 30):
+def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,
+                     T_angle = 90,P1_angle = 180,P2_angle = 0,
+                     eps_angle = 30):
   results = []
   planes = []
   #Ring_containing_amino_acid(Ring_CAA)
-  Ring_CAA = ["resname HIS","resname PHE","resname TYR","resname TRP"]
+  Ring_CAA = ["resname HIS","resname PHE",
+              "resname TYR","resname TRP"]
   #  asc = hierarchy.atom_selection_cache()
   ss = " or ".join(Ring_CAA)
   #  hierarchys = hierarchy.select(asc.selection(ss))
@@ -294,7 +300,8 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
   hierarchy = new_model.get_hierarchy()
   #hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
-  hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",crystal_symmetry=crystal_symmetry)
+  hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",
+                           crystal_symmetry=crystal_symmetry)
   geometry = new_model.get_restraints_manager()
   # first limition: the pi is a plane
   atoms = hierarchy.atoms()
@@ -307,12 +314,8 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
-      #if (' CA ' in ni): continue
-      #if (' CA ' in nj): continue
       if (' CG ' not in ni): continue
       if (' CG ' not in nj): continue
-      #if (' CD2 ' not in ni): continue
-      #if (' CD2 ' not in nj): continue
       if((' CA ' in ni) and (len(ni) < 5) ): continue
       if((' CA ' in nj) and (len(nj) < 5) ): continue
       # The first atom name must be CG in a protein ring
@@ -326,7 +329,6 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
         (cmi[1]-cmj[1])**2+
         (cmi[2]-cmj[2])**2)
       if(dist>dist_cutoff): continue
-      '''
       ai,bi,ci,di = scitbx.matrix.plane_equation(
         point_1=scitbx.matrix.col(xyzi[0]), 
         point_2=scitbx.matrix.col(xyzi[1]), 
@@ -347,12 +349,12 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
       angle = math.acos(cos_a)*180/math.pi
       print angle
       # for T type,the angle should be near to 90,but 30 deviation is ok
-      #if angle < (T_angle - eps_angle):continue
+      if angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
-      #if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
+      if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
       #print type(xyzi), xyzi[1], len(xyzi), "xyzi"
       #print pi.extract_i_seq()
-      '''
+
       result = group_args( p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
                            pi_atoms_name = list(pi.extract_name()),
