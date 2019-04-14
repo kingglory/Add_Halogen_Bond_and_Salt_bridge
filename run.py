@@ -284,9 +284,8 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
   return results
         
 
-def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,
-                     T_angle = 90,P1_angle = 180,P2_angle = 0,
-                     eps_angle = 30):
+def define_pi_system(model,pdb_file_name, dist_cutoff=6.0,
+                     T_angle = 90,P_angle = 0,eps_angle = 30):
   results = []
   planes = []
   #Ring_containing_amino_acid(Ring_CAA)
@@ -298,7 +297,7 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,
   m_sel = model.selection(ss)
   new_model = model.select(m_sel)
   hierarchy = new_model.get_hierarchy()
-  #hierarchy.atoms().reset_i_seq()
+  hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
   hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",
                            crystal_symmetry=crystal_symmetry)
@@ -347,13 +346,13 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
         (aj**2+bj**2+cj**2)**0.5
       angle = math.acos(cos_a)*180/math.pi
-      print angle
       # for T type,the angle should be near to 90,but 30 deviation is ok
-      if angle < (T_angle - eps_angle):continue
+      if (P_angle + eps_angle) < angle < (T_angle - eps_angle):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
-      if (P_angle - eps_angle)> angle > (T_angle + eps_angle):continue
+      if (P_angle - eps_angle) > angle > (T_angle + eps_angle):continue
       #print type(xyzi), xyzi[1], len(xyzi), "xyzi"
       #print pi.extract_i_seq()
+      #print angle, dist
 
       result = group_args( p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
