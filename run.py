@@ -299,11 +299,12 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.0,
               "resname TYR","resname TRP"]
   #  asc = hierarchy.atom_selection_cache()
   ss = " or ".join(Ring_CAA)
-  #  hierarchys = hierarchy.select(asc.selection(ss))
+  #hierarchys = hierarchy.select(asc.selection(ss))
+  #m_sel = model.selection(ss + "and not name CB")
   m_sel = model.selection(ss)
   new_model = model.select(m_sel)
   hierarchy = new_model.get_hierarchy()
-  hierarchy.atoms().reset_i_seq()
+  #hierarchy.atoms().reset_i_seq()
   crystal_symmetry = new_model.crystal_symmetry()
   hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",
                            crystal_symmetry=crystal_symmetry)
@@ -359,7 +360,6 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.0,
       #print type(xyzi), xyzi[1], len(xyzi), "xyzi"
       #print pi.extract_i_seq()
       #print angle, dist
-
       result = group_args( p_i = list(pi.extract_i_seq()),
                            p_j = list(pj.extract_i_seq()),
                            pi_atoms_name = list(pi.extract_name()),
