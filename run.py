@@ -307,14 +307,14 @@ def define_pi_system(model,pdb_file_name, dist_cutoff=6.5,T_angle = 90,P_angle =
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
-      if (' CA ' in ni): continue
-      if (' CA ' in nj): continue
+      #if (' CA ' in ni): continue
+      #if (' CA ' in nj): continue
       if (' CG ' not in ni): continue
       if (' CG ' not in nj): continue
       #if (' CD2 ' not in ni): continue
       #if (' CD2 ' not in nj): continue
-      #if((' CA ' in ni) and (len(ni) < 5) ): continue
-      #if((' CA ' in nj) and (len(nj) < 5) ): continue
+      if((' CA ' in ni) and (len(ni) < 5) ): continue
+      if((' CA ' in nj) and (len(nj) < 5) ): continue
       # The first atom name must be CG in a protein ring
       """ second limition: the mean distance between two plane 
       is short than 5
