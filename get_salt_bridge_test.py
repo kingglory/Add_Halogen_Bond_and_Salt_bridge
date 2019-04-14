@@ -48,6 +48,7 @@ def exercise():
       Salt_Bridge_sites = Ideal_Salt_Bridge_files[pdb_file_name]
       print ("%s"% r.atom_1, r.atom_2,r.atom_3)
       assert  (r.atom_1, r.atom_2,r.atom_3) in  Salt_Bridge_sites
+      #print ("%s"% r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str())
       
        
 

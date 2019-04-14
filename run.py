@@ -276,9 +276,15 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
           diff = abs(180 - angle_312)
           if (diff < diff_best):
             diff_best = diff
+
             result = group_args(atom_1 = a1.id_str(),
                                 atom_2 = a2.id_str(),
                                 atom_3 = a3.id_str())
+            '''
+            result = group_args(atom_1 = a1,
+                                atom_2 = a2,
+                                atom_3 = a3)
+            '''
     if (result is not None): results.append(result)
 
   return results

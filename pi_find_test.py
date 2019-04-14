@@ -28,9 +28,17 @@ def exercise():
              ["5yy2.pdb", "5yyf.ligands.cif"],
              ["5yy3.pdb", "5yyf.ligands.cif"],
           ]
-  pi_sites = [
+  pi_sites = {"1p51.pdb" : (),
+              "1p53.pdb" : (),
+              "1p54.pdb" : (),
+              "5yy2.pdb" : (),
+              "5yy3.pdb" : ()
+              }
 
-      ]
+
+
+
+
 
 
   for (pdb_file_name, cif_file_name) in files:
@@ -40,7 +48,8 @@ def exercise():
     if result is not None:
      for r in result:
       print (r.p_i, r.p_j)
-     #assert (r.p_i, r.p_j) in pi_sites
+      pi_stacking_site =  pi_sites[pdb_file_name]
+     #assert (r.p_i, r.p_j) in pi_stacking_site
 
 if __name__ == '__main__':
     t0 = time.time()
