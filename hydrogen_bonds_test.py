@@ -37,7 +37,7 @@ def exercise():
                                               ('pdb=" H   GLU A   8 "', 'pdb=" O   ARG A   4 "'),
                                               ('pdb=" HB2 ARG A   5 "', 'pdb=" OE2 GLU A   1 "'),
                                               ('pdb=" H   ARG A   5 "', 'pdb=" O   GLU A   1 "'),
-                                              ('pdb=" HG2 ARG A   4 "', 'pdb=" OE2 GLU A   8 "')],
+                                               ('pdb=" HG2 ARG A   4 "', 'pdb=" OE2 GLU A   8 "')],
                                 "1kych2.pdb":[('pdb=" HA  GLU A   8 "', 'pdb=" OE1 GLU A  11 "'),
                                               ('pdb=" H   GLU A  11 "', 'pdb=" O   GLU A   8 "'),
                                               ('pdb=" H   ARG A  12 "', 'pdb=" O   GLU A   8 "'),

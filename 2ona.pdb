@@ -1,9 +1,8 @@
 HEADER    PROTEIN FIBRIL                          23-JAN-07   2ONA              
-TITLE     MVGGVV PEPTIDE DERIVED FROM ALZHEIMER'S A-BETA, RESIDUES 35-          
-TITLE    2 40                                                                   
+TITLE     MVGGVV PEPTIDE DERIVED FROM ALZHEIMER'S A-BETA, RESIDUES 35-40        
 COMPND    MOL_ID: 1;                                                            
-COMPND   2 MOLECULE: MVGGVV PEPTIDE DERIVED FROM ALZHEIMER'S A-BETA,            
-COMPND   3 RESIDUES 35-40;                                                      
+COMPND   2 MOLECULE: MVGGVV PEPTIDE DERIVED FROM ALZHEIMER'S A-BETA, RESIDUES   
+COMPND   3 35-40;                                                               
 COMPND   4 CHAIN: A, B, C, D;                                                   
 COMPND   5 FRAGMENT: RESIDUES 35-40;                                            
 COMPND   6 ENGINEERED: YES                                                      
@@ -12,25 +11,24 @@ SOURCE   2 SYNTHETIC: YES
 KEYWDS    STERIC ZIPPER, BETA SHEET, PROTEIN FIBRIL                             
 EXPDTA    X-RAY DIFFRACTION                                                     
 AUTHOR    S.SAMBASHIVAN,M.R.SAWAYA,D.EISENBERG                                  
+REVDAT   4   18-OCT-17 2ONA    1       REMARK                                   
 REVDAT   3   24-FEB-09 2ONA    1       VERSN                                    
 REVDAT   2   05-JUN-07 2ONA    1       JRNL                                     
 REVDAT   1   30-JAN-07 2ONA    0                                                
-JRNL        AUTH   M.R.SAWAYA,S.SAMBASHIVAN,R.NELSON,M.I.IVANOVA,               
-JRNL        AUTH 2 S.A.SIEVERS,M.I.APOSTOL,M.J.THOMPSON,M.BALBIRNIE,            
-JRNL        AUTH 3 J.J.WILTZIUS,H.T.MCFARLANE,A.O.MADSEN,C.RIEKEL,              
-JRNL        AUTH 4 D.EISENBERG                                                  
-JRNL        TITL   ATOMIC STRUCTURES OF AMYLOID CROSS-BETA SPINES               
-JRNL        TITL 2 REVEAL VARIED STERIC ZIPPERS.                                
+JRNL        AUTH   M.R.SAWAYA,S.SAMBASHIVAN,R.NELSON,M.I.IVANOVA,S.A.SIEVERS,   
+JRNL        AUTH 2 M.I.APOSTOL,M.J.THOMPSON,M.BALBIRNIE,J.J.WILTZIUS,           
+JRNL        AUTH 3 H.T.MCFARLANE,A.O.MADSEN,C.RIEKEL,D.EISENBERG                
+JRNL        TITL   ATOMIC STRUCTURES OF AMYLOID CROSS-BETA SPINES REVEAL VARIED 
+JRNL        TITL 2 STERIC ZIPPERS.                                              
 JRNL        REF    NATURE                        V. 447   453 2007              
 JRNL        REFN                   ISSN 0028-0836                               
 JRNL        PMID   17468747                                                     
 JRNL        DOI    10.1038/NATURE05695                                          
-REMARK   1                                                                      
 REMARK   2                                                                      
 REMARK   2 RESOLUTION.    2.03 ANGSTROMS.                                       
 REMARK   3                                                                      
 REMARK   3 REFINEMENT.                                                          
-REMARK   3   PROGRAM     : REFMAC 5.2.0019                                      
+REMARK   3   PROGRAM     : REFMAC                                               
 REMARK   3   AUTHORS     : MURSHUDOV,VAGIN,DODSON                               
 REMARK   3                                                                      
 REMARK   3    REFINEMENT TARGET : MAXIMUM LIKELIHOOD                            
@@ -54,7 +52,7 @@ REMARK   3
 REMARK   3  FIT IN THE HIGHEST RESOLUTION BIN.                                  
 REMARK   3   TOTAL NUMBER OF BINS USED           : 20                           
 REMARK   3   BIN RESOLUTION RANGE HIGH       (A) : 2.03                         
-REMARK   3   BIN RESOLUTION RANGE LOW        (A) : 2.08                         
+REMARK   3   BIN RESOLUTION RANGE LOW        (A) : 2.09                         
 REMARK   3   REFLECTION IN BIN     (WORKING SET) : 24                           
 REMARK   3   BIN COMPLETENESS (WORKING+TEST) (%) : 37.31                        
 REMARK   3   BIN R VALUE           (WORKING SET) : 0.2080                       
@@ -119,8 +117,13 @@ REMARK   3  ISOTROPIC THERMAL FACTOR RESTRAINTS.     COUNT   RMS    WEIGHT
 REMARK   3   MAIN-CHAIN BOND REFINED ATOMS  (A**2):   137 ; 1.732 ; 2.000       
 REMARK   3   MAIN-CHAIN BOND OTHER ATOMS    (A**2):    52 ; 0.456 ; 2.000       
 REMARK   3   MAIN-CHAIN ANGLE REFINED ATOMS (A**2):   176 ; 1.821 ; 3.000       
+REMARK   3   MAIN-CHAIN ANGLE OTHER ATOMS   (A**2):  NULL ;  NULL ;  NULL       
 REMARK   3   SIDE-CHAIN BOND REFINED ATOMS  (A**2):    37 ; 2.080 ; 2.000       
+REMARK   3   SIDE-CHAIN BOND OTHER ATOMS    (A**2):  NULL ;  NULL ;  NULL       
 REMARK   3   SIDE-CHAIN ANGLE REFINED ATOMS (A**2):    20 ; 2.628 ; 3.000       
+REMARK   3   SIDE-CHAIN ANGLE OTHER ATOMS   (A**2):  NULL ;  NULL ;  NULL       
+REMARK   3   LONG RANGE B REFINED ATOMS     (A**2):  NULL ;  NULL ;  NULL       
+REMARK   3   LONG RANGE B OTHER ATOMS       (A**2):  NULL ;  NULL ;  NULL       
 REMARK   3                                                                      
 REMARK   3 ANISOTROPIC THERMAL FACTOR RESTRAINTS.    COUNT   RMS   WEIGHT       
 REMARK   3   RIGID-BOND RESTRAINTS          (A**2):  NULL ;  NULL ;  NULL       
@@ -166,13 +169,13 @@ REMARK   3   VDW PROBE RADIUS   : 1.40
 REMARK   3   ION PROBE RADIUS   : 0.80                                          
 REMARK   3   SHRINKAGE RADIUS   : 0.80                                          
 REMARK   3                                                                      
-REMARK   3  OTHER REFINEMENT REMARKS: HYDROGENS HAVE BEEN ADDED IN THE          
-REMARK   3  RIDING POSITIONS                                                    
+REMARK   3  OTHER REFINEMENT REMARKS: HYDROGENS HAVE BEEN ADDED IN THE RIDING   
+REMARK   3  POSITIONS                                                           
 REMARK   4                                                                      
-REMARK   4 2ONA COMPLIES WITH FORMAT V. 3.15, 01-DEC-08                         
+REMARK   4 2ONA COMPLIES WITH FORMAT V. 3.30, 13-JUL-11                         
 REMARK 100                                                                      
 REMARK 100 THIS ENTRY HAS BEEN PROCESSED BY RCSB ON 24-JAN-07.                  
-REMARK 100 THE RCSB ID CODE IS RCSB041347.                                      
+REMARK 100 THE DEPOSITION ID IS D_1000041347.                                   
 REMARK 200                                                                      
 REMARK 200 EXPERIMENTAL DETAILS                                                 
 REMARK 200  EXPERIMENT TYPE                : X-RAY DIFFRACTION                  
@@ -193,7 +196,7 @@ REMARK 200
 REMARK 200  DETECTOR TYPE                  : CCD                                
 REMARK 200  DETECTOR MANUFACTURER          : MAR CCD 165 MM                     
 REMARK 200  INTENSITY-INTEGRATION SOFTWARE : DENZO                              
-REMARK 200  DATA SCALING SOFTWARE          : HKL                                
+REMARK 200  DATA SCALING SOFTWARE          : SCALEPACK                          
 REMARK 200                                                                      
 REMARK 200  NUMBER OF UNIQUE REFLECTIONS   : 409                                
 REMARK 200  RESOLUTION RANGE HIGH      (A) : 2.000                              
@@ -229,8 +232,7 @@ REMARK 280 MATTHEWS COEFFICIENT, VM (ANGSTROMS**3/DA): NULL
 REMARK 280                                                                      
 REMARK 280 CRYSTALLIZATION CONDITIONS: 30 MG/ML PEPTIDE IN WATER MIXED 1:1      
 REMARK 280  WITH RESERVOIR CONTAINING 0.02 M CACL2, 30% MPD, 0.1 M SODIUM       
-REMARK 280  ACETATE, PH 4.6, VAPOR DIFFUSION, HANGING DROP, TEMPERATURE         
-REMARK 280  298K                                                                
+REMARK 280  ACETATE, PH 4.6, VAPOR DIFFUSION, HANGING DROP, TEMPERATURE 298K    
 REMARK 290                                                                      
 REMARK 290 CRYSTALLOGRAPHIC SYMMETRY                                            
 REMARK 290 SYMMETRY OPERATORS FOR SPACE GROUP: P 1                              
@@ -257,9 +259,8 @@ REMARK 300 SEE REMARK 350 FOR THE AUTHOR PROVIDED AND/OR PROGRAM
 REMARK 300 GENERATED ASSEMBLY INFORMATION FOR THE STRUCTURE IN                  
 REMARK 300 THIS ENTRY. THE REMARK MAY ALSO PROVIDE INFORMATION ON               
 REMARK 300 BURIED SURFACE AREA.                                                 
-REMARK 300 REMARK: THE STERIC ZIPPER CAN BE GENERATED BY REPEATED               
-REMARK 300 APPLICATION OF THE CRYSTALLOGRAPHIC UNIT CELL TRANSLATION ALONG      
-REMARK 300 THE B AXIS.                                                          
+REMARK 300 REMARK: THE STERIC ZIPPER CAN BE GENERATED BY REPEATED APPLICATION   
+REMARK 300 OF THE CRYSTALLOGRAPHIC UNIT CELL TRANSLATION ALONG THE B AXIS.      
 REMARK 350                                                                      
 REMARK 350 COORDINATES FOR A COMPLETE MULTIMER REPRESENTING THE KNOWN           
 REMARK 350 BIOLOGICALLY SIGNIFICANT OLIGOMERIZATION STATE OF THE                
@@ -462,5 +463,5 @@ HETATM  159  O   HOH A   9      15.465   4.316  14.005  1.00 30.10           O
 HETATM  160  O   HOH B   7      -0.359   0.519  -2.665  1.00 20.66           O  
 HETATM  161  O   HOH B   8       0.647   1.659  -4.617  1.00 33.04           O  
 HETATM  162  O   HOH D   7      11.115   5.211  -0.764  1.00 33.22           O  
-MASTER      255    0    0    0    4    0    0    6  158    4    0    4          
+MASTER      257    0    0    0    4    0    0    6  158    4    0    4          
 END                                                                             
