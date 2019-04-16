@@ -1,13 +1,6 @@
 from __future__ import division
-import iotbx.pdb
-import iotbx.cif
 import scitbx
-import matplotlib as np
-from scitbx.array_family import flex
-import numpy as np
-import mmtbx.hydrogens.build_hydrogens
 from libtbx import group_args
-from libtbx import easy_run
 import math, time
 import scitbx.matrix
 
@@ -42,7 +35,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
                        emp_scale2 = 0.75, angle_eps = 30):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                  sites_cart=model.get_sites_cart())
+                                   sites_cart=model.get_sites_cart())
   bps_dict = {}
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   hierarchy = model.get_hierarchy()
@@ -192,18 +185,6 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
 
 def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
                      eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
-  '''
-  salt_bridge_res = ["resname ARG", "resname HIS",
-                     "resname LYS", "resname ASP", "resname GLU"]
-  ss = " or ".join(salt_bridge_res)
-  m_sel = model.selection(ss)
-  new_model = model.select(m_sel)
-  hierarchy = new_model.get_hierarchy()
-  hierarchy.atoms().reset_i_seq()
-  crystal_symmetry = new_model.crystal_symmetry()
-  hierarchy.write_pdb_file(file_name=pdb_file_name[0:6] + "new.pdb",
-                           crystal_symmetry=crystal_symmetry)
-  '''
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -212,7 +193,6 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   positive_residues = ["ARG", "HIS", "LYS"]
   negative_residues = ["ASP", "GLU", "HIS"]
-  #main_chain_atoms_plus = ["CA","N","O","C","CB"]
   results = []
   positive_atoms = []
   atom1s = []
@@ -232,8 +212,6 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
       if a.parent().resname == "HOH":continue
       if not (a.parent().resname in negative_residues):continue
       atom3s.append(a)
-
-   
       
   """ select out N H pairs in pasitive sites
    if there are more than three hydrohen atoms
@@ -299,22 +277,6 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
 
   results = []
   planes = []
-  '''
-  #Ring_containing_amino_acid(Ring_CAA)
-  #Ring_CAA = ["resname HIS","resname PHE",
-  #            "resname TYR","resname TRP"]
-  #  asc = hierarchy.atom_selection_cache()
-  #ss = " or ".join(Ring_CAA)
-  #hierarchys = hierarchy.select(asc.selection(ss))
-  #m_sel = model.selection(ss + "and not name CB")
-  #m_sel = model.selection(ss)
-  #new_model = model.select(m_sel)
- 
-  #hierarchy.atoms().reset_i_seq()
-  crystal_symmetry = model.crystal_symmetry()
-  #hierarchy.write_pdb_file(file_name=pdb_file_name[0:4]+"new.pdb",
-  #                         crystal_symmetry=crystal_symmetry)
-  '''
   hierarchy = model.get_hierarchy()
   geometry = model.get_restraints_manager()
   # first limition: the pi is a plane
@@ -367,7 +329,7 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       third limition : Dihedral angle
       for T(perpendicular)is 180
       for P(In parallel) is 90
-      30 degree angular offset
+      25 degree angular offset
       https://math.tutorvista.com/geometry/angle-between-two-planes.html
       """
       cos_a = abs(ai*aj+bi*bj+ci*cj)/(ai**2+bi**2+ci**2)**0.5/\
