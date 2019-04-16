@@ -192,6 +192,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
 
 def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
                      eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
+  '''
   salt_bridge_res = ["resname ARG", "resname HIS",
                      "resname LYS", "resname ASP", "resname GLU"]
   ss = " or ".join(salt_bridge_res)
@@ -202,9 +203,11 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
   crystal_symmetry = new_model.crystal_symmetry()
   hierarchy.write_pdb_file(file_name=pdb_file_name[0:6] + "new.pdb",
                            crystal_symmetry=crystal_symmetry)
-  geometry = new_model.get_restraints_manager()
+  '''
+  geometry = model.get_restraints_manager()
+  hierarchy = model.get_hierarchy()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-    sites_cart=new_model.get_sites_cart())
+                                   sites_cart=model.get_sites_cart())
   bps_dict = {}
   [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
   positive_residues = ["ARG", "HIS", "LYS"]
@@ -226,7 +229,7 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
       if not (a.parent().resname in positive_residues):continue
       positive_atoms.append(a)
     if e == "O":
-      #if a.parent().resname == "HOH":continue
+      if a.parent().resname == "HOH":continue
       if not (a.parent().resname in negative_residues):continue
       atom3s.append(a)
 
