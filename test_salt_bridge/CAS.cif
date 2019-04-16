@@ -1,0 +1,157 @@
+# electronic Ligand Builder and Optimisation Workbench (eLBOW)
+#   - a module of PHENIX version dev-3409-
+#   - file written: Tue Apr 16 10:26:40 2019
+#
+#   Input file: /home/wangwensong/phenix-dev-3409/modules/chem_data/chemical_components/c/data_CAS.cif
+#   Random seed: 3628800
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+CAS        CAS 'Unknown                  ' L-peptide 21 10 .
+#
+data_comp_CAS
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+CAS         N      N   NH2    0    .      -3.1732   -0.4070   -1.9019
+CAS         CA     C   CH1    0    .      -1.7275   -0.2911   -1.8430
+CAS         CB     C   CH2    0    .      -1.2862   -0.1594   -0.3870
+CAS         C      C   C      0    .      -1.0916   -1.5364   -2.4570
+CAS         O      O   O      0    .      -1.4843   -2.6807   -2.1086
+CAS         OXT    O   OC    -1    .      -0.1747   -1.4187   -3.3118
+CAS         SG     S   S2     0    .       0.5279   -0.1250   -0.3049
+CAS        AS      AS  AS     0    .       1.1725    0.4537    1.7663
+CAS         CE1    C   CH3    0    .       2.4835   -0.8473    2.4311
+CAS         CE2    C   CH3    0    .       1.9868    2.2393    1.7232
+CAS         H      H   HNH2   0    .      -3.4749   -0.3460   -2.8562
+CAS         H2     H   HNH2   0    .      -3.5899    0.3350   -1.3715
+CAS         HA     H   HCH1   0    .      -1.4127    0.5854   -2.3965
+CAS         HB2    H   HCH2   0    .      -1.6845    0.7595    0.0298
+CAS         HB3    H   HCH2   0    .      -1.6579   -1.0053    0.1814
+CAS        HE11    H   HCH3   0    .       3.3378   -0.8753    1.7608
+CAS        HE12    H   HCH3   0    .       2.8119   -0.5551    3.4244
+CAS        HE13    H   HCH3   0    .       2.0260   -1.8316    2.4759
+CAS        HE21    H   HCH3   0    .       2.7805    2.2575    0.9818
+CAS        HE22    H   HCH3   0    .       1.2315    2.9755    1.4633
+CAS        HE23    H   HCH3   0    .       2.3990    2.4730    2.7006
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+CAS   N       CA    single        1.452 0.020     1.452
+CAS   N       H     single        0.860 0.020     1.020
+CAS   N       H2    single        0.890 0.020     1.040
+CAS   CA      CB    single        1.527 0.020     1.527
+CAS   CA      C     single        1.527 0.020     1.527
+CAS   CA      HA    single        0.970 0.020     1.090
+CAS   CB      SG    single        1.816 0.020     1.816
+CAS   CB      HB2   single        0.970 0.020     1.090
+CAS   CB      HB3   single        0.970 0.020     1.090
+CAS   C       O     deloc         1.259 0.020     1.259
+CAS   C       OXT   deloc         1.259 0.020     1.259
+CAS   SG     AS     single        2.245 0.020     2.245
+CAS  AS       CE1   single        1.963 0.020     1.963
+CAS  AS       CE2   single        1.963 0.020     1.963
+CAS   CE1    HE11   single        0.970 0.020     1.090
+CAS   CE1    HE12   single        0.970 0.020     1.090
+CAS   CE1    HE13   single        0.970 0.020     1.090
+CAS   CE2    HE21   single        0.970 0.020     1.090
+CAS   CE2    HE22   single        0.970 0.020     1.090
+CAS   CE2    HE23   single        0.970 0.020     1.090
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+CAS   H2      N       H           109.47 3.000
+CAS   H2      N       CA          109.47 3.000
+CAS   H       N       CA          109.47 3.000
+CAS   HA      CA      C           109.47 3.000
+CAS   HA      CA      CB          109.47 3.000
+CAS   C       CA      CB          109.47 3.000
+CAS   HA      CA      N           109.47 3.000
+CAS   C       CA      N           109.47 3.000
+CAS   CB      CA      N           109.47 3.000
+CAS   HB3     CB      HB2         109.47 3.000
+CAS   HB3     CB      SG          109.47 3.000
+CAS   HB2     CB      SG          109.47 3.000
+CAS   HB3     CB      CA          109.47 3.000
+CAS   HB2     CB      CA          109.47 3.000
+CAS   SG      CB      CA          109.47 3.000
+CAS   OXT     C       O           120.00 3.000
+CAS   OXT     C       CA          120.00 3.000
+CAS   O       C       CA          120.00 3.000
+CAS  AS       SG      CB          109.47 3.000
+CAS   CE2    AS       CE1         109.47 3.000
+CAS   CE2    AS       SG          109.47 3.000
+CAS   CE1    AS       SG          109.47 3.000
+CAS  HE13     CE1    HE12         109.47 3.000
+CAS  HE13     CE1    HE11         109.47 3.000
+CAS  HE12     CE1    HE11         109.47 3.000
+CAS  HE13     CE1    AS           109.47 3.000
+CAS  HE12     CE1    AS           109.47 3.000
+CAS  HE11     CE1    AS           109.47 3.000
+CAS  HE23     CE2    HE22         109.47 3.000
+CAS  HE23     CE2    HE21         109.47 3.000
+CAS  HE22     CE2    HE21         109.47 3.000
+CAS  HE23     CE2    AS           109.47 3.000
+CAS  HE22     CE2    AS           109.47 3.000
+CAS  HE21     CE2    AS           109.47 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+CAS Var_01         CE1    AS       SG      CB          128.94  30.0 3
+CAS Var_02        HE11     CE1    AS       SG           58.75  30.0 3
+CAS Var_03        HE21     CE2    AS       SG          -53.66  30.0 3
+CAS Var_04         HB2     CB      SG     AS            49.39  30.0 1
+#
+loop_
+_chem_comp_chir.comp_id
+_chem_comp_chir.id
+_chem_comp_chir.atom_id_centre
+_chem_comp_chir.atom_id_1
+_chem_comp_chir.atom_id_2
+_chem_comp_chir.atom_id_3
+_chem_comp_chir.volume_sign
+CAS chir_01   CA      N       CB      C     negativ
+#
+loop_
+_chem_comp_plane_atom.comp_id
+_chem_comp_plane_atom.plane_id
+_chem_comp_plane_atom.atom_id
+_chem_comp_plane_atom.dist_esd
+CAS plan-1     CA 0.020
+CAS plan-1      C 0.020
+CAS plan-1      O 0.020
+CAS plan-1    OXT 0.020

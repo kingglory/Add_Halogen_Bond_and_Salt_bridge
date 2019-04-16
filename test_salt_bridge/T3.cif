@@ -1,0 +1,261 @@
+# electronic Ligand Builder and Optimisation Workbench (eLBOW)
+#   - a module of PHENIX version dev-3409-
+#   - file written: Tue Apr 16 10:27:07 2019
+#
+#   Input file: /home/wangwensong/phenix-dev-3409/modules/chem_data/chemical_components/t/data_T3.cif
+#   Random seed: 3628800
+#
+data_comp_list
+loop_
+_chem_comp.id
+_chem_comp.three_letter_code
+_chem_comp.name
+_chem_comp.group
+_chem_comp.number_atoms_all
+_chem_comp.number_atoms_nh
+_chem_comp.desc_level
+T3          T3 'Unknown                  ' ligand 34 23 .
+#
+data_comp_T3
+#
+loop_
+_chem_comp_atom.comp_id
+_chem_comp_atom.atom_id
+_chem_comp_atom.type_symbol
+_chem_comp_atom.type_energy
+_chem_comp_atom.charge
+_chem_comp_atom.partial_charge
+_chem_comp_atom.x
+_chem_comp_atom.y
+_chem_comp_atom.z
+T3          C1     C   CR6    0    .      -0.9079   -0.9382   -1.4165
+T3          C2     C   CR6    0    .       1.5438    0.4614    2.6209
+T3          C3     C   CR16   0    .       0.4754   -0.8985   -1.4783
+T3          C4     C   CR16   0    .       0.8249    1.6094    2.9115
+T3          C5     C   CR6    0    .       1.2170   -0.7769   -0.3153
+T3          C6     C   CR6    0    .       1.4613    2.6989    3.4826
+T3          C7     C   CR6    0    .       0.5757   -0.6950    0.9097
+T3          C8     C   CR6    0    .       2.8166    2.6407    3.7633
+T3          C9     C   CR6    0    .      -0.8075   -0.7348    0.9714
+T3          C10    C   CR16   0    .       3.5354    1.4927    3.4726
+T3          C11    C   CR16   0    .      -1.5491   -0.8564   -0.1915
+T3          C12    C   CR16   0    .       2.8991    0.4032    2.9015
+T3          C13    C   CH2    0    .      -1.6022   -0.4818   -2.6958
+T3          C15    C   CH1    0    .      -2.3698   -1.6531   -3.3039
+T3          C17    C   C      0    .      -3.7960   -1.2138   -3.6277
+T3          I1     I   I      0    .       3.2422   -1.1153   -0.8032
+T3          I2     I   I      0    .       0.1199    4.2999    3.7844
+T3          I3     I   I      0    .      -2.1116   -1.0703    2.5961
+T3          N1     N   NH2    0    .      -1.7083   -2.0851   -4.5216
+T3          O1     O   OH1    0    .       3.0933    3.9284    4.2385
+T3          O2     O   O2     0    .       1.1606   -0.8052    2.1731
+T3          O3     O   OC    -1    .      -3.9956   -0.1587   -4.2851
+T3          O4     O   O      0    .      -4.7726   -1.8905   -3.2121
+T3          HC3    H   HCR6   0    .       0.9758   -0.9330   -2.4385
+T3          HC4    H   HCR6   0    .      -0.2322    1.6598    2.6797
+T3         HC10    H   HCR6   0    .       4.5953    1.4472    3.6921
+T3         HC11    H   HCR6   0    .      -2.6308   -0.8874   -0.1433
+T3         HC12    H   HCR6   0    .       3.4612   -0.4946    2.6742
+T3         H131    H   HCH2   0    .      -0.8598   -0.1292   -3.4041
+T3         H132    H   HCH2   0    .      -2.2928    0.3224   -2.4652
+T3         HC15    H   HCH1   0    .      -2.3964   -2.4735   -2.5968
+T3         HN11    H   HNH2   0    .      -2.2742   -1.8433   -5.3134
+T3         HN12    H   HNH2   0    .      -1.5765   -3.0785   -4.4959
+T3          HO1    H   HOH1   0    .       3.8859    4.2489    3.8365
+#
+loop_
+_chem_comp_bond.comp_id
+_chem_comp_bond.atom_id_1
+_chem_comp_bond.atom_id_2
+_chem_comp_bond.type
+_chem_comp_bond.value_dist
+_chem_comp_bond.value_dist_esd
+_chem_comp_bond.value_dist_neutron
+T3   C1      C3    aromatic      1.385 0.020     1.385
+T3   C1      C11   aromatic      1.385 0.020     1.385
+T3   C1      C13   single        1.525 0.020     1.525
+T3   C2      C4    aromatic      1.385 0.020     1.385
+T3   C2      C12   aromatic      1.385 0.020     1.385
+T3   C2      O2    single        1.397 0.020     1.397
+T3   C3      C5    aromatic      1.385 0.020     1.385
+T3   C3      HC3   single        0.930 0.020     1.080
+T3   C4      C6    aromatic      1.385 0.020     1.385
+T3   C4      HC4   single        0.930 0.020     1.080
+T3   C5      C7    aromatic      1.385 0.020     1.385
+T3   C5      I1    single        2.110 0.020     2.110
+T3   C6      C8    aromatic      1.385 0.020     1.385
+T3   C6      I2    single        2.110 0.020     2.110
+T3   C7      C9    aromatic      1.385 0.020     1.385
+T3   C7      O2    single        1.397 0.020     1.397
+T3   C8      C10   aromatic      1.385 0.020     1.385
+T3   C8      O1    single        1.400 0.020     1.400
+T3   C9      C11   aromatic      1.385 0.020     1.385
+T3   C9      I3    single        2.110 0.020     2.110
+T3   C10     C12   aromatic      1.385 0.020     1.385
+T3   C10    HC10   single        0.930 0.020     1.080
+T3   C11    HC11   single        0.930 0.020     1.080
+T3   C12    HC12   single        0.930 0.020     1.080
+T3   C13     C15   single        1.527 0.020     1.527
+T3   C13    H131   single        0.970 0.020     1.090
+T3   C13    H132   single        0.970 0.020     1.090
+T3   C15     C17   single        1.527 0.020     1.527
+T3   C15     N1    single        1.452 0.020     1.452
+T3   C15    HC15   single        0.970 0.020     1.090
+T3   C17     O3    deloc         1.259 0.020     1.259
+T3   C17     O4    deloc         1.259 0.020     1.259
+T3   N1     HN11   single        0.890 0.020     1.040
+T3   N1     HN12   single        0.890 0.020     1.040
+T3   O1      HO1   single        0.850 0.020     0.980
+#
+loop_
+_chem_comp_angle.comp_id
+_chem_comp_angle.atom_id_1
+_chem_comp_angle.atom_id_2
+_chem_comp_angle.atom_id_3
+_chem_comp_angle.value_angle
+_chem_comp_angle.value_angle_esd
+T3   C13     C1      C11         120.88 3.000
+T3   C13     C1      C3          114.11 3.000
+T3   C11     C1      C3          120.00 3.000
+T3   O2      C2      C12         107.17 3.000
+T3   O2      C2      C4          132.55 3.000
+T3   C12     C2      C4          120.00 3.000
+T3   HC3     C3      C5          119.99 3.000
+T3   HC3     C3      C1          119.99 3.000
+T3   C5      C3      C1          120.00 3.000
+T3   HC4     C4      C6          120.00 3.000
+T3   HC4     C4      C2          120.00 3.000
+T3   C6      C4      C2          120.00 3.000
+T3   I1      C5      C7          131.17 3.000
+T3   I1      C5      C3          107.80 3.000
+T3   C7      C5      C3          120.00 3.000
+T3   I2      C6      C8          128.67 3.000
+T3   I2      C6      C4          111.33 3.000
+T3   C8      C6      C4          120.00 3.000
+T3   O2      C7      C9          112.06 3.000
+T3   O2      C7      C5          126.98 3.000
+T3   C9      C7      C5          120.00 3.000
+T3   O1      C8      C10         136.95 3.000
+T3   O1      C8      C6          102.91 3.000
+T3   C10     C8      C6          120.00 3.000
+T3   I3      C9      C11         107.56 3.000
+T3   I3      C9      C7          131.00 3.000
+T3   C11     C9      C7          120.00 3.000
+T3  HC10     C10     C12         120.00 3.000
+T3  HC10     C10     C8          120.00 3.000
+T3   C12     C10     C8          120.00 3.000
+T3  HC11     C11     C9          120.00 3.000
+T3  HC11     C11     C1          120.00 3.000
+T3   C9      C11     C1          120.00 3.000
+T3  HC12     C12     C10         120.00 3.000
+T3  HC12     C12     C2          120.00 3.000
+T3   C10     C12     C2          120.00 3.000
+T3  H132     C13    H131         109.47 3.000
+T3  H132     C13     C15         109.47 3.000
+T3  H131     C13     C15         109.47 3.000
+T3  H132     C13     C1          109.47 3.000
+T3  H131     C13     C1          109.47 3.000
+T3   C15     C13     C1          109.47 3.000
+T3  HC15     C15     N1          109.47 3.000
+T3  HC15     C15     C17         109.47 3.000
+T3   N1      C15     C17         109.47 3.000
+T3  HC15     C15     C13         109.47 3.000
+T3   N1      C15     C13         109.47 3.000
+T3   C17     C15     C13         109.47 3.000
+T3   O4      C17     O3          119.99 3.000
+T3   O4      C17     C15         119.99 3.000
+T3   O3      C17     C15         119.99 3.000
+T3  HN12     N1     HN11         109.47 3.000
+T3  HN12     N1      C15         109.47 3.000
+T3  HN11     N1      C15         109.47 3.000
+T3   HO1     O1      C8          109.47 3.000
+T3   C7      O2      C2          109.47 3.000
+#
+loop_
+_chem_comp_tor.comp_id
+_chem_comp_tor.id
+_chem_comp_tor.atom_id_1
+_chem_comp_tor.atom_id_2
+_chem_comp_tor.atom_id_3
+_chem_comp_tor.atom_id_4
+_chem_comp_tor.value_angle
+_chem_comp_tor.value_angle_esd
+_chem_comp_tor.period
+T3 CONST_01       C7      C5      C3      C1            0.00   0.0 0
+T3 CONST_02       C7      C9      C11     C1           -0.00   0.0 0
+T3 CONST_03       C8      C6      C4      C2            0.00   0.0 0
+T3 CONST_04       C8      C10     C12     C2           -0.00   0.0 0
+T3 CONST_05       C9      C11     C1      C3            0.00   0.0 0
+T3 CONST_06       C9      C7      C5      C3           -0.00   0.0 0
+T3 CONST_07       C10     C12     C2      C4            0.00   0.0 0
+T3 CONST_08       C10     C8      C6      C4           -0.00   0.0 0
+T3 CONST_09       C11     C1      C3      C5            0.00   0.0 0
+T3 CONST_10       C11     C9      C7      C5            0.00   0.0 0
+T3 CONST_11       C12     C2      C4      C6           -0.00   0.0 0
+T3 CONST_12       C12     C10     C8      C6            0.00   0.0 0
+T3 CONST_13       I1      C5      C3      C1          169.63   0.0 0
+T3 CONST_14       I3      C9      C11     C1         -167.73   0.0 0
+T3 CONST_15       I2      C6      C4      C2          179.27   0.0 0
+T3 CONST_16       O2      C7      C5      C3          167.89   0.0 0
+T3 CONST_17       O1      C8      C6      C4          176.43   0.0 0
+T3 CONST_18       C13     C1      C3      C5          155.21   0.0 0
+T3 CONST_19       I3      C9      C7      C5          164.43   0.0 0
+T3 CONST_20       O2      C2      C4      C6          173.07   0.0 0
+T3 CONST_21       I1      C5      C7      C9         -166.84   0.0 0
+T3 CONST_22       C13     C1      C11     C9         -153.51   0.0 0
+T3 CONST_23       I2      C6      C8      C10        -179.12   0.0 0
+T3 CONST_24       O2      C2      C12     C10        -174.66   0.0 0
+T3 CONST_25       O2      C7      C9      C11        -169.58   0.0 0
+T3 CONST_26       O1      C8      C10     C12        -174.90   0.0 0
+T3 CONST_27      HC10     C10     C12     C2          180.00   0.0 0
+T3 CONST_28      HC11     C11     C1      C3          180.00   0.0 0
+T3 CONST_29      HC12     C12     C2      C4         -180.00   0.0 0
+T3 CONST_30       HC3     C3      C5      C7          178.20   0.0 0
+T3 CONST_31       HC4     C4      C6      C8         -179.18   0.0 0
+T3 Var_01         C5      C7      O2      C2           90.73  30.0 2
+T3 Var_02         C12     C2      O2      C7         -123.55  30.0 3
+T3 Var_03         C15     C13     C1      C3          115.48  30.0 2
+#
+loop_
+_chem_comp_chir.comp_id
+_chem_comp_chir.id
+_chem_comp_chir.atom_id_centre
+_chem_comp_chir.atom_id_1
+_chem_comp_chir.atom_id_2
+_chem_comp_chir.atom_id_3
+_chem_comp_chir.volume_sign
+T3 chir_01   C15     C13     C17     N1    negativ
+#
+loop_
+_chem_comp_plane_atom.comp_id
+_chem_comp_plane_atom.plane_id
+_chem_comp_plane_atom.atom_id
+_chem_comp_plane_atom.dist_esd
+T3 plan-1     C1 0.020
+T3 plan-1     C3 0.020
+T3 plan-1     C5 0.020
+T3 plan-1     C7 0.020
+T3 plan-1     C9 0.020
+T3 plan-1    C11 0.020
+T3 plan-1    C13 0.020
+T3 plan-1     I1 0.020
+T3 plan-1     I3 0.020
+T3 plan-1     O2 0.020
+T3 plan-1    HC3 0.020
+T3 plan-1   HC11 0.020
+T3 plan-2     C2 0.020
+T3 plan-2     C4 0.020
+T3 plan-2     C6 0.020
+T3 plan-2     C8 0.020
+T3 plan-2    C10 0.020
+T3 plan-2    C12 0.020
+T3 plan-2     I2 0.020
+T3 plan-2     O1 0.020
+T3 plan-2     O2 0.020
+T3 plan-2    HC4 0.020
+T3 plan-2   HC10 0.020
+T3 plan-2   HC12 0.020
+T3 plan-3    C15 0.020
+T3 plan-3    C17 0.020
+T3 plan-3     O3 0.020
+T3 plan-3     O4 0.020
