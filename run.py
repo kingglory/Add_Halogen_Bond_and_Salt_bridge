@@ -382,7 +382,7 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       if (eps_angle > angle > P_angle_1)or( P_angle_2 > angle > P_angle_2 - eps_angle):
         if (dist_h_d > dist_h_cutoff):continue
         if (dist_point_plane < dist_cutoff_2): continue
-      print angle, dist,dist_point_plane,dist_h_d
+      #print angle, dist,dist_point_plane,dist_h_d
       result = group_args( pi  = pi,
                            pj  = pj
                            )
