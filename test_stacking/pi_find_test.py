@@ -28,6 +28,8 @@ def exercise():
   files = [  ["1p5j.pdb", None],
              ["1p5j_1.pdb", None],
              ["1p5j_2.pdb", None],
+             ["2ito.pdb", "2ito.ligands.cif"],
+             ["3v04.pdb", "3v04.ligands.cif"],
              ["5yyf.pdb", "5yyf.ligands.cif"],
              ["5yy2.pdb", "5yyf.ligands.cif"],
              ["5yy3.pdb", "5yyf.ligands.cif"],

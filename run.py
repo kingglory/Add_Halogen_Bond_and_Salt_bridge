@@ -295,7 +295,7 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
 
 def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
                      dist_h_cutoff=2.5,dist_v_cutoff=1.2,T_angle = 90,
-                     P_angle_1 = 0,eps_angle = 30,P_angle_2 =180):
+                     P_angle_1 = 0,eps_angle = 25,P_angle_2 =180):
 
   results = []
   planes = []
