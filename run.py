@@ -327,8 +327,10 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       nj = list(pj.extract_name())
       if (' CG ' not in ni): continue
       if (' CG ' not in nj): continue
-      if((' CA ' in ni) and (len(ni) < 6) ): continue
-      if((' CA ' in nj) and (len(nj) < 6) ): continue
+      if ('CA' in ni): continue
+      if ('CA' in nj): continue
+      if (len(ni) < 5):continue
+      if (len(nj) < 5): continue
       # The first atom name must be CG in a protein ring
       """ second limition: the mean distance between two plane 
       is short than 5
@@ -377,7 +379,7 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       if (eps_angle > angle > P_angle_1)or( P_angle_2 > angle > P_angle_2 - eps_angle):
         if (dist_h_d > dist_h_cutoff):continue
         if (dist_point_plane < dist_cutoff_2): continue
-      #print angle, dist
+      print angle, dist,dist_point_plane,dist_h_d
       result = group_args( pi  = pi,
                            pj  = pj
                            )
