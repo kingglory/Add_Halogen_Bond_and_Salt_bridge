@@ -2,15 +2,8 @@ from __future__ import division
 import iotbx.pdb
 import iotbx.cif
 import os
-import re
-import scitbx
-from scitbx.array_family import flex
-import numpy as np
-import pandas as pd
 import mmtbx.hydrogens.build_hydrogens
-from libtbx import group_args
 from libtbx import easy_run
-import math, time
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out

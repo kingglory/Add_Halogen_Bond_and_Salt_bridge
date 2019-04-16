@@ -32,16 +32,6 @@ def exercise():
              ["5yy2.pdb", "5yyf.ligands.cif"],
              ["5yy3.pdb", "5yyf.ligands.cif"],
           ]
-  pi_sites = {"1p5j_1.pdb" : (),
-              "1p5j_2.pdb" : (),
-              "1p5j_3.pdb" : (),
-              "5yy2.pdb" : (),
-              "5yy3.pdb" : ()
-              }
-
-
-
-
 
 
 
@@ -51,7 +41,11 @@ def exercise():
     result = define_pi_system(model = model)
     if result is not None:
      for r in result:
-      print (r.p_i, r.p_j)
+       p_i = list(r.pi.extract_i_seq()),
+       p_j = list(r.pj.extract_i_seq()),
+       pi_atoms_name = list(r.pi.extract_name()),
+       pj_atoms_name = list(r.pj.extract_name())
+       print (p_i, p_j)
       #pi_stacking_site =  pi_sites[pdb_file_name]
       #assert (r.p_i, r.p_j) in pi_stacking_site
 
