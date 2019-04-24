@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 sys.path.append("..")
 import run
-from run import define_pi_system
+from run import get_stacking_system
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out

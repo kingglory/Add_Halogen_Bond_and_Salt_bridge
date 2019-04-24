@@ -31,7 +31,7 @@ the angle1 is more near 120,more possible;
 """
 
 
-def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
+def get_halogen_bonds_pairs(model, eps = 0.15, emp_scale1 = 0.6,
                        emp_scale2 = 0.75, angle_eps = 30):
   geometry = model.get_restraints_manager()
   bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -95,7 +95,7 @@ def find_halogen_bonds(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
+def get_hydrogen_bonds_pairs(model, min = 1.7, max = 2.2,eps = 0.8):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -183,7 +183,7 @@ def find_hydrogen_bonds(model, min = 1.7, max = 2.2,eps = 0.8):
     return results
 
 
-def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
+def get_salt_bridge_pairs(model, pdb_file_name, min = 1.7, max = 2.2,
                      eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
   geometry = model.get_restraints_manager()
   hierarchy = model.get_hierarchy()
@@ -271,7 +271,7 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
   return results
         
 
-def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
+def get_stacking_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
                      dist_h_cutoff=2.2,dist_v_cutoff=1.1,T_angle = 90,
                      P_angle_1 = 0,eps_angle = 26,P_angle_2 =180):
 

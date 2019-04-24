@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 sys.path.append("..")
 import run
-from run import find_halogen_bonds
+from run import get_halogen_bonds_pairs
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
