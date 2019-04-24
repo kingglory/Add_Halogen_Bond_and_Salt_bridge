@@ -272,8 +272,8 @@ def find_salt_bridge(model, pdb_file_name, min = 1.7, max = 2.2,
         
 
 def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
-                     dist_h_cutoff=2.5,dist_v_cutoff=1.2,T_angle = 90,
-                     P_angle_1 = 0,eps_angle = 25,P_angle_2 =180):
+                     dist_h_cutoff=2.2,dist_v_cutoff=1.1,T_angle = 90,
+                     P_angle_1 = 0,eps_angle = 26,P_angle_2 =180):
 
   results = []
   planes = []
@@ -290,8 +290,6 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       xyzj = pj.extract_xyz()
       ni = list(pi.extract_name())
       nj = list(pj.extract_name())
-      if (' CG ' not in ni): continue
-      if (' CG ' not in nj): continue
       if ('CA' in ni): continue
       if ('CA' in nj): continue
       if (len(ni) < 5):continue
@@ -344,7 +342,7 @@ def define_pi_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       if (eps_angle > angle > P_angle_1)or( P_angle_2 > angle > P_angle_2 - eps_angle):
         if (dist_h_d > dist_h_cutoff):continue
         if (dist_point_plane < dist_cutoff_2): continue
-      #print angle, dist,dist_point_plane,dist_h_d
+      print angle, dist,dist_point_plane,dist_h_d
       result = group_args( pi  = pi,
                            pj  = pj
                            )
