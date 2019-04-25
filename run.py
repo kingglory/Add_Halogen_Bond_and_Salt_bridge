@@ -95,7 +95,7 @@ def get_halogen_bonds_pairs(model, eps = 0.15, emp_scale1 = 0.6,
   return results
 
 
-def get_hydrogen_bonds_pairs(model, min = 1.7, max = 2.2,eps = 0.8):
+def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
     geometry = model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                      sites_cart=model.get_sites_cart())
@@ -107,7 +107,7 @@ def get_hydrogen_bonds_pairs(model, min = 1.7, max = 2.2,eps = 0.8):
     atom3s = []
     atom4s = []
     results = []
-    Accepter_H_pair = ["O","N"]
+    Accepter_H_pair = ["O","N","S"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
       if a.element_is_hydrogen():
@@ -134,10 +134,12 @@ def get_hydrogen_bonds_pairs(model, min = 1.7, max = 2.2,eps = 0.8):
           if (min-eps < d_12 < max+eps):
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (100 < angle_312):
+              '''
               diff = abs( 2 - d_12 )
               if (diff < diff_best):
                   diff_best = diff
-                  result = group_args(
+                  '''
+              result = group_args(
                     atom_1=a1,
                     atom_2=a2)
         if (result in results):continue
@@ -257,11 +259,6 @@ def get_salt_bridge_pairs(model, pdb_file_name, min = 1.7, max = 2.2,
           diff = abs(180 - angle_312)
           if (diff < diff_best):
             diff_best = diff
-            '''
-            result = group_args(atom_1 = a1.id_str(),
-                                atom_2 = a2.id_str(),
-                                atom_3 = a3.id_str())
-            '''
             result = group_args(atom_1 = a1,
                                 atom_2 = a2,
                                 atom_3 = a3)

@@ -40,7 +40,7 @@ def exercise():
                                               ('pdb=" H   GLU A   8 "', 'pdb=" O   ARG A   4 "'),
                                               ('pdb=" HB2 ARG A   5 "', 'pdb=" OE2 GLU A   1 "'),
                                               ('pdb=" H   ARG A   5 "', 'pdb=" O   GLU A   1 "'),
-                                               ('pdb=" HG2 ARG A   4 "', 'pdb=" OE2 GLU A   8 "')],
+                                              ('pdb=" HG2 ARG A   4 "', 'pdb=" OE2 GLU A   8 "')],
                                 "1kych2.pdb":[('pdb=" HA  GLU A   8 "', 'pdb=" OE1 GLU A  11 "'),
                                               ('pdb=" H   GLU A  11 "', 'pdb=" O   GLU A   8 "'),
                                               ('pdb=" H   ARG A  12 "', 'pdb=" O   GLU A   8 "'),
@@ -61,8 +61,9 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results = find_hydrogen_bonds(model=model)
+    results = get_hydrogen_bonds_pairs(model=model)
     for r in results:
+      d_12 = r.atom_1.distance(r.atom_2)
       Hydrogen_bond_pairs = Ideal_Hydrogen_Bonds_files[pdb_file_name]
       assert (r.atom_1.id_str(), r.atom_2.id_str()) in Hydrogen_bond_pairs
       print ("%s"% r.atom_1.id_str(), r.atom_2.id_str())
