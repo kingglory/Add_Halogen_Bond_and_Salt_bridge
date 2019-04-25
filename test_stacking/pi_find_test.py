@@ -40,7 +40,7 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    result = define_pi_system(model = model)
+    result = get_stacking_system(model = model)
     if result is not None:
      for r in result:
        p_i = list(r.pi.extract_i_seq()),

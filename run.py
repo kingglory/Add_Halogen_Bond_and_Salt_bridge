@@ -107,7 +107,7 @@ def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
     atom3s = []
     atom4s = []
     results = []
-    Accepter_H_pair = ["O","N","S"]
+    Accepter_H_pair = ["O","N","S","F","CL"]
     for a in hierarchy.atoms():
       e = a.element.strip().upper()
       if a.element_is_hydrogen():
@@ -134,12 +134,10 @@ def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
           if (min-eps < d_12 < max+eps):
             angle_312 = (a1.angle(a2, a3, deg=True))
             if (100 < angle_312):
-              '''
               diff = abs( 2 - d_12 )
               if (diff < diff_best):
                   diff_best = diff
-                  '''
-              result = group_args(
+                  result = group_args(
                     atom_1=a1,
                     atom_2=a2)
         if (result in results):continue
