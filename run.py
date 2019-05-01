@@ -105,7 +105,6 @@ def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
     atom1s = []
     atom2s = []
     atom3s = []
-    atom4s = []
     results = []
     Accepter_H_pair = ["O","N","S","F","CL"]
     for a in hierarchy.atoms():
@@ -116,14 +115,12 @@ def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
         if a.parent().resname == "HOH":continue
         atom2s.append(a)
       if e in Accepter_H_pair:
-        atom4s.append(a)
-      if e == "C":
         atom3s.append(a)
 
     for a2 in atom2s:
       result = None
       diff_best = 1.e+9
-      for a3 in atom4s:
+      for a3 in atom3s:
         for a1 in atom1s:
           if (not a1.is_in_same_conformer_as(a2)): continue
           if (not is_bonded(a1, a3, bps_dict)): continue
@@ -142,26 +139,7 @@ def get_hydrogen_bonds_pairs(model, min = 1.7,max = 2.2,eps = 0.8):
                     atom_2=a2)
         if (result in results):continue
         if (result is not None): results.append(result)
-      if (result is None):
-        for a3 in atom3s:
-          for a1 in atom1s:
-            if (not a1.is_in_same_conformer_as(a2)): continue
-            if (not is_bonded(a1, a3, bps_dict)): continue
-            if (is_bonded(a1, a2, bps_dict)): continue
-            if (a1.parent().parent().resseq ==
-                  a2.parent().parent().resseq): continue
-            d_12 = a1.distance(a2)
-            if (min - eps < d_12 < max + eps):
-              angle_312 = (a1.angle(a2, a3, deg=True))
-              if (100 < angle_312):
-                diff = abs(180 - angle_312)
-                if (diff < diff_best):
-                  diff_best = diff
-                  result = group_args(
-                    atom_1=a1,
-                    atom_2=a2)
-        if (result in results): continue
-        if (result is not None): results.append(result)
+
     # one O atom can make two hydrogen bonds,
     # but one hydrogen atom can just one
 

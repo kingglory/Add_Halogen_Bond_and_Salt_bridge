@@ -32,9 +32,8 @@ def exercise():
            ["1kych2.pdb",None],
            ["1kych3.pdb",None],
            ["3q8jh1.pdb",None],
-           ["3q8jh2.pdb",None],
-           ["3q8jh3.pdb",None]
-           ]
+           ["3q8jh2.pdb",None]
+          ]
   Ideal_Hydrogen_Bonds_files = {"1kych1.pdb":[('pdb=" HA  ARG A   5 "', 'pdb=" OE1 GLU A   8 "'),
                                               ('pdb=" H   ARG A   4 "', 'pdb=" O   GLU A   1 "'),
                                               ('pdb=" H   GLU A   8 "', 'pdb=" O   ARG A   4 "'),
@@ -53,11 +52,8 @@ def exercise():
                                 "3q8jh2.pdb":[('pdb=" H   ASN A  11 "', 'pdb=" O   TYR A  15 "'),
                                               ('pdb=" H   TYR A  15 "', 'pdb=" O   ASN A  11 "'),
                                               ('pdb=" H   GLN A  13 "', 'pdb=" OD1 ASN A  11 "'),
-                                              ('pdb=" HA  PHE A  14 "', 'pdb=" O   GLN A  13 "'),
-                                              ('pdb=" H   PHE A  14 "', 'pdb=" OD1 ASN A  11 "')],
-                                "3q8jh3.pdb":[('pdb="HD13 LEU A  23 "', 'pdb=" O   CYS A  18 "'),
-                                              ('pdb=" HG  LEU A  21 "', 'pdb=" O   PRO A  19 "'),
-                                              ('pdb="HD23 LEU A  21 "', 'pdb=" O   GLY A  20 "')]}
+                                              ('pdb=" H   PHE A  14 "', 'pdb=" OD1 ASN A  11 "')]
+                                }
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
