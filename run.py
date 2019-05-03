@@ -275,23 +275,7 @@ class get_hydrogen_bonds(object):
           if (result in results): continue
           if (result is not None): results.append(result)
 
-        #just keep the more possiable situation for O atom
-        for i, ri in enumerate(results):
-          for j, rj in enumerate(results):
-            if (j <= i): continue
-            ai1 = ri.atom_1
-            ai2 = ri.atom_2
-            aj1 = rj.atom_1
-            aj2 = rj.atom_2
-            if ri.atom_1 == rj.atom_1:
-              di = ai1.distance(ai2)
-              dj = aj1.distance(aj2)
-              if di < dj:
-                if rj in results:
-                  results.remove(rj)
-              else:
-                if ri in results:
-                  results.remove(ri)
+        #just keep the more possiable situation for N atom
 
         for i,ri in enumerate(results):
           for j,rj in enumerate(results):
