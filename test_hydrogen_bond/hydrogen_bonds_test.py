@@ -27,16 +27,17 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [["1kyc.pdb",None],
+  files = [
            ["1kych.pdb",None],
            ["1kych1.pdb",None],
            ["1kych2.pdb",None],
            ["1kych3.pdb",None],
-           ["3q8jh.pdb",None],
+           ["1kyc.pdb", None],
            ["3q8jh1.pdb",None],
            ["3q8jh2.pdb",None],
+           ["3q8jh.pdb", None],
            ["6iip.pdb",None],
-           ["6iiph.pdb",None]
+           #["6iiph.pdb",None]
 
           ]
   Ideal_Hydrogen_Bonds_files = {"1kych1.pdb":[('pdb=" HA  ARG A   5 "', 'pdb=" OE1 GLU A   8 "'),

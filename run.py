@@ -128,8 +128,8 @@ class get_halogen_bonds(object):
     '''
     #results = self.get_halogen_bonds_pairs()
     i = 1
-    d_add = 0
-    angle_add = 0
+    #d_add = 0
+    #angle_add = 0
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
@@ -138,12 +138,14 @@ class get_halogen_bonds(object):
         r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
       a3_str = "chain %s and resseq %s and name %s" % (
         r.atom_3.chain().id, r.atom_3.parent().parent().resid(), r.atom_3.name)
-      d = r.d
-      angle = r.angle_312
-      d_add = d + d_add
-      d_ideal = d_add/i
-      angle_add = angle + angle_add
-      angle_ideal = angle_add/i
+      d_ideal = 3.1
+      angle_ideal = 165.72
+      #d = r.d
+      #angle = r.angle_312
+      #d_add = d + d_add
+      #d_ideal = d_add/i
+      #angle_add = angle + angle_add
+      #angle_ideal = angle_add/i
       i = i + 1
       bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,a1_str,a2_str,a3_str,angle_ideal)
       sub_fin_str = sub_fin_str + bond_angle_str
@@ -152,7 +154,7 @@ class get_halogen_bonds(object):
     file_name = pdb_file_name[:4] + ".eff"
     with open(file_name,'w') as fileobject:
       fileobject.write(str_final)
-    #print str_final
+
 
 
 
@@ -201,7 +203,7 @@ class get_hydrogen_bonds(object):
               d_12 = a1.distance(a2)
               if (min-eps1 < d_12 < max+eps1):
                 angle_312 = (a1.angle(a2, a3, deg=True))
-                if (100 < angle_312):
+                if (90 < angle_312):
                   diff = abs( 2 - d_12 )
                   if (diff < diff_best):
                       diff_best = diff
@@ -335,8 +337,6 @@ class get_hydrogen_bonds(object):
     '''
     #results = self.get_hydrogen_bonds_pairs()
     i = 1
-    d_add = 0
-    #angle_add = 0
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
@@ -344,10 +344,12 @@ class get_hydrogen_bonds(object):
       a2_str = "chain %s and resseq %s and name %s" % (
         r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
       d_ideal_1 = 2.19
-      #d_ideal_2 = 2.9
-      d=r.d
-      d_add = d+d_add
-      d_ideal_2 = d_add/i
+      d_ideal_2 = 3.05
+      #d_add = 0
+      # angle_add = 0
+      #d=r.d
+      #d_add = d+d_add
+      #d_ideal_2 = d_add/i
       i = i + 1
       if r.atom_1.element.strip().upper() == "H":
         a3_str = "chain %s and resseq %s and name %s" % (
