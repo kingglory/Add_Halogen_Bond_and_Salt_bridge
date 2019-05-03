@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 sys.path.append("..")
 import run
-from run import get_hydrogen_bonds_pairs
+from run import get_hydrogen_bonds
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -27,12 +27,17 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [
+  files = [["1kyc.pdb",None],
+           ["1kych.pdb",None],
            ["1kych1.pdb",None],
            ["1kych2.pdb",None],
            ["1kych3.pdb",None],
+           ["3q8jh.pdb",None],
            ["3q8jh1.pdb",None],
-           ["3q8jh2.pdb",None]
+           ["3q8jh2.pdb",None],
+           ["6iip.pdb",None],
+           ["6iiph.pdb",None]
+
           ]
   Ideal_Hydrogen_Bonds_files = {"1kych1.pdb":[('pdb=" HA  ARG A   5 "', 'pdb=" OE1 GLU A   8 "'),
                                               ('pdb=" H   ARG A   4 "', 'pdb=" O   GLU A   1 "'),
@@ -57,11 +62,13 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results = get_hydrogen_bonds_pairs(model=model)
+    get_h_bonds = get_hydrogen_bonds(model=model)
+    get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name)
+    results = get_h_bonds.get_hydrogen_bonds_pairs()
+    
     for r in results:
-      d_12 = r.atom_1.distance(r.atom_2)
-      Hydrogen_bond_pairs = Ideal_Hydrogen_Bonds_files[pdb_file_name]
-      assert (r.atom_1.id_str(), r.atom_2.id_str()) in Hydrogen_bond_pairs
+      #Hydrogen_bond_pairs = Ideal_Hydrogen_Bonds_files[pdb_file_name]
+      #assert (r.atom_1.id_str(), r.atom_2.id_str()) in Hydrogen_bond_pairs
       print ("%s"% r.atom_1.id_str(), r.atom_2.id_str())
 
 if __name__ == '__main__':
