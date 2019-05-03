@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 sys.path.append("..")
 import run
-from run import get_halogen_bonds_pairs
+from run import get_halogen_bonds
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -43,7 +43,9 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results = get_halogen_bonds_pairs(model=model)
+    get_x_bonds = get_halogen_bonds(model=model)
+    results = get_x_bonds.get_halogen_bonds_pairs()
+    get_x_bonds.write_restrains_file(pdb_file_name=pdb_file_name)
     for r in results:
       assert (r.atom_1.id_str(), r.atom_2.id_str()) in Halogen_atom_pairs
       print ("%s" % r.atom_1.id_str(), r.atom_2.id_str())

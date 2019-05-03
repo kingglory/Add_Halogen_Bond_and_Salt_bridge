@@ -1,0 +1,40 @@
+refinement{
+  geometry_restraints.edits{
+    bond{
+      atom_selection_1 = chain A and resseq   18  and name BR  
+      atom_selection_2 = chain A and resseq   28  and name  N  
+      symmetry_operation = None
+      distance_ideal = 3.067546
+      sigma = 0.1
+      slack = None
+      limit = -0.1
+      top_out = False
+    }
+    angle {
+      atom_selection_1 = chain A and resseq   18  and name BR  
+      atom_selection_2 = chain A and resseq   28  and name  N  
+      atom_selection_3 = chain A and resseq   18  and name  CE2
+      angle_ideal = 150.913902
+      sigma = 5
+    }
+    bond{
+      atom_selection_1 = chain A and resseq   18  and name BR  
+      atom_selection_2 = chain A and resseq   28  and name  O  
+      symmetry_operation = None
+      distance_ideal = 2.973342
+      sigma = 0.1
+      slack = None
+      limit = -0.1
+      top_out = False
+    }
+    angle {
+      atom_selection_1 = chain A and resseq   18  and name BR  
+      atom_selection_2 = chain A and resseq   28  and name  O  
+      atom_selection_3 = chain A and resseq   18  and name  CE2
+      angle_ideal = 150.845987
+      sigma = 5
+    }
+    
+  }
+}
+    
