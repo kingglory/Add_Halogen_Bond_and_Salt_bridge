@@ -101,7 +101,7 @@ class get_halogen_bonds(object):
               if (result is not None):results.append(result)
     return results
 
-  def write_restrains_file(self,pdb_file_name):
+  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
     str_1 = '''bond{
       atom_selection_1 = %s
       atom_selection_2 = %s
@@ -307,7 +307,7 @@ class get_hydrogen_bonds(object):
       return results
 
 
-  def write_restrains_file(self,pdb_file_name):
+  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
     str_1 = '''bond{
       atom_selection_1 = %s
       atom_selection_2 = %s
@@ -474,7 +474,7 @@ class get_salt_bridge(object):
 
     return results
 
-  def write_restrains_file(self, pdb_file_name):
+  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
     str_1 = '''bond{
         atom_selection_1 = %s
         atom_selection_2 = %s
