@@ -1,0 +1,9 @@
+1)generate made up helix
+python run_generate_SS.py
+2)Perturb it using some dynamics:
+phenix.dynamics m-helix.pdb temperature=2000 number_of_steps=300
+3)Ran model optimization:
+ -without H-bond restraints
+ phenix.geometry_minimization m-helix_shaken.pdb
+ -with H-bond restraints
+ phenix.geometry_minimization m-helix_shaken.pdb H-bond-restraints.eff

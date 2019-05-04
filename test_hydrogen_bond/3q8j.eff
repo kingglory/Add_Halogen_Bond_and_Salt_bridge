@@ -4,7 +4,7 @@ refinement{
       atom_selection_1 = chain A and resseq   18  and name  H  
       atom_selection_2 = chain A and resseq    4  and name  O  
       symmetry_operation = None
-      distance_ideal = 1.963961
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -14,14 +14,14 @@ refinement{
       atom_selection_1 = chain A and resseq   18  and name  H  
       atom_selection_2 = chain A and resseq    4  and name  O  
       atom_selection_3 = chain A and resseq   18  and name  N  
-      angle_ideal = 174.924621
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    8  and name  H  
       atom_selection_2 = chain A and resseq    5  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.234769
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -31,14 +31,14 @@ refinement{
       atom_selection_1 = chain A and resseq    8  and name  H  
       atom_selection_2 = chain A and resseq    5  and name  O  
       atom_selection_3 = chain A and resseq    8  and name  N  
-      angle_ideal = 155.620695
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   34  and name  H  
       atom_selection_2 = chain A and resseq    8  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.094195
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -48,14 +48,14 @@ refinement{
       atom_selection_1 = chain A and resseq   34  and name  H  
       atom_selection_2 = chain A and resseq    8  and name  O  
       atom_selection_3 = chain A and resseq   34  and name  N  
-      angle_ideal = 165.718174
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    5  and name  H  
       atom_selection_2 = chain A and resseq    8  and name  OE1
       symmetry_operation = None
-      distance_ideal = 2.336101
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -65,14 +65,14 @@ refinement{
       atom_selection_1 = chain A and resseq    5  and name  H  
       atom_selection_2 = chain A and resseq    8  and name  OE1
       atom_selection_3 = chain A and resseq    5  and name  N  
-      angle_ideal = 178.317118
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   32  and name  H  
       atom_selection_2 = chain A and resseq   10  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.059124
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -82,14 +82,14 @@ refinement{
       atom_selection_1 = chain A and resseq   32  and name  H  
       atom_selection_2 = chain A and resseq   10  and name  O  
       atom_selection_3 = chain A and resseq   32  and name  N  
-      angle_ideal = 151.696534
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   15  and name  H  
       atom_selection_2 = chain A and resseq   11  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.075624
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -99,14 +99,14 @@ refinement{
       atom_selection_1 = chain A and resseq   15  and name  H  
       atom_selection_2 = chain A and resseq   11  and name  O  
       atom_selection_3 = chain A and resseq   15  and name  N  
-      angle_ideal = 149.088146
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   14  and name  H  
       atom_selection_2 = chain A and resseq   11  and name  OD1
       symmetry_operation = None
-      distance_ideal = 2.126199
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -116,14 +116,14 @@ refinement{
       atom_selection_1 = chain A and resseq   14  and name  H  
       atom_selection_2 = chain A and resseq   11  and name  OD1
       atom_selection_3 = chain A and resseq   14  and name  N  
-      angle_ideal = 149.215288
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    2  and name  H  
       atom_selection_2 = chain A and resseq   14  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.683359
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -133,14 +133,14 @@ refinement{
       atom_selection_1 = chain A and resseq    2  and name  H  
       atom_selection_2 = chain A and resseq   14  and name  O  
       atom_selection_3 = chain A and resseq    2  and name  N  
-      angle_ideal = 158.846024
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   11  and name  H  
       atom_selection_2 = chain A and resseq   15  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.036595
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -150,14 +150,14 @@ refinement{
       atom_selection_1 = chain A and resseq   11  and name  H  
       atom_selection_2 = chain A and resseq   15  and name  O  
       atom_selection_3 = chain A and resseq   11  and name  N  
-      angle_ideal = 164.901469
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    4  and name  H  
       atom_selection_2 = chain A and resseq   16  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.041600
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -167,14 +167,14 @@ refinement{
       atom_selection_1 = chain A and resseq    4  and name  H  
       atom_selection_2 = chain A and resseq   16  and name  O  
       atom_selection_3 = chain A and resseq    4  and name  N  
-      angle_ideal = 160.903033
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   37  and name  H  
       atom_selection_2 = chain A and resseq   22  and name  O  
       symmetry_operation = None
-      distance_ideal = 1.995388
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -184,14 +184,14 @@ refinement{
       atom_selection_1 = chain A and resseq   37  and name  H  
       atom_selection_2 = chain A and resseq   22  and name  O  
       atom_selection_3 = chain A and resseq   37  and name  N  
-      angle_ideal = 175.079549
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   35  and name  H  
       atom_selection_2 = chain A and resseq   24  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.066352
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -201,14 +201,14 @@ refinement{
       atom_selection_1 = chain A and resseq   35  and name  H  
       atom_selection_2 = chain A and resseq   24  and name  O  
       atom_selection_3 = chain A and resseq   35  and name  N  
-      angle_ideal = 165.291442
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   33  and name  H  
       atom_selection_2 = chain A and resseq   26  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.055281
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -218,14 +218,14 @@ refinement{
       atom_selection_1 = chain A and resseq   33  and name  H  
       atom_selection_2 = chain A and resseq   26  and name  O  
       atom_selection_3 = chain A and resseq   33  and name  N  
-      angle_ideal = 158.494031
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   12  and name  H  
       atom_selection_2 = chain A and resseq   30  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.267885
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -235,14 +235,14 @@ refinement{
       atom_selection_1 = chain A and resseq   12  and name  H  
       atom_selection_2 = chain A and resseq   30  and name  O  
       atom_selection_3 = chain A and resseq   12  and name  N  
-      angle_ideal = 149.454080
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   28  and name  H  
       atom_selection_2 = chain A and resseq   31  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.149098
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -252,14 +252,14 @@ refinement{
       atom_selection_1 = chain A and resseq   28  and name  H  
       atom_selection_2 = chain A and resseq   31  and name  O  
       atom_selection_3 = chain A and resseq   28  and name  N  
-      angle_ideal = 130.077299
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   11  and name HD21
       atom_selection_2 = chain A and resseq   31  and name  OD1
       symmetry_operation = None
-      distance_ideal = 2.037972
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -269,14 +269,14 @@ refinement{
       atom_selection_1 = chain A and resseq   11  and name HD21
       atom_selection_2 = chain A and resseq   31  and name  OD1
       atom_selection_3 = chain A and resseq   11  and name  ND2
-      angle_ideal = 161.821597
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   10  and name  H  
       atom_selection_2 = chain A and resseq   32  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.041400
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -286,14 +286,14 @@ refinement{
       atom_selection_1 = chain A and resseq   10  and name  H  
       atom_selection_2 = chain A and resseq   32  and name  O  
       atom_selection_3 = chain A and resseq   10  and name  N  
-      angle_ideal = 170.983734
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   26  and name  H  
       atom_selection_2 = chain A and resseq   33  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.203944
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -303,14 +303,14 @@ refinement{
       atom_selection_1 = chain A and resseq   26  and name  H  
       atom_selection_2 = chain A and resseq   33  and name  O  
       atom_selection_3 = chain A and resseq   26  and name  N  
-      angle_ideal = 176.214257
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    7  and name  H  
       atom_selection_2 = chain A and resseq   34  and name  O  
       symmetry_operation = None
-      distance_ideal = 1.941239
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -320,14 +320,14 @@ refinement{
       atom_selection_1 = chain A and resseq    7  and name  H  
       atom_selection_2 = chain A and resseq   34  and name  O  
       atom_selection_3 = chain A and resseq    7  and name  N  
-      angle_ideal = 175.825362
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   24  and name  H  
       atom_selection_2 = chain A and resseq   35  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.074757
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -337,14 +337,14 @@ refinement{
       atom_selection_1 = chain A and resseq   24  and name  H  
       atom_selection_2 = chain A and resseq   35  and name  O  
       atom_selection_3 = chain A and resseq   24  and name  N  
-      angle_ideal = 167.116297
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   29  and name HD21
       atom_selection_2 = chain A and resseq 1001  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.509937
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -354,14 +354,14 @@ refinement{
       atom_selection_1 = chain A and resseq   29  and name HD21
       atom_selection_2 = chain A and resseq 1001  and name  O  
       atom_selection_3 = chain A and resseq   29  and name  ND2
-      angle_ideal = 145.037320
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq    3  and name  H  
       atom_selection_2 = chain A and resseq 1003  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.033483
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -371,14 +371,14 @@ refinement{
       atom_selection_1 = chain A and resseq    3  and name  H  
       atom_selection_2 = chain A and resseq 1003  and name  O  
       atom_selection_3 = chain A and resseq    3  and name  N  
-      angle_ideal = 175.847092
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   17  and name  H  
       atom_selection_2 = chain A and resseq 1009  and name  O  
       symmetry_operation = None
-      distance_ideal = 2.028071
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -388,14 +388,14 @@ refinement{
       atom_selection_1 = chain A and resseq   17  and name  H  
       atom_selection_2 = chain A and resseq 1009  and name  O  
       atom_selection_3 = chain A and resseq   17  and name  N  
-      angle_ideal = 158.594297
+      angle_ideal = 153.400000
       sigma = 5
     }
     bond{
       atom_selection_1 = chain A and resseq   31  and name  HD2
       atom_selection_2 = chain A and resseq 1011  and name  O  
       symmetry_operation = None
-      distance_ideal = 1.786643
+      distance_ideal = 2.190000
       sigma = 0.1
       slack = None
       limit = -0.1
@@ -405,7 +405,7 @@ refinement{
       atom_selection_1 = chain A and resseq   31  and name  HD2
       atom_selection_2 = chain A and resseq 1011  and name  O  
       atom_selection_3 = chain A and resseq   31  and name  OD2
-      angle_ideal = 157.565787
+      angle_ideal = 153.400000
       sigma = 5
     }
     
