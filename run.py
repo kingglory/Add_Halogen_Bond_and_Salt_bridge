@@ -179,6 +179,7 @@ class get_hydrogen_bonds(object):
       atom1s = []
       atom2s = []
       atom3s = []
+      atom4s = []
       results = []
       Accepter_H_pair = ["O","N","S","F","CL"]
       for a in hierarchy.atoms():
@@ -190,6 +191,8 @@ class get_hydrogen_bonds(object):
           atom2s.append(a)
         if e in Accepter_H_pair:
           atom3s.append(a)
+        if e == "C":
+          atom4s.append(a)
 
       if atom1s is not None:
         for a2 in atom2s:
@@ -265,23 +268,26 @@ class get_hydrogen_bonds(object):
           result = None
           diff_best = 1.e+9
           for a2 in atom2s:
-            resid_2 = a2.parent().parent().resid()
-            resid_3 = a3.parent().parent().resid()
-            diff_r_r = abs(int(resid_2) - int(resid_3))
-            if diff_r_r < 2: continue
-            if (not a3.is_in_same_conformer_as(a2)): continue
-            if (is_bonded(a2, a3, bps_dict)): continue
-            d_O_N = a3.distance(a2)
-            if (ideal_dist -eps2 < d_O_N < ideal_dist + eps2):
-              diff = abs(ideal_dist - d_O_N)
-              if (diff < diff_best):
-                diff_best = diff
-                result = group_args(
-                  atom_1=a2,
-                  atom_2=a3,
-                  d=d_O_N)
-          if (result in results): continue
-          if (result is not None): results.append(result)
+            for a4 in atom4s:
+              if (not is_bonded(a4, a3, bps_dict)): continue
+              resid_2 = a2.parent().parent().resid()
+              resid_3 = a3.parent().parent().resid()
+              diff_r_r = abs(int(resid_2) - int(resid_3))
+              if diff_r_r < 2: continue
+              if (not a3.is_in_same_conformer_as(a2)): continue
+              if (is_bonded(a2, a3, bps_dict)): continue
+              d_O_N = a3.distance(a2)
+              if (ideal_dist -eps2 < d_O_N < ideal_dist + eps2):
+                diff = abs(ideal_dist - d_O_N)
+                if (diff < diff_best):
+                  diff_best = diff
+                  result = group_args(
+                    atom_1=a2,
+                    atom_2=a3,
+                    atom_3=a4,
+                    d=d_O_N)
+            if (result in results): continue
+            if (result is not None): results.append(result)
 
         #just keep the more possiable situation for N atom
 
@@ -326,18 +332,8 @@ class get_hydrogen_bonds(object):
       sigma = 5
     }
     '''
-    str_2 = '''bond{
-      atom_selection_1 = %s
-      atom_selection_2 = %s
-      symmetry_operation = None
-      distance_ideal = %f
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    '''
-    str_3 = '''refinement{
+
+    str_2 = '''refinement{
   geometry_restraints.edits{
     %s
   }
@@ -354,6 +350,10 @@ class get_hydrogen_bonds(object):
         r.atom_2.chain().id,
         r.atom_2.parent().parent().resid(),
         r.atom_2.name)
+      a3_str = "chain %s and resseq %s and name %s" % (
+        r.atom_3.chain().id,
+        r.atom_3.parent().parent().resid(),
+        r.atom_3.name)
       if (use_defaul_parameters):
         d_ideal_1 = 2.19
         d_ideal_2 = 2.9
@@ -362,21 +362,20 @@ class get_hydrogen_bonds(object):
         d_ideal_2 = r.d
       i = i + 1
       if r.atom_1.element.strip().upper() == "H":
-        a3_str = "chain %s and resseq %s and name %s" % (
-          r.atom_3.chain().id,
-          r.atom_3.parent().parent().resid(),
-          r.atom_3.name)
         if (use_defaul_parameters):
           angle_ideal = 153.4
         else:angle_ideal = r.angle_312
-        bond_angle_str = str_1 % (a1_str,a2_str,d_ideal_1,
-                                  a1_str,a2_str,a3_str,angle_ideal)
+        bond_angle_str = str_1 % (a1_str, a2_str, d_ideal_1,
+                                  a1_str, a2_str, a3_str, angle_ideal)
         sub_fin_str = sub_fin_str + bond_angle_str
       else :
-        bond_str = str_2 % (a1_str, a2_str, d_ideal_2)
-        sub_fin_str = sub_fin_str + bond_str
+        if (use_defaul_parameters):
+          angle_ideal = 147.15
+          bond_angle_str = str_1 % (a1_str, a2_str, d_ideal_2,
+                                  a1_str, a2_str, a3_str, angle_ideal)
+          sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
-    str_final = str_3 % (s_f_str)
+    str_final = str_2 % (s_f_str)
     file_name = pdb_file_name[:4]+".eff"
     with open(file_name,'w') as fileobject:
       fileobject.write(str_final)
