@@ -370,90 +370,149 @@ class get_hydrogen_bonds(object):
       fileobject.write(str_final)
 
 
+class get_salt_bridge(object):
+  def __init__(self, model):
+    self.model = model
+    self.results = self.get_salt_bridge_pairs()
 
-
-def get_salt_bridge_pairs(model, pdb_file_name, min = 1.7, max = 2.2,
+  def get_salt_bridge_pairs(self, min = 1.7, max = 2.2,
                      eps1 = 0.15, eps2 = 0.8, shutoff = 4 ):
-  geometry = model.get_restraints_manager()
-  hierarchy = model.get_hierarchy()
-  bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                   sites_cart=model.get_sites_cart())
-  bps_dict = {}
-  [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-  positive_residues = ["ARG", "HIS", "LYS"]
-  negative_residues = ["ASP", "GLU", "HIS"]
-  results = []
-  positive_atoms = []
-  atom1s = []
-  atom3s = []
-  """ select out the pasitive atoms and hydrogen atoms 
-  and negative atoms to lists
-  """
-  for a in hierarchy.atoms():
-    e = a.element.strip().upper()
-    if a.element_is_hydrogen():
-      #if a.parent().resname == "HOH":continue
-      atom1s.append(a)
-    if e == "N":
-      if not (a.parent().resname in positive_residues):continue
-      positive_atoms.append(a)
-    if e == "O":
-      if a.parent().resname == "HOH":continue
-      if not (a.parent().resname in negative_residues):continue
-      atom3s.append(a)
-      
-  """ select out N H pairs in pasitive sites
-   if there are more than three hydrohen atoms
-   make covalent bond with N in side chains
-   then the N atom could be positive atom
-  """
-  i = 0
-  a1_a2_pairs = []
-  H_N_pairs = []
-  for a2 in positive_atoms:
-    for a1 in atom1s:
-      if (not is_bonded(a1, a2, bps_dict)): continue
-      i = i+1
-      a1_a2_pairs.append((a1,a2))
-    if i >=2:
-      if a1_a2_pairs is None:continue
-      H_N_pairs.extend(a1_a2_pairs)
-      
-  """ select out the negative site that opposite the positive site,
-    if the O atom in negative is close enough with N (positive atom),
-    and they didn't make covalent bond ,they will have chance to make
-    electrostatic interaction.and the negative also will have chance 
-    to make hydrogen bonds with th hydrogen atoms nearby the positive
-    N atom.then the eletrostatic interaction will make salt bridge
-    with hydrogen bonds.
-  """
-  for a3 in atom3s:
-    result = None
-    diff_best = 1.e+9
-    for r in H_N_pairs:
-      a1 = r[0]
-      a2 = r[1]
-      if (is_bonded(a3, a2, bps_dict)): continue
-      if (not a3.is_in_same_conformer_as(a2)): continue
-      if (a3.parent().parent().resseq ==
-              a2.parent().parent().resseq): continue
-      d_32 = a3.distance(a2)
-      if(d_32 > shutoff - eps1): continue
-      d_13 = a1.distance(a3)
-      if (min-eps1 < d_13 < max+eps2):
-        angle_312 = (a1.angle(a2, a3, deg=True))
-        if (100 < angle_312):
-          diff = abs(180 - angle_312)
-          if (diff < diff_best):
-            diff_best = diff
-            result = group_args(atom_1 = a1,
-                                atom_2 = a2,
-                                atom_3 = a3)
+    geometry = self.model.get_restraints_manager()
+    hierarchy = self.model.get_hierarchy()
+    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+                                     sites_cart=self.model.get_sites_cart())
+    bps_dict = {}
+    [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+    positive_residues = ["ARG", "HIS", "LYS"]
+    negative_residues = ["ASP", "GLU", "HIS"]
+    results = []
+    positive_atoms = []
+    atom1s = []
+    atom3s = []
+    """ select out the pasitive atoms and hydrogen atoms 
+    and negative atoms to lists
+    """
+    for a in hierarchy.atoms():
+      e = a.element.strip().upper()
+      if a.element_is_hydrogen():
+        #if a.parent().resname == "HOH":continue
+        atom1s.append(a)
+      if e == "N":
+        if not (a.parent().resname in positive_residues):continue
+        positive_atoms.append(a)
+      if e == "O":
+        if a.parent().resname == "HOH":continue
+        if not (a.parent().resname in negative_residues):continue
+        atom3s.append(a)
 
-    if (result is not None): results.append(result)
+    """ select out N H pairs in pasitive sites
+     if there are more than three hydrohen atoms
+     make covalent bond with N in side chains
+     then the N atom could be positive atom
+    """
+    i = 0
+    a1_a2_pairs = []
+    H_N_pairs = []
+    for a2 in positive_atoms:
+      for a1 in atom1s:
+        if (not is_bonded(a1, a2, bps_dict)): continue
+        i = i+1
+        a1_a2_pairs.append((a1,a2))
+      if i >=2:
+        if a1_a2_pairs is None:continue
+        H_N_pairs.extend(a1_a2_pairs)
 
-  return results
-        
+    """ select out the negative site that opposite the positive site,
+      if the O atom in negative is close enough with N (positive atom),
+      and they didn't make covalent bond ,they will have chance to make
+      electrostatic interaction.and the negative also will have chance 
+      to make hydrogen bonds with th hydrogen atoms nearby the positive
+      N atom.then the eletrostatic interaction will make salt bridge
+      with hydrogen bonds.
+    """
+    for a3 in atom3s:
+      result = None
+      diff_best = 1.e+9
+      for r in H_N_pairs:
+        a1 = r[0]
+        a2 = r[1]
+        if (is_bonded(a3, a2, bps_dict)): continue
+        if (not a3.is_in_same_conformer_as(a2)): continue
+        if (a3.parent().parent().resseq ==
+                a2.parent().parent().resseq): continue
+        d_32 = a3.distance(a2)
+        if(d_32 > shutoff - eps1): continue
+        d_13 = a1.distance(a3)
+        if (min-eps1 < d_13 < max+eps2):
+          angle_312 = (a1.angle(a2, a3, deg=True))
+          if (100 < angle_312):
+            diff = abs(180 - angle_312)
+            if (diff < diff_best):
+              diff_best = diff
+              result = group_args(atom_1=a1,
+                                  atom_2=a2,
+                                  atom_3=a3,
+                                  d=d_32,
+                                  angle=angle_312)
+
+      if (result is not None): results.append(result)
+
+    return results
+
+  def write_restrains_file(self, pdb_file_name):
+    str_1 = '''bond{
+        atom_selection_1 = %s
+        atom_selection_2 = %s
+        symmetry_operation = None
+        distance_ideal = %f
+        sigma = 0.1
+        slack = None
+        limit = -0.1
+        top_out = False
+      }
+      angle {
+        atom_selection_1 = %s
+        atom_selection_2 = %s
+        atom_selection_3 = %s
+        angle_ideal = %f
+        sigma = 5
+      }
+      '''
+    str_2 = '''refinement{
+    geometry_restraints.edits{
+      %s
+    }
+  }
+      '''
+    # results = self.get_halogen_bonds_pairs()
+    i = 1
+    #d_add = 0
+    #angle_add = 0
+    sub_fin_str = 'a'
+    for r in self.results:
+      a1_str = "chain %s and resseq %s and name %s" % (
+        r.atom_1.chain().id, r.atom_1.parent().parent().resid(), r.atom_1.name)
+      a2_str = "chain %s and resseq %s and name %s" % (
+        r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
+      a3_str = "chain %s and resseq %s and name %s" % (
+        r.atom_3.chain().id, r.atom_3.parent().parent().resid(), r.atom_3.name)
+      d_ideal = 2.98
+      angle_ideal = 165.07
+      #d = r.d
+      #angle = r.angle
+      #d_add = d + d_add
+      #d_ideal = d_add/i
+      #angle_add = angle + angle_add
+      #angle_ideal = angle_add/i
+      i = i + 1
+      bond_angle_str = str_1 % (a1_str, a2_str, d_ideal, a1_str, a2_str, a3_str, angle_ideal)
+      sub_fin_str = sub_fin_str + bond_angle_str
+    s_f_str = sub_fin_str[1:]
+    str_final = str_2 % (s_f_str)
+    file_name = pdb_file_name[:4] + ".eff"
+    with open(file_name, 'w') as fileobject:
+      fileobject.write(str_final)
+
 
 def get_stacking_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
                      dist_h_cutoff=2.2,dist_v_cutoff=1.1,T_angle = 90,
@@ -499,12 +558,15 @@ def get_stacking_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
         point_1=scitbx.matrix.col(xyzj[0]), 
         point_2=scitbx.matrix.col(xyzj[1]), 
         point_3=scitbx.matrix.col(xyzj[2]))
-      # calculation the distance from one center point of one plane to another plane
+      # calculation the distance from one center point of
+      # one plane to another plane
       x, y, z = cmj
       den = math.sqrt(ai ** 2 + bi ** 2 + ci ** 2)
       dist_point_plane = abs(ai * x + bi * y + ci * z + di) / den
-      # calculation the dist_h_d between two center of plane in horizontal direction
-      # for T type dist_point_plane  also represent one of dist_h_d
+      # calculation the dist_h_d between two center of plane
+      # in horizontal direction
+      # for T type dist_point_plane
+      # also represent one of dist_h_d
       dist_h_d = math.sqrt(dist**2 - dist_point_plane**2)
 
       """

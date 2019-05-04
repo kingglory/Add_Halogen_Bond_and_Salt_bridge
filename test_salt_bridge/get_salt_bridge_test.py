@@ -2,7 +2,7 @@ from __future__ import division
 import sys
 sys.path.append("..")
 import run
-from run import get_salt_bridge_pairs
+from run import get_salt_bridge
 import iotbx.pdb
 import mmtbx.model
 from libtbx.utils import null_out
@@ -46,10 +46,13 @@ def exercise():
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
-    results= get_salt_bridge_pairs(model=model,pdb_file_name=pdb_file_name)
+    salt_bridge = get_salt_bridge(model)
+    results= salt_bridge.get_salt_bridge_pairs()
+    salt_bridge.write_restrains_file(pdb_file_name=pdb_file_name)
     for r in results:
-      Salt_Bridge_sites = Ideal_Salt_Bridge_files[pdb_file_name]
+      #Salt_Bridge_sites = Ideal_Salt_Bridge_files[pdb_file_name]
       print ("%s"% r.atom_1, r.atom_2,r.atom_3)
+      #salt_bridge = get_salt_bridge(model=model)
       #assert  (r.atom_1, r.atom_2,r.atom_3) in  Salt_Bridge_sites
       #print ("%s"% r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str())
       

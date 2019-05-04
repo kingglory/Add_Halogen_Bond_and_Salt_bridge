@@ -1,0 +1,40 @@
+refinement{
+    geometry_restraints.edits{
+      bond{
+        atom_selection_1 = chain A and resseq   10  and name HH21
+        atom_selection_2 = chain A and resseq   10  and name  NH2
+        symmetry_operation = None
+        distance_ideal = 2.980000
+        sigma = 0.1
+        slack = None
+        limit = -0.1
+        top_out = False
+      }
+      angle {
+        atom_selection_1 = chain A and resseq   10  and name HH21
+        atom_selection_2 = chain A and resseq   10  and name  NH2
+        atom_selection_3 = chain A and resseq    2  and name  OE1
+        angle_ideal = 165.070000
+        sigma = 5
+      }
+      bond{
+        atom_selection_1 = chain A and resseq   10  and name  HE 
+        atom_selection_2 = chain A and resseq   10  and name  NE 
+        symmetry_operation = None
+        distance_ideal = 2.980000
+        sigma = 0.1
+        slack = None
+        limit = -0.1
+        top_out = False
+      }
+      angle {
+        atom_selection_1 = chain A and resseq   10  and name  HE 
+        atom_selection_2 = chain A and resseq   10  and name  NE 
+        atom_selection_3 = chain A and resseq    2  and name  OE2
+        angle_ideal = 165.070000
+        sigma = 5
+      }
+      
+    }
+  }
+      
