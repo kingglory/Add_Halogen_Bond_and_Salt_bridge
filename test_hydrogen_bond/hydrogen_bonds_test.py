@@ -85,7 +85,7 @@ def exercise():
     model = get_model(pdb_file_name=pdb_file_name,
                       cif_file_name=cif_file_name)
     get_h_bonds = get_hydrogen_bonds(model=model)
-    get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name)
+    get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name,use_defaul_parameters=False)
     results = get_h_bonds.get_hydrogen_bonds_pairs()
     
     for r in results:
