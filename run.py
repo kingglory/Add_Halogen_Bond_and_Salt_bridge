@@ -292,7 +292,7 @@ class get_hydrogen_bonds(object):
             ai2 = ri.atom_2
             aj1 = rj.atom_1
             aj2 = rj.atom_2
-            if ri.atom_2 == rj.atom_2:
+            if ri.atom_1 == rj.atom_1:
               di = ai1.distance(ai2)
               dj = aj1.distance(aj2)
               if di < dj:
