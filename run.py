@@ -101,7 +101,9 @@ class get_halogen_bonds(object):
               if (result is not None):results.append(result)
     return results
 
-  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
+  def write_restrains_file(self, pdb_file_name,
+                           for_phenix_refine=True,
+                           use_defaul_parameters=True):
     str_1 = '''bond{
       atom_selection_1 = %s
       atom_selection_2 = %s
@@ -126,10 +128,8 @@ class get_halogen_bonds(object):
   }
 }
     '''
-    #results = self.get_halogen_bonds_pairs()
+
     i = 1
-    #d_add = 0
-    #angle_add = 0
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
@@ -144,14 +144,12 @@ class get_halogen_bonds(object):
         r.atom_3.chain().id,
         r.atom_3.parent().parent().resid(),
         r.atom_3.name)
-      d_ideal = 3.1
-      angle_ideal = 165.72
-      #d = r.d
-      #angle = r.angle_312
-      #d_add = d + d_add
-      #d_ideal = d_add/i
-      #angle_add = angle + angle_add
-      #angle_ideal = angle_add/i
+      if (use_defaul_parameters):
+        d_ideal = 3.1
+        angle_ideal = 165.72
+      else:
+        d_ideal = r.d
+        angle_ideal = r.angle_312
       i = i + 1
       bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,
                                 a1_str,a2_str,a3_str,angle_ideal)
@@ -307,7 +305,9 @@ class get_hydrogen_bonds(object):
       return results
 
 
-  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
+  def write_restrains_file(self, pdb_file_name,
+                           for_phenix_refine=True,
+                           use_defaul_parameters=True):
     str_1 = '''bond{
       atom_selection_1 = %s
       atom_selection_2 = %s
@@ -343,7 +343,6 @@ class get_hydrogen_bonds(object):
   }
 }
     '''
-    #results = self.get_hydrogen_bonds_pairs()
     i = 1
     sub_fin_str = 'a'
     for r in self.results:
@@ -355,23 +354,21 @@ class get_hydrogen_bonds(object):
         r.atom_2.chain().id,
         r.atom_2.parent().parent().resid(),
         r.atom_2.name)
-      d_ideal_1 = 2.19
-      d_ideal_2 = 3.05
-      #d_add = 0
-      # angle_add = 0
-      #d=r.d
-      #d_add = d+d_add
-      #d_ideal_2 = d_add/i
+      if (use_defaul_parameters):
+        d_ideal_1 = 2.19
+        d_ideal_2 = 3.05
+      else:
+        d_ideal_1 = r.d
+        d_ideal_2 = r.d
       i = i + 1
       if r.atom_1.element.strip().upper() == "H":
         a3_str = "chain %s and resseq %s and name %s" % (
           r.atom_3.chain().id,
           r.atom_3.parent().parent().resid(),
           r.atom_3.name)
-        #angle = r.angle_312
-        #angle_add = angle + angle_add
-        #angle_ideal = angle_add/i
-        angle_ideal = 153.4
+        if (use_defaul_parameters):
+          angle_ideal = 153.4
+        else:angle_ideal = r.angle_312
         bond_angle_str = str_1 % (a1_str,a2_str,d_ideal_1,
                                   a1_str,a2_str,a3_str,angle_ideal)
         sub_fin_str = sub_fin_str + bond_angle_str
@@ -474,7 +471,9 @@ class get_salt_bridge(object):
 
     return results
 
-  def write_restrains_file(self, pdb_file_name, for_phenix_refine=True):
+  def write_restrains_file(self, pdb_file_name,
+                           for_phenix_refine=True,
+                           use_defaul_parameters=True):
     str_1 = '''bond{
         atom_selection_1 = %s
         atom_selection_2 = %s
@@ -499,10 +498,6 @@ class get_salt_bridge(object):
     }
   }
       '''
-    # results = self.get_halogen_bonds_pairs()
-    i = 1
-    #d_add = 0
-    #angle_add = 0
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
@@ -517,15 +512,12 @@ class get_salt_bridge(object):
         r.atom_3.chain().id,
         r.atom_3.parent().parent().resid(),
         r.atom_3.name)
-      d_ideal = 2.98
-      angle_ideal = 165.07
-      #d = r.d
-      #angle = r.angle
-      #d_add = d + d_add
-      #d_ideal = d_add/i
-      #angle_add = angle + angle_add
-      #angle_ideal = angle_add/i
-      i = i + 1
+      if (use_defaul_parameters):
+        d_ideal = 2.98
+        angle_ideal = 165.07
+      else:
+        d_ideal = r.d
+        angle_ideal = r.angle
       bond_angle_str = str_1 % (a1_str, a2_str, d_ideal, a1_str,
                                      a2_str, a3_str, angle_ideal)
       sub_fin_str = sub_fin_str + bond_angle_str
@@ -604,10 +596,12 @@ def get_stacking_system(model, dist_cutoff_1=6.0,dist_cutoff_2=3.0,
       # for T type,the angle should be near to 90,but 30 deviation is ok
       if (P_angle_1 + eps_angle) < angle < (T_angle - eps_angle):continue
       if (T_angle - eps_angle) < angle < (T_angle + eps_angle):
-        if ((dist_point_plane > dist_v_cutoff )and(dist_h_d > dist_v_cutoff)):continue
+        if ((dist_point_plane > dist_v_cutoff )
+            and(dist_h_d > dist_v_cutoff)):continue
       # for P type,the angle shuld be near to 180,but 30 deviaton is ok
       if (P_angle_2 - eps_angle) > angle > (T_angle + eps_angle):continue
-      if (eps_angle > angle > P_angle_1)or( P_angle_2 > angle > P_angle_2 - eps_angle):
+      if (eps_angle > angle > P_angle_1)\
+        or( P_angle_2 > angle > P_angle_2 - eps_angle):
         if (dist_h_d > dist_h_cutoff):continue
         if (dist_point_plane < dist_cutoff_2): continue
       print angle, dist,dist_point_plane,dist_h_d
