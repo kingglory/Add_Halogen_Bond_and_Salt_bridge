@@ -356,7 +356,7 @@ class get_hydrogen_bonds(object):
         r.atom_2.name)
       if (use_defaul_parameters):
         d_ideal_1 = 2.19
-        d_ideal_2 = 3.05
+        d_ideal_2 = 2.9
       else:
         d_ideal_1 = r.d
         d_ideal_2 = r.d
