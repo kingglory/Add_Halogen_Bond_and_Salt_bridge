@@ -168,94 +168,108 @@ class get_hydrogen_bonds(object):
     self.model = model
     self.results = self.get_hydrogen_bonds_pairs()
 
-  def get_hydrogen_bonds_pairs(self, min = 1.7,max = 2.2,eps1 = 0.8,
-                                        ideal_dist = 3,eps2 = 0.5 ):
+  def get_hydrogen_bonds_pairs(self, ideal_angel_YAD = 147.15, eps_angle_YAD = 30,
+                               angle_AHD_cutoff = 120, eps_angle_AHD = 30,
+                               angle_HAY_min = 90, angle_HAY_max = 180,eps_angle_HAY = 10,
+                               ideal_dist_A_D = 2.95, eps_dist_A_D= 0.5 ):
+      # if there are H atoms ,use model : Y-A...H-D ;
+      # if there are no H atoms ,use model: Y-A...D
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                   sites_cart=self.model.get_sites_cart())
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
       hierarchy = self.model.get_hierarchy()
-      atom1s = []
-      atom2s = []
-      atom3s = []
-      atom4s = []
+      atom_H = []
+      atom_A = []
+      atom_D = []
+      atom_Y = []
+      ress    = []
       results = []
       Accepter_H_pair = ["O","N","S","F","CL"]
       for a in hierarchy.atoms():
         e = a.element.strip().upper()
         if a.element_is_hydrogen():
-          atom1s.append(a)
+          atom_H.append(a)
         if e == "O":
-          if a.parent().resname == "HOH":continue
-          atom2s.append(a)
+          if a.parent().resname == "HOH": continue
+          atom_A.append(a)
         if e in Accepter_H_pair:
-          atom3s.append(a)
+          if a.parent().resname == "HOH": continue
+          atom_D.append(a)
         if e == "C":
-          atom4s.append(a)
+          atom_Y.append(a)
 
-      if atom1s is not None:
-        for a2 in atom2s:
-          result = None
+      if atom_H is not None:
+        for a_A in atom_A:
+          res = None
           diff_best = 1.e+9
-          for a3 in atom3s:
-            for a1 in atom1s:
-              resid_2 = a2.parent().parent().resid()
-              resid_3 = a3.parent().parent().resid()
-              diff_r_r = abs(int(resid_2) - int(resid_3) )
+          for a_D in atom_D:
+            for a_H in atom_H:
+              resid_A = a_A.parent().parent().resid()
+              resid_D = a_D.parent().parent().resid()
+              diff_r_r = abs(int(resid_A) - int(resid_D) )
               if diff_r_r < 2 :continue
-              if (not a1.is_in_same_conformer_as(a2)): continue
-              if (not is_bonded(a1, a3, bps_dict)): continue
-              if (is_bonded(a1, a2, bps_dict)): continue
-              if (a1.parent().parent().resseq ==
-                  a2.parent().parent().resseq): continue
-              d_12 = a1.distance(a2)
-              if (min-eps1 < d_12 < max+eps1):
-                angle_312 = (a1.angle(a2, a3, deg=True))
-                if (90 < angle_312):
-                  diff = abs( 2 - d_12 )
+              if (not a_H.is_in_same_conformer_as(a_A)): continue
+              if (not is_bonded(a_H, a_D, bps_dict)): continue
+              if (is_bonded(a_H, a_A, bps_dict)): continue
+              if (a_A.parent().parent().resseq ==
+                  a_D.parent().parent().resseq): continue
+              d_A_D = a_D.distance(a_A)
+              if (ideal_dist_A_D - eps_dist_A_D  <
+                    d_A_D  < ideal_dist_A_D + eps_dist_A_D ):
+                angle_AHD = a_H.angle(a_A, a_D, deg=True)
+                if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
+                  diff = abs( ideal_dist_A_D - d_A_D )
                   if (diff < diff_best):
                       diff_best = diff
-                      result = group_args(
-                        atom_1=a1,
-                        atom_2=a2,
-                        atom_3=a3,
-                        d=d_12,
-                        angle_312=angle_312)
-
+                      res = group_args(
+                        a_H=a_H,
+                        a_A=a_A,
+                        a_D=a_D,
+                        d_A_D=d_A_D,
+                        angle_AHD=angle_AHD,
+                        ideal_angel_YAD=ideal_angel_YAD,
+                        ideal_dist_A_D=ideal_dist_A_D)
+            if (res in ress):continue
+            if (res is not None): ress.append(res)
+        for r in ress:
+          a_H = r.a_H
+          a_A = r.a_A
+          a_D = r.a_D
+          d_A_D  = r.d_A_D
+          angle_AHD = r.angle_AHD
+          ideal_angel_YAD = r.ideal_angel_YAD
+          ideal_dist_A_D = r.ideal_dist_A_D
+          result = None
+          for a_Y in atom_Y :
+            if (not is_bonded(a_A, a_Y, bps_dict)): continue
+            angle_HAY = a_A.angle(a_H,a_Y,deg=True)
+            if (angle_HAY_min - eps_angle_HAY < angle_HAY < angle_HAY_max + eps_angle_HAY):
+              result = group_args(
+                a_H=a_H,
+                a_A=a_A,
+                a_D=a_D,
+                a_Y=a_Y,
+                d_A_D=d_A_D,
+                angle_HAY=angle_HAY,
+                angle_AHD=angle_AHD,
+                ideal_angel_YAD=ideal_angel_YAD,
+                ideal_dist_A_D=ideal_dist_A_D)
             if (result in results):continue
             if (result is not None): results.append(result)
 
-
-        # one hydrogen atom can just make up one H_bond
-
-        for i,ri in enumerate(results):
-          for j,rj in enumerate(results):
-            if (j <= i): continue
-            ai1 = ri.atom_1
-            ai2 = ri.atom_2
-            aj1 = rj.atom_1
-            aj2 = rj.atom_2
-            if ri.atom_1 == rj.atom_1:
-              di = ai1.distance(ai2)
-              dj = aj1.distance(aj2)
-              if di < dj:
-                if rj in results:
-                  results.remove(rj)
-              else:
-                if ri in results:
-                  results.remove(ri)
-        # just keep the more possiable situation for O atom
+        # just keep the more possiable situation for N atom
         for i, ri in enumerate(results):
           for j, rj in enumerate(results):
             if (j <= i): continue
-            ai1 = ri.atom_1
-            ai2 = ri.atom_2
-            aj1 = rj.atom_1
-            aj2 = rj.atom_2
-            if ri.atom_2 == rj.atom_2:
-              di = ai1.distance(ai2)
-              dj = aj1.distance(aj2)
+            a_A_i = ri.a_A
+            a_D_i = ri.a_D
+            a_A_j = rj.a_A
+            a_D_j = rj.a_D
+            if a_D_i == a_D_j:
+              di = a_A_i.distance(a_D_i)
+              dj = a_A_j.distance(a_D_j)
               if di < dj:
                 if rj in results:
                   results.remove(rj)
@@ -263,29 +277,34 @@ class get_hydrogen_bonds(object):
                 if ri in results:
                   results.remove(ri)
 
-      if len(atom1s) == 0 :
-        for a3 in atom3s:
+      if len(atom_H) == 0 :
+        for a_D in atom_D:
           result = None
           diff_best = 1.e+9
-          for a2 in atom2s:
-            for a4 in atom4s:
-              if (not is_bonded(a4, a3, bps_dict)): continue
-              resid_2 = a2.parent().parent().resid()
-              resid_3 = a3.parent().parent().resid()
+          for a_A in atom_A:
+            for a_Y in atom_Y:
+              if (is_bonded(a_A, a_D, bps_dict)): continue
+              if (not is_bonded(a_Y, a_A, bps_dict)): continue
+              resid_2 = a_A.parent().parent().resid()
+              resid_3 = a_D.parent().parent().resid()
               diff_r_r = abs(int(resid_2) - int(resid_3))
               if diff_r_r < 2: continue
-              if (not a3.is_in_same_conformer_as(a2)): continue
-              if (is_bonded(a2, a3, bps_dict)): continue
-              d_O_N = a3.distance(a2)
-              if (ideal_dist -eps2 < d_O_N < ideal_dist + eps2):
-                diff = abs(ideal_dist - d_O_N)
-                if (diff < diff_best):
-                  diff_best = diff
-                  result = group_args(
-                    atom_1=a2,
-                    atom_2=a3,
-                    atom_3=a4,
-                    d=d_O_N)
+              if (not a_D.is_in_same_conformer_as(a_A)): continue
+              angle_YAD = a_A.angle(a_D,a_Y,deg=True)
+              if (ideal_angel_YAD - eps_angle_YAD < angle_YAD < ideal_angel_YAD + eps_angle_YAD):
+                d_A_D = a_D.distance(a_A)
+                if (ideal_dist_A_D - eps_dist_A_D  < d_A_D < ideal_dist_A_D + eps_dist_A_D ):
+                  diff = abs(ideal_dist_A_D - d_A_D)
+                  if (diff < diff_best):
+                    diff_best = diff
+                    result = group_args(
+                      a_A=a_A,
+                      a_D=a_D,
+                      a_Z=a_Y,
+                      d_A_D=d_A_D,
+                      angle_YAD=angle_YAD,
+                      ideal_angel_YAD=ideal_angel_YAD,
+                      ideal_dist_A_D=ideal_dist_A_D)
             if (result in results): continue
             if (result is not None): results.append(result)
 
@@ -294,13 +313,13 @@ class get_hydrogen_bonds(object):
         for i,ri in enumerate(results):
           for j,rj in enumerate(results):
             if (j <= i): continue
-            ai1 = ri.atom_1
-            ai2 = ri.atom_2
-            aj1 = rj.atom_1
-            aj2 = rj.atom_2
-            if ri.atom_1 == rj.atom_1:
-              di = ai1.distance(ai2)
-              dj = aj1.distance(aj2)
+            a_A_i = ri.a_A
+            a_D_i = ri.a_D
+            a_A_j = rj.a_A
+            a_D_j = rj.a_D
+            if a_A_i == a_A_j:
+              di = a_A_i.distance(a_D_i)
+              dj = a_A_j.distance(a_D_j)
               if di < dj:
                 if rj in results:
                   results.remove(rj)
@@ -355,23 +374,21 @@ class get_hydrogen_bonds(object):
         r.atom_3.parent().parent().resid(),
         r.atom_3.name)
       if (use_defaul_parameters):
-        d_ideal_1 = 2.19
-        d_ideal_2 = 2.9
+        d_ideal = r.ideal_dist_A_D
       else:
-        d_ideal_1 = r.d
-        d_ideal_2 = r.d
+        d_ideal = r.d_A_D
       i = i + 1
       if r.atom_1.element.strip().upper() == "H":
         if (use_defaul_parameters):
           angle_ideal = 153.4
         else:angle_ideal = r.angle_312
-        bond_angle_str = str_1 % (a1_str, a2_str, d_ideal_1,
+        bond_angle_str = str_1 % (a1_str, a2_str, d_ideal,
                                   a1_str, a2_str, a3_str, angle_ideal)
         sub_fin_str = sub_fin_str + bond_angle_str
       else :
         if (use_defaul_parameters):
-          angle_ideal = 147.15
-          bond_angle_str = str_1 % (a1_str, a2_str, d_ideal_2,
+          angle_ideal = r.ideal_angel_YAD
+          bond_angle_str = str_1 % (a1_str, a2_str, d_ideal,
                                   a1_str, a2_str, a3_str, angle_ideal)
           sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
