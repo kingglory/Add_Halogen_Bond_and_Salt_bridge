@@ -42,7 +42,8 @@ def exercise():
   ]
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
-    model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    model = get_model(pdb_file_name=pdb_file_name,
+                      cif_file_name=cif_file_name)
     get_x_bonds = get_halogen_bonds(model=model)
     results = get_x_bonds.get_halogen_bonds_pairs()
     get_x_bonds.write_restrains_file(pdb_file_name=pdb_file_name)

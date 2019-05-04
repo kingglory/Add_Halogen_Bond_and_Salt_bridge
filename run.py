@@ -39,7 +39,7 @@ class get_halogen_bonds(object):
                          emp_scale2 = 0.75, angle_eps = 30):
     geometry = self.model.get_restraints_manager()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                     sites_cart=self.model.get_sites_cart())
+                                sites_cart=self.model.get_sites_cart())
     bps_dict = {}
     [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
     hierarchy = self.model.get_hierarchy()
@@ -133,11 +133,17 @@ class get_halogen_bonds(object):
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
-        r.atom_1.chain().id, r.atom_1.parent().parent().resid(), r.atom_1.name)
+        r.atom_1.chain().id,
+        r.atom_1.parent().parent().resid(),
+        r.atom_1.name)
       a2_str = "chain %s and resseq %s and name %s" % (
-        r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
+        r.atom_2.chain().id,
+        r.atom_2.parent().parent().resid(),
+        r.atom_2.name)
       a3_str = "chain %s and resseq %s and name %s" % (
-        r.atom_3.chain().id, r.atom_3.parent().parent().resid(), r.atom_3.name)
+        r.atom_3.chain().id,
+        r.atom_3.parent().parent().resid(),
+        r.atom_3.name)
       d_ideal = 3.1
       angle_ideal = 165.72
       #d = r.d
@@ -147,7 +153,8 @@ class get_halogen_bonds(object):
       #angle_add = angle + angle_add
       #angle_ideal = angle_add/i
       i = i + 1
-      bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,a1_str,a2_str,a3_str,angle_ideal)
+      bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,
+                                a1_str,a2_str,a3_str,angle_ideal)
       sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)
@@ -163,10 +170,11 @@ class get_hydrogen_bonds(object):
     self.model = model
     self.results = self.get_hydrogen_bonds_pairs()
 
-  def get_hydrogen_bonds_pairs(self, min = 1.7,max = 2.2,eps1 = 0.8,ideal_dist = 3,eps2 = 0.5 ):
+  def get_hydrogen_bonds_pairs(self, min = 1.7,max = 2.2,eps1 = 0.8,
+                                        ideal_dist = 3,eps2 = 0.5 ):
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                       sites_cart=self.model.get_sites_cart())
+                                  sites_cart=self.model.get_sites_cart())
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
       hierarchy = self.model.get_hierarchy()
@@ -340,9 +348,13 @@ class get_hydrogen_bonds(object):
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
-        r.atom_1.chain().id, r.atom_1.parent().parent().resid(), r.atom_1.name)
+        r.atom_1.chain().id,
+        r.atom_1.parent().parent().resid(),
+        r.atom_1.name)
       a2_str = "chain %s and resseq %s and name %s" % (
-        r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
+        r.atom_2.chain().id,
+        r.atom_2.parent().parent().resid(),
+        r.atom_2.name)
       d_ideal_1 = 2.19
       d_ideal_2 = 3.05
       #d_add = 0
@@ -353,12 +365,15 @@ class get_hydrogen_bonds(object):
       i = i + 1
       if r.atom_1.element.strip().upper() == "H":
         a3_str = "chain %s and resseq %s and name %s" % (
-          r.atom_3.chain().id, r.atom_3.parent().parent().resid(), r.atom_3.name)
+          r.atom_3.chain().id,
+          r.atom_3.parent().parent().resid(),
+          r.atom_3.name)
         #angle = r.angle_312
         #angle_add = angle + angle_add
         #angle_ideal = angle_add/i
         angle_ideal = 153.4
-        bond_angle_str = str_1 % (a1_str,a2_str,d_ideal_1,a1_str,a2_str,a3_str,angle_ideal)
+        bond_angle_str = str_1 % (a1_str,a2_str,d_ideal_1,
+                                  a1_str,a2_str,a3_str,angle_ideal)
         sub_fin_str = sub_fin_str + bond_angle_str
       else :
         bond_str = str_2 % (a1_str, a2_str, d_ideal_2)
@@ -380,7 +395,7 @@ class get_salt_bridge(object):
     geometry = self.model.get_restraints_manager()
     hierarchy = self.model.get_hierarchy()
     bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                     sites_cart=self.model.get_sites_cart())
+                               sites_cart=self.model.get_sites_cart())
     bps_dict = {}
     [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
     positive_residues = ["ARG", "HIS", "LYS"]
@@ -491,11 +506,17 @@ class get_salt_bridge(object):
     sub_fin_str = 'a'
     for r in self.results:
       a1_str = "chain %s and resseq %s and name %s" % (
-        r.atom_1.chain().id, r.atom_1.parent().parent().resid(), r.atom_1.name)
+        r.atom_1.chain().id,
+        r.atom_1.parent().parent().resid(),
+        r.atom_1.name)
       a2_str = "chain %s and resseq %s and name %s" % (
-        r.atom_2.chain().id, r.atom_2.parent().parent().resid(), r.atom_2.name)
+        r.atom_2.chain().id,
+        r.atom_2.parent().parent().resid(),
+        r.atom_2.name)
       a3_str = "chain %s and resseq %s and name %s" % (
-        r.atom_3.chain().id, r.atom_3.parent().parent().resid(), r.atom_3.name)
+        r.atom_3.chain().id,
+        r.atom_3.parent().parent().resid(),
+        r.atom_3.name)
       d_ideal = 2.98
       angle_ideal = 165.07
       #d = r.d
@@ -505,7 +526,8 @@ class get_salt_bridge(object):
       #angle_add = angle + angle_add
       #angle_ideal = angle_add/i
       i = i + 1
-      bond_angle_str = str_1 % (a1_str, a2_str, d_ideal, a1_str, a2_str, a3_str, angle_ideal)
+      bond_angle_str = str_1 % (a1_str, a2_str, d_ideal, a1_str,
+                                     a2_str, a3_str, angle_ideal)
       sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)

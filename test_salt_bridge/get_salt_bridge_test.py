@@ -32,20 +32,49 @@ def exercise():
            ["3alph2.pdb", "3alph.ligands.cif"],
            ["3alph3.pdb", "3alph.ligands.cif"],
           ]
-  Ideal_Salt_Bridge_files = {"1jvuh1.pdb":[('pdb="HH21 ARG A  10 "', 'pdb=" NH2 ARG A  10 "', 'pdb=" OE1 GLU A   2 "'),
-                                           ('pdb=" HE  ARG A  10 "', 'pdb=" NE  ARG A  10 "', 'pdb=" OE2 GLU A   2 "')],
-                             "2x7gh2.pdb":[('pdb=" HZ3 LYS A 218 "', 'pdb=" NZ  LYS A 218 "', 'pdb=" OD2 ASP A 147 "'),
-                                           ('pdb=" HZ2 LYS A 218 "', 'pdb=" NZ  LYS A 218 "', 'pdb=" OD2 ASP A 150 "')],
-                             "2x7gh3.pdb":[('pdb="HH22 ARG A 685 "', 'pdb=" NH2 ARG A 685 "', 'pdb=" OE1 GLU A 565 "'),
-                                           ('pdb="HH12 ARG A 685 "', 'pdb=" NH1 ARG A 685 "', 'pdb=" OE2 GLU A 565 "')],
-                             "3alph1.pdb":[('pdb="HH12 ARG A  96 "', 'pdb=" NH1 ARG A  96 "', 'pdb=" OD1 ASP A 118 "'),
-                                           ('pdb="HH22 ARG A  96 "', 'pdb=" NH2 ARG A  96 "', 'pdb=" OD2 ASP A 118 "')],
-                             "3alph2.pdb":[('pdb=" HZ2 LYS A 166 "', 'pdb=" NZ  LYS A 166 "', 'pdb=" OE2 GLU A 192 "')],
-                             "3alph3.pdb":[('pdb=" HZ2 LYS A 236 "', 'pdb=" NZ  LYS A 236 "', 'pdb=" OE1 GLU A 186 "')]}
+  Ideal_Salt_Bridge_files = {
+    "1jvuh1.pdb":[
+      ('pdb="HH21 ARG A  10 "',
+       'pdb=" NH2 ARG A  10 "',
+       'pdb=" OE1 GLU A   2 "'),
+      ('pdb=" HE  ARG A  10 "',
+       'pdb=" NE  ARG A  10 "',
+       'pdb=" OE2 GLU A   2 "')],
+    "2x7gh2.pdb":[
+      ('pdb=" HZ3 LYS A 218 "',
+       'pdb=" NZ  LYS A 218 "',
+       'pdb=" OD2 ASP A 147 "'),
+      ('pdb=" HZ2 LYS A 218 "',
+       'pdb=" NZ  LYS A 218 "',
+       'pdb=" OD2 ASP A 150 "')],
+    "2x7gh3.pdb":[
+      ('pdb="HH22 ARG A 685 "',
+       'pdb=" NH2 ARG A 685 "',
+       'pdb=" OE1 GLU A 565 "'),
+      ('pdb="HH12 ARG A 685 "',
+       'pdb=" NH1 ARG A 685 "',
+       'pdb=" OE2 GLU A 565 "')],
+    "3alph1.pdb":[
+        ('pdb="HH12 ARG A  96 "',
+         'pdb=" NH1 ARG A  96 "',
+         'pdb=" OD1 ASP A 118 "'),
+        ('pdb="HH22 ARG A  96 "',
+         'pdb=" NH2 ARG A  96 "',
+         'pdb=" OD2 ASP A 118 "')],
+    "3alph2.pdb":[
+      ('pdb=" HZ2 LYS A 166 "',
+       'pdb=" NZ  LYS A 166 "',
+       'pdb=" OE2 GLU A 192 "')],
+    "3alph3.pdb":[
+      ('pdb=" HZ2 LYS A 236 "',
+       'pdb=" NZ  LYS A 236 "',
+       'pdb=" OE1 GLU A 186 "')]
+  }
                        
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
-    model = get_model(pdb_file_name=pdb_file_name, cif_file_name=cif_file_name)
+    model = get_model(pdb_file_name=pdb_file_name,
+                      cif_file_name=cif_file_name)
     salt_bridge = get_salt_bridge(model)
     results= salt_bridge.get_salt_bridge_pairs()
     salt_bridge.write_restrains_file(pdb_file_name=pdb_file_name)
@@ -54,7 +83,8 @@ def exercise():
       print ("%s"% r.atom_1, r.atom_2,r.atom_3)
       #salt_bridge = get_salt_bridge(model=model)
       #assert  (r.atom_1, r.atom_2,r.atom_3) in  Salt_Bridge_sites
-      #print ("%s"% r.atom_1.id_str(), r.atom_2.id_str(),r.atom_3.id_str())
+      #print ("%s"% r.atom_1.id_str(),
+      # r.atom_2.id_str(),r.atom_3.id_str())
       
        
 
