@@ -172,7 +172,8 @@ class get_hydrogen_bonds(object):
                     angle_AHD_cutoff = 120,eps_angle_AHD = 30,
                     angle_HAY_min = 90,angle_HAY_max = 180,
                     eps_angle_HAY = 10,ideal_dist_A_D = 2.90,
-                                          eps_dist_A_D= 0.5 ):
+                    sigma_for_angle= 5.0, sigma_for_bond = 0.1,
+                                           eps_dist_A_D= 0.5 ):
       # Hydrogen bond  model : Y-A...H-D ;
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -228,24 +229,33 @@ class get_hydrogen_bonds(object):
                       a_D=a_D,
                       d_A_D=d_A_D,
                       angle_AHD=angle_AHD,
+                      sigma_for_bond=sigma_for_bond,
+                      sigma_for_angle=sigma_for_angle,
                       ideal_angel_YAD=ideal_angel_YAD,
                       ideal_dist_A_D=ideal_dist_A_D)
+                   # print sigma_for_angle, type(sigma_for_angle)
         if (res in ress):continue
         if (res is not None): ress.append(res)
       for r in ress:
+        #print r.sigma_for_angle,type(r.sigma_for_angle)
         a_H = r.a_H
         a_A = r.a_A
         a_D = r.a_D
         d_A_D  = r.d_A_D
         angle_AHD = r.angle_AHD
+        sigma_for_angle = r.sigma_for_angle,
+        sigma_for_bond = r.sigma_for_bond,
         ideal_angel_YAD = r.ideal_angel_YAD
         ideal_dist_A_D = r.ideal_dist_A_D
+        #print r.sigma_for_angle, type(r.sigma_for_angle)
         result = None
         for a_Y in atom_Y :
           if (not is_bonded(a_A, a_Y, bps_dict)): continue
           angle_YAD = a_A.angle(a_Y,a_D,deg=True)
           angle_HAY = a_A.angle(a_H,a_Y,deg=True)
-          if (angle_HAY_min - eps_angle_HAY < angle_HAY < angle_HAY_max + eps_angle_HAY):
+          if (angle_HAY_min - eps_angle_HAY < angle_HAY <
+                            angle_HAY_max + eps_angle_HAY):
+            #print r.sigma_for_angle, type(r.sigma_for_angle)
             result = group_args(
               a_H=a_H,
               a_A=a_A,
@@ -255,12 +265,15 @@ class get_hydrogen_bonds(object):
               angle_HAY=angle_HAY,
               angle_AHD=angle_AHD,
               angle_YAD=angle_YAD,
+              sigma_for_bond=sigma_for_bond,
+              sigma_for_angle=sigma_for_angle,
               ideal_angel_YAD=ideal_angel_YAD,
               ideal_dist_A_D=ideal_dist_A_D)
           if (result in results):continue
           if (result is not None): results.append(result)
 
       # just keep the more possiable situation for N atom
+
       for i, ri in enumerate(results):
         for j, rj in enumerate(results):
           if (j <= i): continue
@@ -279,7 +292,6 @@ class get_hydrogen_bonds(object):
             else:
               if ri in results:
                 results.remove(ri)
-
       return results
 
 
@@ -291,7 +303,7 @@ class get_hydrogen_bonds(object):
       atom_selection_2 = %s
       symmetry_operation = None
       distance_ideal = %f
-      sigma = 0.1
+      sigma = %f
       slack = None
       limit = -0.1
       top_out = False
@@ -301,7 +313,7 @@ class get_hydrogen_bonds(object):
       atom_selection_2 = %s
       atom_selection_3 = %s
       angle_ideal = %f
-      sigma = 5
+      sigma = %f
     }
     '''
 
@@ -334,8 +346,12 @@ class get_hydrogen_bonds(object):
       if (use_defaul_parameters):
         angle_ideal = r.ideal_angel_YAD
       else:angle_ideal = r.angle_YAD
+      sigma_angle = r.sigma_for_angle[0]
+      sigma_bond = r.sigma_for_bond[0]
       bond_angle_str = str_1 % (a1_str, a2_str, d_ideal,
-                         a1_str, a2_str, a3_str, angle_ideal)
+                                sigma_bond,a1_str, a2_str,
+                                a3_str, angle_ideal,
+                                sigma_angle)
       sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)
