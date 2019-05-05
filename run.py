@@ -243,8 +243,8 @@ class get_hydrogen_bonds(object):
         a_D = r.a_D
         d_A_D  = r.d_A_D
         angle_AHD = r.angle_AHD
-        sigma_for_angle = r.sigma_for_angle,
-        sigma_for_bond = r.sigma_for_bond,
+        sigma_for_angle = r.sigma_for_angle
+        sigma_for_bond = r.sigma_for_bond
         ideal_angel_YAD = r.ideal_angel_YAD
         ideal_dist_A_D = r.ideal_dist_A_D
         #print r.sigma_for_angle, type(r.sigma_for_angle)
@@ -346,8 +346,8 @@ class get_hydrogen_bonds(object):
       if (use_defaul_parameters):
         angle_ideal = r.ideal_angel_YAD
       else:angle_ideal = r.angle_YAD
-      sigma_angle = r.sigma_for_angle[0]
-      sigma_bond = r.sigma_for_bond[0]
+      sigma_angle = r.sigma_for_angle
+      sigma_bond = r.sigma_for_bond
       bond_angle_str = str_1 % (a1_str, a2_str, d_ideal,
                                 sigma_bond,a1_str, a2_str,
                                 a3_str, angle_ideal,
