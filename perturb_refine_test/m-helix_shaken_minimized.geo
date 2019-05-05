@@ -298,27 +298,27 @@ bond pdb=" N   GLY A  15 "
 bond pdb=" C   GLY A  18 "
      pdb=" O   GLY A  18 "
   ideal  model  delta    sigma   weight residual
-  1.235  1.235 -0.000 1.18e-02 7.18e+03 1.68e-13
+  1.235  1.235 -0.000 1.18e-02 7.18e+03 6.52e-15
 bond pdb=" CA  GLY A  20 "
      pdb=" C   GLY A  20 "
   ideal  model  delta    sigma   weight residual
-  1.516  1.516  0.000 1.80e-02 3.09e+03 8.17e-15
+  1.516  1.516 -0.000 1.80e-02 3.09e+03 1.84e-15
 bond pdb=" C   GLY A  20 "
      pdb=" O   GLY A  20 "
   ideal  model  delta    sigma   weight residual
-  1.231  1.231  0.000 2.00e-02 2.50e+03 6.41e-15
-bond pdb=" N   GLY A   1 "
-     pdb=" CA  GLY A   1 "
-  ideal  model  delta    sigma   weight residual
-  1.451  1.451  0.000 1.60e-02 3.91e+03 3.29e-15
-bond pdb=" C   GLY A  17 "
-     pdb=" O   GLY A  17 "
-  ideal  model  delta    sigma   weight residual
-  1.235  1.235  0.000 1.35e-02 5.49e+03 5.31e-16
+  1.231  1.231 -0.000 2.00e-02 2.50e+03 5.15e-16
 bond pdb=" C   GLY A  19 "
      pdb=" O   GLY A  19 "
   ideal  model  delta    sigma   weight residual
-  1.235  1.235  0.000 1.35e-02 5.49e+03 8.94e-17
+  1.235  1.235  0.000 1.35e-02 5.49e+03 4.53e-16
+bond pdb=" N   GLY A   1 "
+     pdb=" CA  GLY A   1 "
+  ideal  model  delta    sigma   weight residual
+  1.451  1.451 -0.000 1.60e-02 3.91e+03 2.50e-16
+bond pdb=" C   GLY A  17 "
+     pdb=" O   GLY A  17 "
+  ideal  model  delta    sigma   weight residual
+  1.235  1.235  0.000 1.35e-02 5.49e+03 7.49e-18
 
 User supplied restraints: 16
 Sorted by residual:
@@ -859,21 +859,21 @@ angle pdb=" C   GLY A  18 "
       pdb=" CA  GLY A  19 "
     ideal   model   delta    sigma   weight residual
    121.41  121.43   -0.02 1.96e+00 2.60e-01 1.55e-04
-angle pdb=" CA  GLY A  20 "
-      pdb=" C   GLY A  20 "
-      pdb=" O   GLY A  20 "
-    ideal   model   delta    sigma   weight residual
-   120.80  120.80    0.00 2.10e+00 2.27e-01 4.66e-14
 angle pdb=" N   GLY A   1 "
       pdb=" CA  GLY A   1 "
       pdb=" C   GLY A   1 "
     ideal   model   delta    sigma   weight residual
-   113.30  113.30    0.00 2.90e+00 1.19e-01 4.58e-14
+   113.30  113.30    0.00 2.90e+00 1.19e-01 5.72e-14
 angle pdb=" N   GLY A  20 "
       pdb=" CA  GLY A  20 "
       pdb=" C   GLY A  20 "
     ideal   model   delta    sigma   weight residual
-   113.30  113.30   -0.00 2.90e+00 1.19e-01 3.61e-14
+   113.30  113.30    0.00 2.90e+00 1.19e-01 2.56e-14
+angle pdb=" CA  GLY A  20 "
+      pdb=" C   GLY A  20 "
+      pdb=" O   GLY A  20 "
+    ideal   model   delta    sigma   weight residual
+   120.80  120.80   -0.00 2.10e+00 2.27e-01 1.30e-15
 
 User supplied angle restraints: 16
 Sorted by residual:
@@ -1162,24 +1162,24 @@ plane pdb=" CA  GLY A   1 "    0.003 2.00e-02 2.50e+03   6.38e-03 4.08e-01
       pdb=" O   GLY A   1 "    0.004 2.00e-02 2.50e+03
       pdb=" N   GLY A   2 "    0.004 2.00e-02 2.50e+03
                                delta    sigma   weight rms_deltas residual
-plane pdb=" CA  GLY A  18 "    0.000 2.00e-02 2.50e+03   2.85e-09 8.13e-14
-      pdb=" C   GLY A  18 "   -0.000 2.00e-02 2.50e+03
-      pdb=" O   GLY A  18 "    0.000 2.00e-02 2.50e+03
-      pdb=" N   GLY A  19 "    0.000 2.00e-02 2.50e+03
+plane pdb=" CA  GLY A  17 "   -0.000 2.00e-02 2.50e+03   2.74e-09 7.50e-14
+      pdb=" C   GLY A  17 "    0.000 2.00e-02 2.50e+03
+      pdb=" O   GLY A  17 "   -0.000 2.00e-02 2.50e+03
+      pdb=" N   GLY A  18 "   -0.000 2.00e-02 2.50e+03
                                delta    sigma   weight rms_deltas residual
-plane pdb=" CA  GLY A  17 "    0.000 2.00e-02 2.50e+03   1.52e-09 2.30e-14
-      pdb=" C   GLY A  17 "   -0.000 2.00e-02 2.50e+03
-      pdb=" O   GLY A  17 "    0.000 2.00e-02 2.50e+03
-      pdb=" N   GLY A  18 "    0.000 2.00e-02 2.50e+03
+plane pdb=" CA  GLY A  18 "   -0.000 2.00e-02 2.50e+03   1.92e-09 3.70e-14
+      pdb=" C   GLY A  18 "    0.000 2.00e-02 2.50e+03
+      pdb=" O   GLY A  18 "   -0.000 2.00e-02 2.50e+03
+      pdb=" N   GLY A  19 "   -0.000 2.00e-02 2.50e+03
                                delta    sigma   weight rms_deltas residual
-plane pdb=" CA  GLY A  19 "    0.000 2.00e-02 2.50e+03   3.47e-10 1.20e-15
-      pdb=" C   GLY A  19 "   -0.000 2.00e-02 2.50e+03
-      pdb=" O   GLY A  19 "    0.000 2.00e-02 2.50e+03
-      pdb=" N   GLY A  20 "    0.000 2.00e-02 2.50e+03
+plane pdb=" CA  GLY A  19 "   -0.000 2.00e-02 2.50e+03   1.49e-10 2.21e-16
+      pdb=" C   GLY A  19 "    0.000 2.00e-02 2.50e+03
+      pdb=" O   GLY A  19 "   -0.000 2.00e-02 2.50e+03
+      pdb=" N   GLY A  20 "   -0.000 2.00e-02 2.50e+03
 
 Parallelity restraints: 0
 
-Nonbonded interactions: 839
+Nonbonded interactions: 841
 Sorted by model distance:
 nonbonded pdb=" N   GLY A   3 "
           pdb=" N   GLY A   4 "
@@ -1249,12 +1249,12 @@ nonbonded pdb=" CA  GLY A  14 "
           pdb=" N   GLY A  18 "
    model   vdw
    2.676 2.816
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" N   GLY A   2 "
-   model   vdw
-   2.676 2.560
 nonbonded pdb=" N   GLY A  19 "
           pdb=" N   GLY A  20 "
+   model   vdw
+   2.697 2.560
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" N   GLY A   2 "
    model   vdw
    2.697 2.560
 nonbonded pdb=" C   GLY A   1 "
@@ -1325,6 +1325,10 @@ nonbonded pdb=" C   GLY A  15 "
           pdb=" CA  GLY A  19 "
    model   vdw
    2.742 2.936
+nonbonded pdb=" O   GLY A  16 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   2.743 2.616
 nonbonded pdb=" O   GLY A  10 "
           pdb=" C   GLY A  14 "
    model   vdw
@@ -1425,10 +1429,6 @@ nonbonded pdb=" CA  GLY A   6 "
           pdb=" N   GLY A  10 "
    model   vdw
    2.784 2.816
-nonbonded pdb=" O   GLY A  16 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   2.791 2.616
 nonbonded pdb=" CA  GLY A  11 "
           pdb=" N   GLY A  15 "
    model   vdw
@@ -1517,6 +1517,10 @@ nonbonded pdb=" C   GLY A  16 "
           pdb=" CA  GLY A  20 "
    model   vdw
    2.855 2.936
+nonbonded pdb=" N   GLY A  20 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   2.874 2.496
 nonbonded pdb=" O   GLY A  13 "
           pdb=" C   GLY A  17 "
    model   vdw
@@ -1525,10 +1529,6 @@ nonbonded pdb=" CA  GLY A   1 "
           pdb=" N   GLY A   5 "
    model   vdw
    2.978 2.816
-nonbonded pdb=" N   GLY A  20 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   3.016 2.496
 nonbonded pdb=" O   GLY A   1 "
           pdb=" N   GLY A   6 "
    model   vdw
@@ -1729,10 +1729,10 @@ nonbonded pdb=" C   GLY A  12 "
           pdb=" C   GLY A  13 "
    model   vdw
    3.363 2.800
-nonbonded pdb=" C   GLY A  19 "
-          pdb=" C   GLY A  20 "
+nonbonded pdb=" O   GLY A  17 "
+          pdb=" O   GLY A  20 "
    model   vdw
-   3.369 2.800
+   3.369 3.040
 nonbonded pdb=" N   GLY A   2 "
           pdb=" N   GLY A   6 "
    model   vdw
@@ -1765,6 +1765,10 @@ nonbonded pdb=" C   GLY A   1 "
           pdb=" C   GLY A   5 "
    model   vdw
    3.389 3.500
+nonbonded pdb=" C   GLY A  19 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   3.390 2.800
 nonbonded pdb=" N   GLY A  12 "
           pdb=" N   GLY A  16 "
    model   vdw
@@ -1821,6 +1825,10 @@ nonbonded pdb=" C   GLY A  10 "
           pdb=" C   GLY A  14 "
    model   vdw
    3.439 3.500
+nonbonded pdb=" C   GLY A  19 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   3.440 3.270
 nonbonded pdb=" C   GLY A   7 "
           pdb=" N   GLY A  12 "
    model   vdw
@@ -2045,10 +2053,6 @@ nonbonded pdb=" C   GLY A  11 "
           pdb=" N   GLY A  13 "
    model   vdw
    3.499 3.350
-nonbonded pdb=" C   GLY A  19 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   3.501 3.270
 nonbonded pdb=" C   GLY A   6 "
           pdb=" N   GLY A   8 "
    model   vdw
@@ -2105,10 +2109,6 @@ nonbonded pdb=" C   GLY A  13 "
           pdb=" C   GLY A  17 "
    model   vdw
    3.548 3.500
-nonbonded pdb=" O   GLY A  19 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   3.551 3.040
 nonbonded pdb=" C   GLY A   3 "
           pdb=" C   GLY A   6 "
    model   vdw
@@ -2333,6 +2333,10 @@ nonbonded pdb=" N   GLY A   5 "
           pdb=" CA  GLY A   8 "
    model   vdw
    3.605 3.520
+nonbonded pdb=" C   GLY A  16 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   3.607 3.500
 nonbonded pdb=" C   GLY A  15 "
           pdb=" C   GLY A  18 "
    model   vdw
@@ -2353,18 +2357,18 @@ nonbonded pdb=" O   GLY A  18 "
           pdb=" C   GLY A  19 "
    model   vdw
    3.628 3.270
-nonbonded pdb=" O   GLY A  19 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   3.631 3.270
 nonbonded pdb=" N   GLY A  15 "
           pdb=" N   GLY A  17 "
    model   vdw
    3.643 3.200
-nonbonded pdb=" C   GLY A  16 "
-          pdb=" C   GLY A  20 "
+nonbonded pdb=" O   GLY A  19 "
+          pdb=" O   GLY A  20 "
    model   vdw
-   3.649 3.500
+   3.644 3.040
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" O   GLY A   1 "
+   model   vdw
+   3.650 2.496
 nonbonded pdb=" C   GLY A   1 "
           pdb=" N   GLY A   3 "
    model   vdw
@@ -2393,10 +2397,10 @@ nonbonded pdb=" N   GLY A  11 "
           pdb=" N   GLY A  13 "
    model   vdw
    3.666 3.200
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" O   GLY A   1 "
+nonbonded pdb=" O   GLY A  19 "
+          pdb=" C   GLY A  20 "
    model   vdw
-   3.667 2.496
+   3.668 3.270
 nonbonded pdb=" N   GLY A   8 "
           pdb=" N   GLY A  10 "
    model   vdw
@@ -2545,6 +2549,10 @@ nonbonded pdb=" C   GLY A  11 "
           pdb=" N   GLY A  14 "
    model   vdw
    3.726 3.350
+nonbonded pdb=" O   GLY A  17 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   3.730 3.270
 nonbonded pdb=" C   GLY A  16 "
           pdb=" N   GLY A  19 "
    model   vdw
@@ -2569,14 +2577,14 @@ nonbonded pdb=" O   GLY A  14 "
           pdb=" O   GLY A  18 "
    model   vdw
    3.753 3.040
-nonbonded pdb=" O   GLY A  17 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   3.756 3.270
 nonbonded pdb=" CA  GLY A  17 "
           pdb=" CA  GLY A  18 "
    model   vdw
    3.759 3.072
+nonbonded pdb=" O   GLY A  16 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   3.762 3.040
 nonbonded pdb=" CA  GLY A  16 "
           pdb=" CA  GLY A  17 "
    model   vdw
@@ -2773,10 +2781,6 @@ nonbonded pdb=" CA  GLY A  13 "
           pdb=" CA  GLY A  16 "
    model   vdw
    3.830 3.840
-nonbonded pdb=" O   GLY A  17 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   3.831 3.040
 nonbonded pdb=" N   GLY A   3 "
           pdb=" C   GLY A   6 "
    model   vdw
@@ -2845,10 +2849,6 @@ nonbonded pdb=" C   GLY A  15 "
           pdb=" N   GLY A  18 "
    model   vdw
    3.872 3.350
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" N   GLY A   5 "
-   model   vdw
-   3.880 3.200
 nonbonded pdb=" O   GLY A  13 "
           pdb=" O   GLY A  17 "
    model   vdw
@@ -2873,10 +2873,6 @@ nonbonded pdb=" N   GLY A  16 "
           pdb=" C   GLY A  19 "
    model   vdw
    3.940 3.350
-nonbonded pdb=" O   GLY A  16 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   3.945 3.040
 nonbonded pdb=" N   GLY A   4 "
           pdb=" CA  GLY A   5 "
    model   vdw
@@ -2933,18 +2929,22 @@ nonbonded pdb=" N   GLY A   6 "
           pdb=" CA  GLY A   7 "
    model   vdw
    3.960 3.520
+nonbonded pdb=" CA  GLY A  17 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   3.977 3.670
 nonbonded pdb=" O   GLY A  17 "
           pdb=" O   GLY A  18 "
    model   vdw
    3.981 3.040
+nonbonded pdb=" C   GLY A  17 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   3.993 3.270
 nonbonded pdb=" N   GLY A  17 "
           pdb=" CA  GLY A  18 "
    model   vdw
    4.005 3.520
-nonbonded pdb=" CA  GLY A  17 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   4.029 3.670
 nonbonded pdb=" N   GLY A  18 "
           pdb=" N   GLY A  20 "
    model   vdw
@@ -2956,7 +2956,11 @@ nonbonded pdb=" N   GLY A   2 "
 nonbonded pdb=" C   GLY A  17 "
           pdb=" C   GLY A  20 "
    model   vdw
-   4.084 3.500
+   4.048 3.500
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" N   GLY A   5 "
+   model   vdw
+   4.059 3.200
 nonbonded pdb=" C   GLY A  17 "
           pdb=" O   GLY A  18 "
    model   vdw
@@ -2965,10 +2969,6 @@ nonbonded pdb=" C   GLY A  16 "
           pdb=" O   GLY A  17 "
    model   vdw
    4.103 3.270
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" CA  GLY A   2 "
-   model   vdw
-   4.115 3.520
 nonbonded pdb=" N   GLY A  19 "
           pdb=" CA  GLY A  20 "
    model   vdw
@@ -2989,6 +2989,10 @@ nonbonded pdb=" CA  GLY A  17 "
           pdb=" CA  GLY A  20 "
    model   vdw
    4.130 3.840
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" CA  GLY A   2 "
+   model   vdw
+   4.133 3.520
 nonbonded pdb=" C   GLY A   5 "
           pdb=" CA  GLY A   8 "
    model   vdw
@@ -3061,10 +3065,6 @@ nonbonded pdb=" C   GLY A  15 "
           pdb=" CA  GLY A  18 "
    model   vdw
    4.175 3.670
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" N   GLY A   4 "
-   model   vdw
-   4.175 3.200
 nonbonded pdb=" CA  GLY A  13 "
           pdb=" N   GLY A  15 "
    model   vdw
@@ -3105,6 +3105,10 @@ nonbonded pdb=" CA  GLY A  12 "
           pdb=" N   GLY A  14 "
    model   vdw
    4.209 3.520
+nonbonded pdb=" N   GLY A  17 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   4.215 3.350
 nonbonded pdb=" N   GLY A   4 "
           pdb=" C   GLY A   6 "
    model   vdw
@@ -3133,10 +3137,6 @@ nonbonded pdb=" O   GLY A  13 "
           pdb=" N   GLY A  15 "
    model   vdw
    4.255 2.520
-nonbonded pdb=" N   GLY A  17 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   4.263 3.350
 nonbonded pdb=" O   GLY A  15 "
           pdb=" N   GLY A  17 "
    model   vdw
@@ -3353,6 +3353,10 @@ nonbonded pdb=" CA  GLY A  13 "
           pdb=" O   GLY A  16 "
    model   vdw
    4.349 3.440
+nonbonded pdb=" CA  GLY A  17 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.354 3.440
 nonbonded pdb=" CA  GLY A   6 "
           pdb=" O   GLY A   9 "
    model   vdw
@@ -3445,14 +3449,14 @@ nonbonded pdb=" CA  GLY A  18 "
           pdb=" N   GLY A  20 "
    model   vdw
    4.390 3.520
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" N   GLY A   3 "
-   model   vdw
-   4.391 3.200
 nonbonded pdb=" O   GLY A  17 "
           pdb=" CA  GLY A  20 "
    model   vdw
    4.394 3.440
+nonbonded pdb=" C   GLY A  16 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.400 3.270
 nonbonded pdb=" N   GLY A   2 "
           pdb=" C   GLY A   3 "
    model   vdw
@@ -3533,10 +3537,6 @@ nonbonded pdb=" O   GLY A   4 "
           pdb=" N   GLY A   7 "
    model   vdw
    4.441 2.520
-nonbonded pdb=" C   GLY A  17 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   4.442 3.270
 nonbonded pdb=" N   GLY A  13 "
           pdb=" CA  GLY A  17 "
    model   vdw
@@ -3641,6 +3641,10 @@ nonbonded pdb=" CA  GLY A   4 "
           pdb=" C   GLY A   5 "
    model   vdw
    4.454 3.670
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" N   GLY A   4 "
+   model   vdw
+   4.456 3.200
 nonbonded pdb=" N   GLY A  14 "
           pdb=" CA  GLY A  18 "
    model   vdw
@@ -3769,18 +3773,10 @@ nonbonded pdb=" N   GLY A  16 "
           pdb=" CA  GLY A  20 "
    model   vdw
    4.501 3.520
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" C   GLY A   4 "
-   model   vdw
-   4.504 3.350
 nonbonded pdb=" C   GLY A  17 "
           pdb=" CA  GLY A  19 "
    model   vdw
    4.505 3.670
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" CA  GLY A   4 "
-   model   vdw
-   4.506 3.520
 nonbonded pdb=" C   GLY A   9 "
           pdb=" O   GLY A  12 "
    model   vdw
@@ -3845,6 +3841,10 @@ nonbonded pdb=" C   GLY A  12 "
           pdb=" O   GLY A  15 "
    model   vdw
    4.518 3.270
+nonbonded pdb=" CA  GLY A  19 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.520 3.440
 nonbonded pdb=" N   GLY A  11 "
           pdb=" CA  GLY A  13 "
    model   vdw
@@ -3949,6 +3949,10 @@ nonbonded pdb=" N   GLY A  14 "
           pdb=" CA  GLY A  16 "
    model   vdw
    4.550 3.520
+nonbonded pdb=" N   GLY A  19 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.552 2.520
 nonbonded pdb=" C   GLY A  15 "
           pdb=" C   GLY A  17 "
    model   vdw
@@ -3977,6 +3981,10 @@ nonbonded pdb=" O   GLY A  14 "
           pdb=" CA  GLY A  19 "
    model   vdw
    4.560 3.440
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" N   GLY A   3 "
+   model   vdw
+   4.562 3.200
 nonbonded pdb=" CA  GLY A   5 "
           pdb=" C   GLY A   9 "
    model   vdw
@@ -4045,6 +4053,10 @@ nonbonded pdb=" C   GLY A  14 "
           pdb=" O   GLY A  18 "
    model   vdw
    4.594 3.270
+nonbonded pdb=" C   GLY A  18 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.598 3.270
 nonbonded pdb=" C   GLY A   1 "
           pdb=" O   GLY A   4 "
    model   vdw
@@ -4097,10 +4109,6 @@ nonbonded pdb=" CA  GLY A   8 "
           pdb=" N   GLY A  13 "
    model   vdw
    4.614 3.520
-nonbonded pdb=" CA  GLY A  19 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   4.622 3.670
 nonbonded pdb=" CA  GLY A  13 "
           pdb=" C   GLY A  17 "
    model   vdw
@@ -4113,6 +4121,10 @@ nonbonded pdb=" O   GLY A  15 "
           pdb=" O   GLY A  16 "
    model   vdw
    4.628 3.040
+nonbonded pdb=" CA  GLY A  16 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   4.628 3.670
 nonbonded pdb=" CA  GLY A  13 "
           pdb=" N   GLY A  18 "
    model   vdw
@@ -4121,6 +4133,10 @@ nonbonded pdb=" CA  GLY A   2 "
           pdb=" N   GLY A   7 "
    model   vdw
    4.630 3.520
+nonbonded pdb=" CA  GLY A  19 "
+          pdb=" C   GLY A  20 "
+   model   vdw
+   4.636 3.670
 nonbonded pdb=" C   GLY A  14 "
           pdb=" O   GLY A  17 "
    model   vdw
@@ -4185,10 +4201,6 @@ nonbonded pdb=" O   GLY A   3 "
           pdb=" CA  GLY A   6 "
    model   vdw
    4.651 2.752
-nonbonded pdb=" C   GLY A  16 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   4.651 3.270
 nonbonded pdb=" O   GLY A  14 "
           pdb=" CA  GLY A  17 "
    model   vdw
@@ -4257,10 +4269,6 @@ nonbonded pdb=" C   GLY A  16 "
           pdb=" O   GLY A  19 "
    model   vdw
    4.658 3.270
-nonbonded pdb=" CA  GLY A  16 "
-          pdb=" C   GLY A  20 "
-   model   vdw
-   4.658 3.670
 nonbonded pdb=" C   GLY A   2 "
           pdb=" C   GLY A   4 "
    model   vdw
@@ -4313,10 +4321,6 @@ nonbonded pdb=" CA  GLY A  14 "
           pdb=" O   GLY A  17 "
    model   vdw
    4.670 3.440
-nonbonded pdb=" CA  GLY A  19 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   4.672 3.440
 nonbonded pdb=" O   GLY A  15 "
           pdb=" CA  GLY A  18 "
    model   vdw
@@ -4341,10 +4345,6 @@ nonbonded pdb=" O   GLY A  17 "
           pdb=" C   GLY A  19 "
    model   vdw
    4.681 3.270
-nonbonded pdb=" N   GLY A   1 "
-          pdb=" CA  GLY A   5 "
-   model   vdw
-   4.684 3.520
 nonbonded pdb=" C   GLY A  11 "
           pdb=" CA  GLY A  13 "
    model   vdw
@@ -4384,7 +4384,7 @@ nonbonded pdb=" C   GLY A   5 "
 nonbonded pdb=" N   GLY A  19 "
           pdb=" C   GLY A  20 "
    model   vdw
-   4.703 3.350
+   4.702 3.350
 nonbonded pdb=" C   GLY A  12 "
           pdb=" CA  GLY A  14 "
    model   vdw
@@ -4421,6 +4421,10 @@ nonbonded pdb=" O   GLY A   6 "
           pdb=" N   GLY A  14 "
    model   vdw
    4.737 2.520
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" C   GLY A   4 "
+   model   vdw
+   4.737 3.350
 nonbonded pdb=" O   GLY A   5 "
           pdb=" N   GLY A  13 "
    model   vdw
@@ -4441,6 +4445,10 @@ nonbonded pdb=" O   GLY A   4 "
           pdb=" N   GLY A  12 "
    model   vdw
    4.748 2.520
+nonbonded pdb=" O   GLY A  18 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.748 3.040
 nonbonded pdb=" C   GLY A  12 "
           pdb=" CA  GLY A  17 "
    model   vdw
@@ -4449,10 +4457,6 @@ nonbonded pdb=" O   GLY A   7 "
           pdb=" N   GLY A  15 "
    model   vdw
    4.751 2.520
-nonbonded pdb=" CA  GLY A  17 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   4.758 3.440
 nonbonded pdb=" C   GLY A   7 "
           pdb=" CA  GLY A  12 "
    model   vdw
@@ -4501,10 +4505,18 @@ nonbonded pdb=" C   GLY A  14 "
           pdb=" CA  GLY A  19 "
    model   vdw
    4.776 3.670
+nonbonded pdb=" N   GLY A   1 "
+          pdb=" CA  GLY A   5 "
+   model   vdw
+   4.783 3.520
 nonbonded pdb=" O   GLY A   1 "
           pdb=" CA  GLY A   4 "
    model   vdw
    4.784 2.752
+nonbonded pdb=" N   GLY A  17 "
+          pdb=" O   GLY A  20 "
+   model   vdw
+   4.786 2.520
 nonbonded pdb=" C   GLY A  15 "
           pdb=" CA  GLY A  20 "
    model   vdw
@@ -4518,13 +4530,9 @@ nonbonded pdb=" CA  GLY A  15 "
    model   vdw
    4.791 3.670
 nonbonded pdb=" N   GLY A   1 "
-          pdb=" C   GLY A   2 "
+          pdb=" CA  GLY A   4 "
    model   vdw
-   4.818 3.350
-nonbonded pdb=" N   GLY A  19 "
-          pdb=" O   GLY A  20 "
-   model   vdw
-   4.830 2.520
+   4.795 3.520
 nonbonded pdb=" C   GLY A  18 "
           pdb=" CA  GLY A  20 "
    model   vdw

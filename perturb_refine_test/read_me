@@ -7,7 +7,7 @@ phenix.dynamics m-helix.pdb temperature=2000 number_of_steps=300
  phenix.geometry_minimization m-helix_shaken.pdb
  -with H-bond restraints
  # m-helix_default_para.eff is the h_bond restraints useing default parameters
- phenix.geometry_minimization m-helix_shaken.pdb m-helix_default_para.eff
+ phenix.geometry_minimization m-helix_shaken.pdb m-helix_default_para.eff > m-helix_shaken_H_bond_refine.pdb
 
  #m-helix_real_structure.eff is the h_bond restraints useing the real structure parameters
  phenix.geometry_minimization m-helix_shaken.pdb m-helix_real_structure.eff
