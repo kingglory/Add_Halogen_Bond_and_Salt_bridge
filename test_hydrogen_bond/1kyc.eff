@@ -1,214 +1,38 @@
 refinement{
   geometry_restraints.edits{
     bond{
-      atom_selection_1 = chain A and resseq    0  and name  O1 
-      atom_selection_2 = chain A and resseq    2  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    1  and name  O  
-      atom_selection_2 = chain A and resseq    3  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    0  and name  O1 
-      atom_selection_2 = chain A and resseq    4  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    0  and name  O4 
-      atom_selection_2 = chain A and resseq    4  and name  NE 
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    0  and name  O4 
-      atom_selection_2 = chain A and resseq    4  and name  NH2
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    1  and name  O  
-      atom_selection_2 = chain A and resseq    5  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    3  and name  O  
-      atom_selection_2 = chain A and resseq    6  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    3  and name  O  
-      atom_selection_2 = chain A and resseq    7  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    4  and name  O  
-      atom_selection_2 = chain A and resseq    8  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    5  and name  O  
-      atom_selection_2 = chain A and resseq    9  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    7  and name  O  
-      atom_selection_2 = chain A and resseq   10  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    7  and name  O  
-      atom_selection_2 = chain A and resseq   11  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq    8  and name  O  
-      atom_selection_2 = chain A and resseq   12  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
       atom_selection_1 = chain A and resseq    8  and name  O  
       atom_selection_2 = chain A and resseq   12  and name  NH1
       symmetry_operation = None
-      distance_ideal = 3.050000
+      distance_ideal = 2.900000
       sigma = 0.1
       slack = None
       limit = -0.1
       top_out = False
     }
+    angle {
+      atom_selection_1 = chain A and resseq    8  and name  O  
+      atom_selection_2 = chain A and resseq   12  and name  NH1
+      atom_selection_3 = chain A and resseq    8  and name  C  
+      angle_ideal = 147.150000
+      sigma = 5
+    }
     bond{
-      atom_selection_1 = chain A and resseq   10  and name  O  
-      atom_selection_2 = chain A and resseq   13  and name  N  
+      atom_selection_1 = chain A and resseq    9  and name  O  
+      atom_selection_2 = chain A and resseq   12  and name  N  
       symmetry_operation = None
-      distance_ideal = 3.050000
+      distance_ideal = 2.900000
       sigma = 0.1
       slack = None
       limit = -0.1
       top_out = False
     }
-    bond{
-      atom_selection_1 = chain A and resseq    9  and name  OE1
-      atom_selection_2 = chain A and resseq   13  and name  NH2
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq   10  and name  O  
-      atom_selection_2 = chain A and resseq   14  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq   11  and name  O  
-      atom_selection_2 = chain A and resseq   15  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq  101  and name  O3 
-      atom_selection_2 = chain A and resseq   15  and name  NE 
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq  101  and name  O3 
-      atom_selection_2 = chain A and resseq   15  and name  NH2
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    bond{
-      atom_selection_1 = chain A and resseq   11  and name  O  
-      atom_selection_2 = chain A and resseq   16  and name  N  
-      symmetry_operation = None
-      distance_ideal = 3.050000
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
+    angle {
+      atom_selection_1 = chain A and resseq    9  and name  O  
+      atom_selection_2 = chain A and resseq   12  and name  N  
+      atom_selection_3 = chain A and resseq    9  and name  C  
+      angle_ideal = 147.150000
+      sigma = 5
     }
     
   }
