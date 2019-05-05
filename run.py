@@ -339,7 +339,7 @@ class get_hydrogen_bonds(object):
       sub_fin_str = sub_fin_str + bond_angle_str
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)
-    file_name = pdb_file_name[:4]+".eff"
+    file_name = pdb_file_name
     with open(file_name,'w') as fileobject:
       fileobject.write(str_final)
 
