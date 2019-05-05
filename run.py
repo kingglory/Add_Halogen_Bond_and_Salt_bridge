@@ -169,9 +169,10 @@ class get_hydrogen_bonds(object):
     self.results = self.get_hydrogen_bonds_pairs()
 
   def get_hydrogen_bonds_pairs(self, ideal_angel_YAD = 147.15,
-        angle_AHD_cutoff = 120, eps_angle_AHD = 30, angle_HAY_min = 90,
-        angle_HAY_max = 180,eps_angle_HAY = 10,
-        ideal_dist_A_D = 2.90, eps_dist_A_D= 0.5 ):
+                      eps_ideal_angle_YAD = 0, angle_AHD_cutoff = 120,
+                      eps_angle_AHD = 30, angle_HAY_min = 90,
+                      angle_HAY_max = 180, eps_angle_HAY = 10,
+                      ideal_dist_A_D = 2.90, eps_dist_A_D= 0.5 ):
       # Hydrogen bond  model : Y-A...H-D ;
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
@@ -227,6 +228,7 @@ class get_hydrogen_bonds(object):
                       a_D=a_D,
                       d_A_D=d_A_D,
                       angle_AHD=angle_AHD,
+                      eps_ideal_angle_YAD=eps_ideal_angle_YAD,
                       ideal_angel_YAD=ideal_angel_YAD,
                       ideal_dist_A_D=ideal_dist_A_D)
         if (res in ress):continue
@@ -237,6 +239,7 @@ class get_hydrogen_bonds(object):
         a_D = r.a_D
         d_A_D  = r.d_A_D
         angle_AHD = r.angle_AHD
+        eps_ideal_angle_YAD = r.eps_ideal_angle_YAD,
         ideal_angel_YAD = r.ideal_angel_YAD
         ideal_dist_A_D = r.ideal_dist_A_D
         result = None
@@ -254,6 +257,7 @@ class get_hydrogen_bonds(object):
               angle_HAY=angle_HAY,
               angle_AHD=angle_AHD,
               angle_YAD=angle_YAD,
+              eps_ideal_angle_YAD=eps_ideal_angle_YAD,
               ideal_angel_YAD=ideal_angel_YAD,
               ideal_dist_A_D=ideal_dist_A_D)
           if (result in results):continue
