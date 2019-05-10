@@ -168,13 +168,16 @@ class get_hydrogen_bonds(object):
     self.model = model
     self.results = self.get_hydrogen_bonds_pairs()
 
-  def get_hydrogen_bonds_pairs(self, ideal_angel_YAD = 147.15,
+  def get_hydrogen_bonds_pairs(self, ideal_angle_ADCA = 111.03,
+                    ideal_angle_ADC=123.72,ideal_angle_YAD = 147.15,
                     angle_AHD_cutoff = 120,eps_angle_AHD = 30,
-                    angle_HAY_min = 90,angle_HAY_max = 180,
-                    eps_angle_HAY = 10,ideal_dist_A_D = 2.90,
-                    sigma_for_angle= 5.0, sigma_for_bond = 0.1,
-                                           eps_dist_A_D= 0.5 ):
-      # Hydrogen bond  model : Y-A...H-D ;
+                    angle_YAH_min = 90,angle_YAH_max = 180,
+                    eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
+                    sigma_for_angle = 5.0, sigma_for_bond = 0.1,
+                    ideal_angle_AHD = 180,eps_dist_A_D= 0.5,
+                    ideal_angle_YAH = 120):
+      # Hydrogen bond  model : Y-A...H-D-C/CA ;
+      # The define of angle and bond is all from left to right in atoms order
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                   sites_cart=self.model.get_sites_cart())
@@ -185,11 +188,15 @@ class get_hydrogen_bonds(object):
       atom_A = []
       atom_D = []
       atom_Y = []
+      atom_C = []
+      atom_CA = []
       ress    = []
+      resus   = []
       results = []
       Accepter_H_pair = ["O","N","S","F","CL"]
       for a in hierarchy.atoms():
         e = a.element.strip().upper()
+        n = a.name.strip().upper()
         if a.element_is_hydrogen():
           atom_H.append(a)
         if e == "O":
@@ -200,6 +207,11 @@ class get_hydrogen_bonds(object):
           atom_D.append(a)
         if e == "C":
           atom_Y.append(a)
+          if n == "C":
+            atom_C.append(a)
+          if n == "CA":
+            atom_CA.append(a)
+
 
       for a_A in atom_A:
         res = None
@@ -215,6 +227,7 @@ class get_hydrogen_bonds(object):
             if (is_bonded(a_H, a_A, bps_dict)): continue
             if (a_A.parent().parent().resseq ==
                 a_D.parent().parent().resseq): continue
+            d_A_H = a_A.distance(a_H)
             d_A_D = a_D.distance(a_A)
             if (ideal_dist_A_D - eps_dist_A_D  <
                   d_A_D  < ideal_dist_A_D + eps_dist_A_D ):
@@ -228,49 +241,80 @@ class get_hydrogen_bonds(object):
                       a_A=a_A,
                       a_D=a_D,
                       d_A_D=d_A_D,
-                      angle_AHD=angle_AHD,
-                      sigma_for_bond=sigma_for_bond,
-                      sigma_for_angle=sigma_for_angle,
-                      ideal_angel_YAD=ideal_angel_YAD,
-                      ideal_dist_A_D=ideal_dist_A_D)
-                   # print sigma_for_angle, type(sigma_for_angle)
+                      d_A_H=d_A_H,
+                      angle_AHD=angle_AHD
+                    )
         if (res in ress):continue
         if (res is not None): ress.append(res)
       for r in ress:
-        #print r.sigma_for_angle,type(r.sigma_for_angle)
         a_H = r.a_H
         a_A = r.a_A
         a_D = r.a_D
-        d_A_D  = r.d_A_D
+        d_A_D = r.d_A_D
+        d_A_H = r.d_A_H
         angle_AHD = r.angle_AHD
-        sigma_for_angle = r.sigma_for_angle
-        sigma_for_bond = r.sigma_for_bond
-        ideal_angel_YAD = r.ideal_angel_YAD
-        ideal_dist_A_D = r.ideal_dist_A_D
-        #print r.sigma_for_angle, type(r.sigma_for_angle)
-        result = None
+        resu = None
         for a_Y in atom_Y :
           if (not is_bonded(a_A, a_Y, bps_dict)): continue
           angle_YAD = a_A.angle(a_Y,a_D,deg=True)
-          angle_HAY = a_A.angle(a_H,a_Y,deg=True)
-          if (angle_HAY_min - eps_angle_HAY < angle_HAY <
-                            angle_HAY_max + eps_angle_HAY):
-            #print r.sigma_for_angle, type(r.sigma_for_angle)
-            result = group_args(
+          angle_YAH = a_A.angle(a_H,a_Y,deg=True)
+          if (angle_YAH_min - eps_angle_YAH < angle_YAH <
+                            angle_YAH_max + eps_angle_YAH):
+            resu = group_args(
               a_H=a_H,
               a_A=a_A,
               a_D=a_D,
               a_Y=a_Y,
               d_A_D=d_A_D,
-              angle_HAY=angle_HAY,
+              d_A_H=d_A_H,
+              angle_YAH=angle_YAH,
               angle_AHD=angle_AHD,
               angle_YAD=angle_YAD,
+            )
+          if (resu in resus):continue
+          if (resu is not None): resus.append(resu)
+      for r in resus:
+        a_H = r.a_H
+        a_A = r.a_A
+        a_D = r.a_D
+        a_Y = r.a_Y
+        d_A_D = r.d_A_D
+        d_A_H = r.d_A_H
+        angle_AHD = r.angle_AHD
+        angle_YAH = r.angle_YAH
+        angle_YAD = r.angle_YAD
+        result = None
+        for a_C in atom_C:
+          if (not is_bonded(a_C, a_D, bps_dict)): continue
+          for a_CA in atom_CA :
+            if (not is_bonded(a_CA, a_D, bps_dict)): continue
+            angle_ADC = a_D.angle(a_C,a_A,deg=True)
+            angle_ADCA = a_D.angle(a_CA,a_A,deg=True)
+            result = group_args(
+              a_H=a_H,
+              a_A=a_A,
+              a_D=a_D,
+              a_Y=a_Y,
+              a_C=a_C,
+              a_CA=a_CA,
+              d_A_D=d_A_D,
+              d_A_H=d_A_H,
+              angle_YAH=angle_YAH,
+              angle_AHD=angle_AHD,
+              angle_YAD=angle_YAD,
+              angle_ADC=angle_ADC,
+              angle_ADCA=angle_ADCA,
+              ideal_dist_A_D=ideal_dist_A_D,
               sigma_for_bond=sigma_for_bond,
               sigma_for_angle=sigma_for_angle,
-              ideal_angel_YAD=ideal_angel_YAD,
-              ideal_dist_A_D=ideal_dist_A_D)
-          if (result in results):continue
-          if (result is not None): results.append(result)
+              ideal_angle_YAH=ideal_angle_YAH,
+              ideal_angle_YAD=ideal_angle_YAD,
+              ideal_angle_ADC=ideal_angle_ADC,
+              ideal_angle_AHD=ideal_angle_AHD,
+              ideal_angle_ADCA=ideal_angle_ADCA
+            )
+            if (result in results): continue
+            if (result is not None): results.append(result)
 
       # just keep the more possiable situation for N atom
 
@@ -298,7 +342,7 @@ class get_hydrogen_bonds(object):
   def write_restrains_file(self, pdb_file_name,
                            for_phenix_refine=True,
                            use_defaul_parameters=True):
-    str_1 = '''bond{
+    str_bond = '''bond{
       atom_selection_1 = %s
       atom_selection_2 = %s
       symmetry_operation = None
@@ -308,7 +352,8 @@ class get_hydrogen_bonds(object):
       limit = -0.1
       top_out = False
     }
-    angle {
+    '''
+    str_angle='''angle {
       atom_selection_1 = %s
       atom_selection_2 = %s
       atom_selection_3 = %s
@@ -326,33 +371,63 @@ class get_hydrogen_bonds(object):
     i = 1
     sub_fin_str = 'a'
     for r in self.results:
-      a1_str = "chain %s and resseq %s and name %s" % (
+      a_A_str = "chain %s and resseq %s and name %s" % (
         r.a_A.chain().id,
         r.a_A.parent().parent().resid(),
         r.a_A.name)
-      a2_str = "chain %s and resseq %s and name %s" % (
+      a_D_str = "chain %s and resseq %s and name %s" % (
         r.a_D.chain().id,
         r.a_D.parent().parent().resid(),
         r.a_D.name)
-      a3_str = "chain %s and resseq %s and name %s" % (
+      a_Y_str = "chain %s and resseq %s and name %s" % (
         r.a_Y.chain().id,
         r.a_Y.parent().parent().resid(),
         r.a_Y.name)
+      a_H_str = "chain %s and resseq %s and name %s" % (
+        r.a_H.chain().id,
+        r.a_H.parent().parent().resid(),
+        r.a_H.name)
+      a_C_str = "chain %s and resseq %s and name %s" % (
+        r.a_C.chain().id,
+        r.a_C.parent().parent().resid(),
+        r.a_C.name)
+      a_CA_str = "chain %s and resseq %s and name %s" % (
+        r.a_CA.chain().id,
+        r.a_CA.parent().parent().resid(),
+        r.a_CA.name)
       if (use_defaul_parameters):
         d_ideal = r.ideal_dist_A_D
       else:
         d_ideal = r.d_A_D
       i = i + 1
       if (use_defaul_parameters):
-        angle_ideal = r.ideal_angel_YAD
-      else:angle_ideal = r.angle_YAD
+        angle_YAD_ideal = r.ideal_angle_YAD
+        angle_AHD_ideal = r.ideal_angle_AHD
+        angle_YAH_ideal = r.ideal_angle_YAH
+        angle_ADC_ideal = r.ideal_angle_ADC
+        angle_ADCA_ideal = r.ideal_angle_ADCA
+      else:
+        angle_YAD_ideal = r.angle_YAD
+        angle_AHD_ideal = r.angle_AHD
+        angle_YAH_ideal = r.angle_YAH
+        angle_ADC_ideal = r.angle_ADC
+        angle_ADCA_ideal = r.angle_ADCA
       sigma_angle = r.sigma_for_angle
       sigma_bond = r.sigma_for_bond
-      bond_angle_str = str_1 % (a1_str, a2_str, d_ideal,
-                                sigma_bond,a1_str, a2_str,
-                                a3_str, angle_ideal,
-                                sigma_angle)
-      sub_fin_str = sub_fin_str + bond_angle_str
+      bond_str = str_bond % (a_A_str, a_D_str, d_ideal,sigma_bond)
+      angle_YAD = str_angle % (a_Y_str, a_A_str, a_D_str,
+                               angle_YAD_ideal, sigma_angle)
+      angle_AHD = str_angle % (a_A_str, a_H_str, a_D_str,
+                               angle_AHD_ideal, sigma_angle)
+      angle_YAH = str_angle % (a_Y_str, a_A_str, a_H_str,
+                               angle_YAH_ideal, sigma_angle)
+      angle_ADC = str_angle % (a_A_str, a_D_str, a_C_str,
+                               angle_ADC_ideal, sigma_angle)
+      angle_ADCA = str_angle % (a_A_str, a_D_str, a_CA_str,
+                               angle_ADCA_ideal, sigma_angle)
+
+      sub_fin_str = ( sub_fin_str + bond_str + angle_YAD +
+        angle_AHD + angle_YAH + angle_ADC + angle_ADCA)
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)
     file_name = pdb_file_name

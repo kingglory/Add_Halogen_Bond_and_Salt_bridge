@@ -1,13 +1,15 @@
-1)generate made up helix
+1)Generate made up helix
 python run_generate_SS.py
-2)Perturb it using some dynamics:
-phenix.dynamics m-helix.pdb temperature=2000 number_of_steps=300
-3)Ran model optimization:
+2)Generate updated pad for m-helix.pdb
+phenix.ready_set m-helix.pdb
+3)Perturb it using some dynamics:
+phenix.dynamics m-helix.updated.pdb temperature=2000 number_of_steps=300
+4)Ran model optimization:
  -without H-bond restraints
- phenix.geometry_minimization m-helix_shaken.pdb
+ phenix.geometry_minimization m-helix.updated_shaken.pdb
  -with H-bond restraints
  # m-helix_default_para.eff is the h_bond restraints useing default parameters
- phenix.geometry_minimization m-helix_shaken.pdb m-helix_default_para.eff output_file_name_prefix="m-helix_default_para_H_bond"
+ phenix.geometry_minimization m-helix.updated_shaken.pdb m-helix.updated_default_para.eff output_file_name_prefix="m-helix.updated_default_para_H_bond"
 
  #m-helix_real_structure.eff is the h_bond restraints useing the real structure parameters
- phenix.geometry_minimization m-helix_shaken.pdb m-helix_real_structure.eff output_file_name_prefix="m-helix_real_structure_H_bond"
+ phenix.geometry_minimization m-helix.updated_shaken.pdb m-helix.updated_real_structure.eff output_file_name_prefix="m-helix.updated_real_structure_H_bond"
