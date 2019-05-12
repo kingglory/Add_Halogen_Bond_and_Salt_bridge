@@ -174,7 +174,7 @@ class get_hydrogen_bonds(object):
                     angle_YAH_min = 90,angle_YAH_max = 180,
                     eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
                     sigma_for_angle = 5.0, sigma_for_bond = 0.1,
-                    ideal_angle_AHD = 180,eps_dist_A_D= 0.5,
+                    ideal_angle_AHD = 153.30,eps_dist_A_D= 0.5,
                     ideal_angle_YAH = 120):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
       # The define of angle and bond is all from left to right in atoms order

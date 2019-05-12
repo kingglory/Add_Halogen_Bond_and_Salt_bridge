@@ -1,0 +1,132 @@
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain A and resname HIS and resseq   67
+    atom_selection_2 = name  V   and chain A and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.169351
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain A and resname HIS and resseq   71
+    atom_selection_2 = name  V   and chain A and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.148063
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain C and resname HIS and resseq   67
+    atom_selection_2 = name  V   and chain C and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.149895
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain C and resname HIS and resseq   71
+    atom_selection_2 = name  V   and chain C and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.157961
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain E and resname HIS and resseq   67
+    atom_selection_2 = name  V   and chain A and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.152649
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain E and resname HIS and resseq   71
+    atom_selection_2 = name  V   and chain A and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.089114
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain E and resname HIS and resseq   97
+    atom_selection_2 = name  V   and chain A and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.214680
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain G and resname HIS and resseq   67
+    atom_selection_2 = name  V   and chain C and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.177732
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain G and resname HIS and resseq   71
+    atom_selection_2 = name  V   and chain C and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.107992
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  NE2 and chain G and resname HIS and resseq   97
+    atom_selection_2 = name  V   and chain C and resname V and resseq  201
+    symmetry_operation = x,y,z
+    distance_ideal = 2.267412
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  V   and chain A and resname V and resseq  201
+    atom_selection_2 = name  O   and chain E and resname HOH and resseq  227
+    symmetry_operation = x,y,z
+    distance_ideal = 2.024349
+    sigma = 0.050
+  }
+}
+
+refinement.geometry_restraints.edits {
+  bond {
+    action = *add
+    atom_selection_1 = name  V   and chain C and resname V and resseq  201
+    atom_selection_2 = name  O   and altid A and chain G and resname HOH and resseq  261
+    symmetry_operation = x,y,z
+    distance_ideal = 2.011283
+    sigma = 0.050
+  }
+}
