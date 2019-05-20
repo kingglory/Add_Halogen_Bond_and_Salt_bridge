@@ -1,9 +1,12 @@
 from __future__ import division
 import scitbx
+import iotbx
+from iotbx import pdb
 from libtbx import group_args
 import math, time
 import scitbx.matrix
-
+from qrefine.super_cell import expand
+from qrefine.super_cell import create_super_sphere
 
 def is_bonded(atom_1, atom_2, bps_dict):
   i12 = [atom_1.i_seq, atom_2.i_seq]
@@ -164,8 +167,9 @@ class get_halogen_bonds(object):
 
 
 class get_hydrogen_bonds(object):
-  def __init__(self,model):
+  def __init__(self,model,pdb_file_name):
     self.model = model
+    self.pdb_file_name = pdb_file_name
     self.results = self.get_hydrogen_bonds_pairs()
 
   def get_hydrogen_bonds_pairs(self, ideal_angle_ADCA = 111.03,
@@ -178,12 +182,22 @@ class get_hydrogen_bonds(object):
                     ideal_angle_YAH = 120):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
       # The define of angle and bond is all from left to right in atoms order
+      pdb_inp = iotbx.pdb.input(file_name=self.pdb_file_name)
       geometry = self.model.get_restraints_manager()
       bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
                                   sites_cart=self.model.get_sites_cart())
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+      cs = pdb_inp.crystal_symmetry()
       hierarchy = self.model.get_hierarchy()
+      super_cell = expand(
+        pdb_hierarchy = hierarchy,
+        crystal_symmetry = cs,
+        create_restraints_manager = False
+      )
+
+      # r = create_super_sphere(
+      #   pdb_hierarchy = hierarchy,crystal_symmetry = cs,select_within_radius=15)
       atom_H = []
       atom_A = []
       atom_D = []
@@ -194,7 +208,7 @@ class get_hydrogen_bonds(object):
       resus   = []
       results = []
       Accepter_H_pair = ["O","N","S","F","CL"]
-      for a in hierarchy.atoms():
+      for a in super_cell.pdb_hierarchy.atoms():
         e = a.element.strip().upper()
         n = a.name.strip().upper()
         if a.element_is_hydrogen():

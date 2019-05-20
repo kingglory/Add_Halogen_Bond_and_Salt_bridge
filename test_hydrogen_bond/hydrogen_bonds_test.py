@@ -27,9 +27,9 @@ def get_model(pdb_file_name, cif_file_name):
   return model
 
 def exercise():
-  files = [["6dyl.updated.pdb", None]
+  files = [#["6dyl.updated.pdb", None]
            #["m-helix.updated.pdb",None],
-           #["1kych.pdb",None],
+           ["1f8t.updated.pdb",None],
            #["1kych1.pdb",None],
            #["1kych2.pdb",None],
            #["1kyc.pdb", None],
@@ -84,15 +84,16 @@ def exercise():
     print (pdb_file_name, "-"*50)
     model = get_model(pdb_file_name=pdb_file_name,
                       cif_file_name=cif_file_name)
-    get_h_bonds = get_hydrogen_bonds(model=model)
+    get_h_bonds = get_hydrogen_bonds(model=model,pdb_file_name=pdb_file_name)
     get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name[:-4]+'.eff',
                                      use_defaul_parameters=True)
-    '''
+
     results = get_h_bonds.get_hydrogen_bonds_pairs()
     
     for r in results:
-      print ("%s"% r.a_A.id_str(), r.a_D.id_str(), r.d_A_D, r.angle_YAD )
-    '''
+      print r
+      #print ("%s"% r.a_A.id_str(), r.a_D.id_str(), r.d_A_D, r.angle_YAD )
+
 if __name__ == '__main__':
     start = time.time()
     exercise()
