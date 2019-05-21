@@ -25,14 +25,12 @@ def get_model(pdb_file_name, cif_file_name):
     process_input = True,
     log = null_out())
   return model
-
+#
 def exercise():
   files = [#["6dyl.updated.pdb", None]
            #["m-helix.updated.pdb",None],
-           ["1f8t.updated.pdb",None],
-           #["1kych1.pdb",None],
-           #["1kych2.pdb",None],
-           #["1kyc.pdb", None],
+           #["1f8t.updated.pdb",None],
+           ["1kych.pdb", None],
            #["3q8jh1.pdb",None],
            #["3q8jh2.pdb",None],
            #["3q8jh.pdb", None],
