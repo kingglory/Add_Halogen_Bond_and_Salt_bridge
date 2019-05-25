@@ -28,15 +28,14 @@ def get_model(pdb_file_name, cif_file_name):
 #
 def exercise():
   files = [#["6dyl.updated.pdb", None]
-           #["m-helix.updated.pdb",None],
+           ["m-helix.updated.pdb",None],
            #["1f8t.updated.pdb",None],
-           ["1kych.pdb", None],
+           #["1kych.pdb", None],
            #["3q8jh1.pdb",None],
            #["3q8jh2.pdb",None],
            #["3q8jh.pdb", None],
            #["6iip.pdb",None],
            #["6iiph.pdb",None]
-
           ]
   Ideal_Hydrogen_Bonds_files = {
     "1kych1.pdb":[('pdb=" HA  ARG A   5 "',
@@ -84,7 +83,7 @@ def exercise():
                       cif_file_name=cif_file_name)
     get_h_bonds = get_hydrogen_bonds(model=model,pdb_file_name=pdb_file_name)
     get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name[:-4]+'.eff',
-                                     use_defaul_parameters=True)
+                                     use_defaul_parameters=False)
 
     results = get_h_bonds.get_hydrogen_bonds_pairs()
     

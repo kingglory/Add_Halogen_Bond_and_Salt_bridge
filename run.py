@@ -6,7 +6,7 @@ from libtbx import group_args
 import math, time
 import scitbx.matrix
 from qrefine.super_cell import expand
-from qrefine.super_cell import create_super_sphere
+from qrefine_new.super_cell import create_super_sphere
 
 def is_bonded(atom_1, atom_2, bps_dict):
   i12 = [atom_1.i_seq, atom_2.i_seq]
@@ -188,16 +188,18 @@ class get_hydrogen_bonds(object):
                                   sites_cart=self.model.get_sites_cart())
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-      cs = pdb_inp.crystal_symmetry()
+      cs = self.model.crystal_symmetry()
       hierarchy = self.model.get_hierarchy()
+      hierarchy.atoms().reset_i_seq()
+      hierarchy.write_pdb_file(file_name="pdb_file.pdb",crystal_symmetry=cs)
       super_cell = expand(
         pdb_hierarchy = hierarchy,
         crystal_symmetry = cs,
         create_restraints_manager = False
       )
 
-      # r = create_super_sphere(
-      #   pdb_hierarchy = hierarchy,crystal_symmetry = cs,select_within_radius=15)
+      r = create_super_sphere(
+        pdb_hierarchy = hierarchy,crystal_symmetry = cs,select_within_radius=15)
       atom_H = []
       atom_A = []
       atom_D = []
