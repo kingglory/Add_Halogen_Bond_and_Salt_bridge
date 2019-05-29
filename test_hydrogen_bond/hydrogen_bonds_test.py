@@ -28,7 +28,8 @@ def get_model(pdb_file_name, cif_file_name):
 #
 def exercise():
   files = [#["6dyl.updated.pdb", None]
-           ["m-helix.updated.pdb",None],
+           #["m-helix.updated.pdb",None],
+            ["4gif_part.pdb",None]
            #["1f8t.updated.pdb",None],
            #["1kych.pdb", None],
            #["3q8jh1.pdb",None],
@@ -79,17 +80,22 @@ def exercise():
                                 }
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
+    pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
+    '''
     model = get_model(pdb_file_name=pdb_file_name,
-                      cif_file_name=cif_file_name)
+                      cif_file_name=cif_file_name,
+                      )
+    '''
+    model = mmtbx.model.manager(model_input=pdb_inp, build_grm=True)
     get_h_bonds = get_hydrogen_bonds(model=model,pdb_file_name=pdb_file_name)
     get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name[:-4]+'.eff',
-                                     use_defaul_parameters=False)
+                                     use_defaul_parameters=True)
 
     results = get_h_bonds.get_hydrogen_bonds_pairs()
-    
+    '''
     for r in results:
       print r
-      #print ("%s"% r.a_A.id_str(), r.a_D.id_str(), r.d_A_D, r.angle_YAD )
+    '''
 
 if __name__ == '__main__':
     start = time.time()
