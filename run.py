@@ -3,7 +3,30 @@ import scitbx
 from libtbx import group_args
 import math, time
 import scitbx.matrix
+import iotbx.pdb
+import mmtbx.model
+import math
+from libtbx import group_args
 
+import boost.python
+ext = boost.python.import_ext("cctbx_geometry_restraints_ext")
+
+def get_pair_generator(crystal_symmetry, buffer_thickness, sites_cart):
+  sst = crystal_symmetry.special_position_settings().site_symmetry_table(
+    sites_cart = sites_cart)
+  from cctbx import crystal
+  conn_asu_mappings = crystal_symmetry.special_position_settings().\
+    asu_mappings(buffer_thickness = buffer_thickness)
+  conn_asu_mappings.process_sites_cart(
+    original_sites      = sites_cart,
+    site_symmetry_table = sst)
+  conn_pair_asu_table = crystal.pair_asu_table(asu_mappings = conn_asu_mappings)
+  conn_pair_asu_table.add_all_pairs(distance_cutoff = buffer_thickness)
+  pair_generator = crystal.neighbors_fast_pair_generator(
+    conn_asu_mappings, distance_cutoff = buffer_thickness)
+  return group_args(
+    pair_generator    = pair_generator,
+    conn_asu_mappings = conn_asu_mappings)
 
 def is_bonded(atom_1, atom_2, bps_dict):
   i12 = [atom_1.i_seq, atom_2.i_seq]
@@ -16,150 +39,6 @@ def in_plain(atom1,atom2,atom3,atom4,atom5,pps_dict):
   i12345.sort()
   if (not tuple(i12345) in pps_dict):return False
   else:return True
-
-"""
-1,when one halogen atoms make halogen bond when other atom,
-when the distance and angle limations all fited,
-the bond distance more shorter ,more possible;
-2, when chooseing the third atoms to make up the angle1,
-the angle1 is more near 180,more possible;
-3,when chooseing the fourth atoms to make up the angle2,
-the angle1 is more near 120,more possible;
-4,see Figure 4 in paper "Halogen bonding(X-bonding): 
- A biological perspective"
-5,theta_2 angle :Geometry of X-bonds in paper 
-"Halogen bond in biological molecules"
-"""
-class get_halogen_bonds(object):
-  def __init__(self,model):
-    self.model = model
-    self.results = self.get_halogen_bonds_pairs()
-
-  def get_halogen_bonds_pairs(self,eps = 0.15, emp_scale1 = 0.6,
-                         emp_scale2 = 0.75, angle_eps = 30):
-    geometry = self.model.get_restraints_manager()
-    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                sites_cart=self.model.get_sites_cart())
-    bps_dict = {}
-    [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-    hierarchy = self.model.get_hierarchy()
-    vdwr = self.model.get_vdw_radii()
-    #main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
-    halogens = ["CL", "BR", "I", "F"]
-    halogen_bond_pairs_atom = [ "O", "S", "N", "F", "CL", "BR", "I"]
-    acceptor_pair = ["C","N","P","S"]
-    atom1s = []
-    atom2s = []
-    atom3s = []
-    atom4s = []
-    results = []
-    for a in hierarchy.atoms():
-      if a.element.strip().upper() in halogens:
-        atom1s.append(a)
-      if a.element.strip().upper() in halogen_bond_pairs_atom:
-        if a.parent().resname == "HOH":continue
-        atom2s.append(a)
-      if a.element.strip().upper() in acceptor_pair:
-        atom4s.append(a)
-      if a.element.strip().upper() == "C":
-        atom3s.append(a)
-
-    for a1 in atom1s:
-      for a2 in atom2s:
-        if (not a1.is_in_same_conformer_as(a2)): continue
-        if (is_bonded(a1, a2, bps_dict)): continue
-        if (a1.parent().parent().resseq ==
-              a2.parent().parent().resseq): continue
-        d = a1.distance(a2)
-        n1 = a1.name.strip().upper()
-        n2 = a2.name.strip().upper()
-        if (n1 not in vdwr.keys()): continue
-        if (n2 not in vdwr.keys()): continue
-        sum_vdwr = vdwr[n1] + vdwr[n2]
-        sum_vdwr_min2 = sum_vdwr * emp_scale2
-        if (sum_vdwr_min2 - eps < d < sum_vdwr + eps):
-          diff_best = 1.e+9
-          result = None
-          for a3 in atom3s:
-            if (not is_bonded(a1, a3, bps_dict)): continue
-            angle_312 = (a1.angle(a2, a3, deg=True))
-            if (90 < angle_312):
-              for a4 in atom4s:
-                if (not is_bonded(a2, a4, bps_dict)): continue
-                # theta_2 angle in "Halogen bond in biological molecules"
-                angle_214 = (a2.angle(a1, a4, deg=True))
-                if (120 - angle_eps < angle_214 < 120 + angle_eps):
-                  diff = abs(120 - angle_214)
-                  if (diff < diff_best):
-                    diff_best = diff
-                    result = group_args(
-                      atom_1=a1,
-                      atom_2=a2,
-                      atom_3=a3,
-                      d=d,
-                      angle_312=angle_312)
-              if (result is not None):results.append(result)
-    return results
-
-  def write_restrains_file(self, pdb_file_name,
-                           for_phenix_refine=True,
-                           use_defaul_parameters=True):
-    str_1 = '''bond{
-      atom_selection_1 = %s
-      atom_selection_2 = %s
-      symmetry_operation = None
-      distance_ideal = %f
-      sigma = 0.1
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    angle {
-      atom_selection_1 = %s
-      atom_selection_2 = %s
-      atom_selection_3 = %s
-      angle_ideal = %f
-      sigma = 5
-    }
-    '''
-    str_2 = '''refinement{
-  geometry_restraints.edits{
-    %s
-  }
-}
-    '''
-
-    i = 1
-    sub_fin_str = 'a'
-    for r in self.results:
-      a1_str = "chain %s and resseq %s and name %s" % (
-        r.atom_1.chain().id,
-        r.atom_1.parent().parent().resid(),
-        r.atom_1.name)
-      a2_str = "chain %s and resseq %s and name %s" % (
-        r.atom_2.chain().id,
-        r.atom_2.parent().parent().resid(),
-        r.atom_2.name)
-      a3_str = "chain %s and resseq %s and name %s" % (
-        r.atom_3.chain().id,
-        r.atom_3.parent().parent().resid(),
-        r.atom_3.name)
-      if (use_defaul_parameters):
-        d_ideal = 3.1
-        angle_ideal = 165.72
-      else:
-        d_ideal = r.d
-        angle_ideal = r.angle_312
-      i = i + 1
-      bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,
-                                a1_str,a2_str,a3_str,angle_ideal)
-      sub_fin_str = sub_fin_str + bond_angle_str
-    s_f_str = sub_fin_str[1:]
-    str_final = str_2 % (s_f_str)
-    file_name = pdb_file_name[:4] + ".eff"
-    with open(file_name,'w') as fileobject:
-      fileobject.write(str_final)
-
 
 
 
@@ -433,6 +312,152 @@ class get_hydrogen_bonds(object):
     file_name = pdb_file_name
     with open(file_name,'w') as fileobject:
       fileobject.write(str_final)
+
+
+
+"""
+1,when one halogen atoms make halogen bond when other atom,
+when the distance and angle limations all fited,
+the bond distance more shorter ,more possible;
+2, when chooseing the third atoms to make up the angle1,
+the angle1 is more near 180,more possible;
+3,when chooseing the fourth atoms to make up the angle2,
+the angle1 is more near 120,more possible;
+4,see Figure 4 in paper "Halogen bonding(X-bonding): 
+ A biological perspective"
+5,theta_2 angle :Geometry of X-bonds in paper 
+"Halogen bond in biological molecules"
+"""
+class get_halogen_bonds(object):
+  def __init__(self,model):
+    self.model = model
+    self.results = self.get_halogen_bonds_pairs()
+
+  def get_halogen_bonds_pairs(self,eps = 0.15, emp_scale1 = 0.6,
+                         emp_scale2 = 0.75, angle_eps = 30):
+    geometry = self.model.get_restraints_manager()
+    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+                                sites_cart=self.model.get_sites_cart())
+    bps_dict = {}
+    [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+    hierarchy = self.model.get_hierarchy()
+    vdwr = self.model.get_vdw_radii()
+    #main_chain_atoms_plus = ["CA", "N", "O", "C", "CB"]
+    halogens = ["CL", "BR", "I", "F"]
+    halogen_bond_pairs_atom = [ "O", "S", "N", "F", "CL", "BR", "I"]
+    acceptor_pair = ["C","N","P","S"]
+    atom1s = []
+    atom2s = []
+    atom3s = []
+    atom4s = []
+    results = []
+    for a in hierarchy.atoms():
+      if a.element.strip().upper() in halogens:
+        atom1s.append(a)
+      if a.element.strip().upper() in halogen_bond_pairs_atom:
+        if a.parent().resname == "HOH":continue
+        atom2s.append(a)
+      if a.element.strip().upper() in acceptor_pair:
+        atom4s.append(a)
+      if a.element.strip().upper() == "C":
+        atom3s.append(a)
+
+    for a1 in atom1s:
+      for a2 in atom2s:
+        if (not a1.is_in_same_conformer_as(a2)): continue
+        if (is_bonded(a1, a2, bps_dict)): continue
+        if (a1.parent().parent().resseq ==
+              a2.parent().parent().resseq): continue
+        d = a1.distance(a2)
+        n1 = a1.name.strip().upper()
+        n2 = a2.name.strip().upper()
+        if (n1 not in vdwr.keys()): continue
+        if (n2 not in vdwr.keys()): continue
+        sum_vdwr = vdwr[n1] + vdwr[n2]
+        sum_vdwr_min2 = sum_vdwr * emp_scale2
+        if (sum_vdwr_min2 - eps < d < sum_vdwr + eps):
+          diff_best = 1.e+9
+          result = None
+          for a3 in atom3s:
+            if (not is_bonded(a1, a3, bps_dict)): continue
+            angle_312 = (a1.angle(a2, a3, deg=True))
+            if (90 < angle_312):
+              for a4 in atom4s:
+                if (not is_bonded(a2, a4, bps_dict)): continue
+                # theta_2 angle in "Halogen bond in biological molecules"
+                angle_214 = (a2.angle(a1, a4, deg=True))
+                if (120 - angle_eps < angle_214 < 120 + angle_eps):
+                  diff = abs(120 - angle_214)
+                  if (diff < diff_best):
+                    diff_best = diff
+                    result = group_args(
+                      atom_1=a1,
+                      atom_2=a2,
+                      atom_3=a3,
+                      d=d,
+                      angle_312=angle_312)
+              if (result is not None):results.append(result)
+    return results
+
+  def write_restrains_file(self, pdb_file_name,
+                           for_phenix_refine=True,
+                           use_defaul_parameters=True):
+    str_1 = '''bond{
+      atom_selection_1 = %s
+      atom_selection_2 = %s
+      symmetry_operation = None
+      distance_ideal = %f
+      sigma = 0.1
+      slack = None
+      limit = -0.1
+      top_out = False
+    }
+    angle {
+      atom_selection_1 = %s
+      atom_selection_2 = %s
+      atom_selection_3 = %s
+      angle_ideal = %f
+      sigma = 5
+    }
+    '''
+    str_2 = '''refinement{
+  geometry_restraints.edits{
+    %s
+  }
+}
+    '''
+
+    i = 1
+    sub_fin_str = 'a'
+    for r in self.results:
+      a1_str = "chain %s and resseq %s and name %s" % (
+        r.atom_1.chain().id,
+        r.atom_1.parent().parent().resid(),
+        r.atom_1.name)
+      a2_str = "chain %s and resseq %s and name %s" % (
+        r.atom_2.chain().id,
+        r.atom_2.parent().parent().resid(),
+        r.atom_2.name)
+      a3_str = "chain %s and resseq %s and name %s" % (
+        r.atom_3.chain().id,
+        r.atom_3.parent().parent().resid(),
+        r.atom_3.name)
+      if (use_defaul_parameters):
+        d_ideal = 3.1
+        angle_ideal = 165.72
+      else:
+        d_ideal = r.d
+        angle_ideal = r.angle_312
+      i = i + 1
+      bond_angle_str = str_1 % (a1_str,a2_str,d_ideal,
+                                a1_str,a2_str,a3_str,angle_ideal)
+      sub_fin_str = sub_fin_str + bond_angle_str
+    s_f_str = sub_fin_str[1:]
+    str_final = str_2 % (s_f_str)
+    file_name = pdb_file_name[:4] + ".eff"
+    with open(file_name,'w') as fileobject:
+      fileobject.write(str_final)
+
 
 
 class get_salt_bridge(object):
