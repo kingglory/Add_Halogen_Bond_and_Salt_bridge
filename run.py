@@ -85,6 +85,7 @@ class get_hydrogen_bonds(object):
       ress    = []
       resus   = []
       results = []
+      pair_atom = []
       hd = ["H", "D"]
       acceptors = ["O", "N", "S", "F", "CL"]
       r = {}
@@ -110,6 +111,9 @@ class get_hydrogen_bonds(object):
         assert dist <= max_cutoff
         is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
                        altloc_i == altloc_j and resseq_i != resseq_j
+        if (not is_candidate): continue
+        #print atoms[i].id_str(),atoms[j].id_str()
+        pair_atom.append((atoms[i],atoms[j]))
         if (protein_only):
           for it in [i, j]:
             resname = atoms[it].parent().resname
@@ -145,6 +149,17 @@ class get_hydrogen_bonds(object):
               new_xyz.append(t3[0])
             rg_.atoms().set_xyz(new_xyz)
             rg_.link_to_previous = True
+      for p in pair_atom:
+        if p[0].element.upper().strip() in hd:
+          a_h_p = p[0]
+          a_a_p = p[1]
+        else:
+          a_h_p = p[1]
+          a_a_p = p[0]
+        print a_h_p.id_str(),a_a_p.id_str()
+
+
+
 
 
 

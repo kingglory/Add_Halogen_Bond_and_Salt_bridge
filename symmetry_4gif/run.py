@@ -56,7 +56,7 @@ def run(model,
       for it in [i,j]:
         resname = atoms[it].parent().resname
         is_candidate &= get_class(name=resname) == "common_amino_acid"
-    if(not is_candidate): continue
+
     # pre-screen candidates end
     rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
     rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
@@ -70,4 +70,4 @@ if(__name__ == "__main__"):
   pdb_inp = iotbx.pdb.input(file_name="4gif_part.pdb")
   model = mmtbx.model.manager(model_input = pdb_inp, build_grm = True)
   run(model = model)
-
+
