@@ -88,10 +88,10 @@ def exercise():
     '''
     model = mmtbx.model.manager(model_input=pdb_inp, build_grm=True)
     get_h_bonds = get_hydrogen_bonds(model=model,pdb_file_name=pdb_file_name)
-    '''
+
     get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name[:-4]+'.eff',
                                      use_defaul_parameters=True)
-    '''
+
     results = get_h_bonds.get_hydrogen_bonds_pairs()
     '''
     for r in results:

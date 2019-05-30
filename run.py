@@ -139,7 +139,6 @@ class get_hydrogen_bonds(object):
           ops = r[i]
           for op in ops:
             rg_ = rg.detached_copy()
-
             xyz = rg_.atoms().extract_xyz()
             new_xyz = flex.vec3_double()
             for xyz_ in xyz:
@@ -196,7 +195,6 @@ class get_hydrogen_bonds(object):
             if a.element_is_hydrogen():
               if a in atom_H: continue
               atom_H.append(a)
-
             if e == "O":
               if a.parent().resname == "HOH": continue
               if a in atom_A: continue
@@ -372,7 +370,7 @@ class get_hydrogen_bonds(object):
         if (result is not None): results.append(result)
 
       for r in results:
-        print r.a_A.id_str(),r.a_A.xyz,r.a_D.id_str(),r.a_D.xyz,r.a_H.id_str(),a_H.xyz,r.a_C.id_str(),a_C.xyz
+        print r.a_A.id_str(),r.a_A.xyz,r.a_D.id_str(),r.a_D.xyz,r.a_H.id_str(),a_H.xyz,r.a_C.id_str(),a_C.xyz,r.a_Y.id_str()
       return results
 
       
@@ -408,21 +406,60 @@ class get_hydrogen_bonds(object):
     i = 1
     sub_fin_str = 'a'
     for r in self.results:
+
+
+      if r.a_Y.parent() is None:
+        a_Y_resid = None
+      else :
+        a_Y_resid = r.a_Y.parent().parent().resid()
+      if r.a_A.parent() is None:
+        a_A_resid = None
+      else :
+        a_A_resid = r.a_A.parent().parent().resid()
+      if r.a_D.parent() is None:
+        a_D_resid = None
+      else:
+        a_D_resid = r.a_D.parent().parent().resid()
+      if r.a_H.parent() is None:
+        a_H_resid = None
+      else :
+        a_H_resid = r.a_H.parent().parent().resid()
+
+
+      if r.a_H.chain() is None:
+        a_H_chain_id = None
+      else:
+        a_H_chain_id = r.a_D.chain().id
+      if r.a_D.chain() is None:
+        a_D_chain_id = None
+      else:
+        a_D_chain_id = r.a_D.chain().id
+      if r.a_Y.chain() is None:
+        a_Y_chain_id = None
+      else:
+        a_Y_chain_id = r.a_Y.chain().id
+      if r.a_A.chain() is None:
+        a_A_chain_id = None
+      else:
+        a_A_chain_id = r.a_A.chain().id
+
+
+
       a_A_str = "chain %s and resseq %s and name %s" % (
-        r.a_A.chain().id,
-        r.a_A.parent().parent().resid(),
+        a_A_chain_id,
+        a_A_resid,
         r.a_A.name)
       a_D_str = "chain %s and resseq %s and name %s" % (
-        r.a_D.chain().id,
-        r.a_D.parent().parent().resid(),
+        a_D_chain_id,
+        a_D_resid,
         r.a_D.name)
       a_Y_str = "chain %s and resseq %s and name %s" % (
-        r.a_Y.chain().id,
-        r.a_Y.parent().parent().resid(),
+        a_Y_chain_id,
+        a_Y_resid,
         r.a_Y.name)
       a_H_str = "chain %s and resseq %s and name %s" % (
-        r.a_H.chain().id,
-        r.a_H.parent().parent().resid(),
+        a_H_chain_id,
+        a_H_resid,
         r.a_H.name)
       if (use_defaul_parameters):
         d_ideal = r.ideal_dist_A_D
@@ -455,13 +492,30 @@ class get_hydrogen_bonds(object):
 
 
       if r.a_c1 is None:
+        if r.a_C.chain() is None:
+          a_C_chain_id = None
+        else:
+          a_C_chain_id = r.a_C.chain().id
+
+        if r.a_CA.chain() is None:
+          a_CA_chain_id = None
+        else:
+          a_CA_chain_id = r.a_CA.chain().id
+        if r.a_C.parent() is None:
+          r.a_C.resid = None
+        else:
+          r.a_C.resid = r.a_C.parent().parent().resid()
+        if r.a_CA.parent() is None:
+          r.a_CA.resid = None
+        else:
+          r.a_CA.resid = r.a_CA.parent().parent().resid()
         a_C_str = "chain %s and resseq %s and name %s" % (
-          r.a_C.chain().id,
-          r.a_C.parent().parent().resid(),
+          a_C_chain_id,
+          r.a_C.resid,
           r.a_C.name)
         a_CA_str = "chain %s and resseq %s and name %s" % (
-          r.a_CA.chain().id,
-          r.a_CA.parent().parent().resid(),
+          a_CA_chain_id,
+          r.a_CA.resid,
           r.a_CA.name)
         angle_ADC = str_angle % (a_A_str, a_D_str, a_C_str,
                                  angle_ADC_ideal, sigma_angle)
