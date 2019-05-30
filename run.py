@@ -5,8 +5,19 @@ import math, time
 import scitbx.matrix
 import iotbx.pdb
 import mmtbx.model
-import math
+from scitbx.array_family import flex
+from cctbx import uctbx
+from cctbx import crystal
+from libtbx.utils import null_out
+import mmtbx
+import mmtbx.monomer_library.server
+import mmtbx.monomer_library.pdb_interpretation
+import mmtbx.restraints
+from mmtbx import monomer_library
 from libtbx import group_args
+import math
+import iotbx.pdb.utils
+
 
 import boost.python
 ext = boost.python.import_ext("cctbx_geometry_restraints_ext")
@@ -54,7 +65,8 @@ class get_hydrogen_bonds(object):
                     eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
                     sigma_for_angle = 5.0, sigma_for_bond = 0.1,
                     ideal_angle_AHD = 153.30,eps_dist_A_D= 0.5,
-                    ideal_angle_YAH = 120):
+                    ideal_angle_YAH = 120, max_cutoff   = 4.0,
+                    min_cutoff   = 1.5,protein_only = True):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
       # The define of angle and bond is all from left to right in atoms order
       geometry = self.model.get_restraints_manager()
@@ -63,6 +75,7 @@ class get_hydrogen_bonds(object):
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
       hierarchy = self.model.get_hierarchy()
+
       atom_H = []
       atom_A = []
       atom_D = []
@@ -72,7 +85,86 @@ class get_hydrogen_bonds(object):
       ress    = []
       resus   = []
       results = []
-      Accepter_H_pair = ["O","N","S","F","CL"]
+      hd = ["H", "D"]
+      acceptors = ["O", "N", "S", "F", "CL"]
+      r = {}
+      atoms = list(self.model.get_hierarchy().atoms())
+      sites_cart = self.model.get_sites_cart()
+      crystal_symmetry = self.model.crystal_symmetry()
+      pg = get_pair_generator(
+        crystal_symmetry=crystal_symmetry,
+        buffer_thickness=max_cutoff,
+        sites_cart=sites_cart)
+      get_class = iotbx.pdb.common_residue_names_get_class
+      for p in pg.pair_generator:
+        i, j = p.i_seq, p.j_seq
+        ei, ej = atoms[i].element, atoms[j].element
+        altloc_i = atoms[i].parent().altloc
+        altloc_j = atoms[j].parent().altloc
+        resseq_i = atoms[i].parent().parent().resseq
+        resseq_j = atoms[j].parent().parent().resseq
+        # pre-screen candidates begin
+        one_is_hd = ei in hd or ej in hd
+        other_is_acceptor = ei in acceptors or ej in acceptors
+        dist = math.sqrt(p.dist_sq)
+        assert dist <= max_cutoff
+        is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
+                       altloc_i == altloc_j and resseq_i != resseq_j
+        if (protein_only):
+          for it in [i, j]:
+            resname = atoms[it].parent().resname
+            is_candidate &= get_class(name=resname) == "common_amino_acid"
+        if (not is_candidate): continue
+        rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
+        rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
+        rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+        if str(rt_mx_ji) == "x,y,z": continue
+        r.setdefault(p.j_seq, []).append(rt_mx_ji)
+      for k, v in zip(r.keys(), r.values()):  # remove duplicates!
+        r[k] = list(set(v))
+
+      fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+      om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+      selection = r.keys()
+      for rg in hierarchy.residue_groups():
+        keep = False
+        for i in rg.atoms().extract_i_seq():
+          if (i in selection):
+            keep = True
+            break
+        if (keep):
+          ops = r[i]
+          for op in ops:
+            rg_ = rg.detached_copy()
+            xyz = rg_.atoms().extract_xyz()
+            new_xyz = flex.vec3_double()
+            for xyz_ in xyz:
+              t1 = fm * flex.vec3_double([xyz_])
+              t2 = op * t1[0]
+              t3 = om * flex.vec3_double([t2])
+              new_xyz.append(t3[0])
+            rg_.atoms().set_xyz(new_xyz)
+            rg_.link_to_previous = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       for a in hierarchy.atoms():
         e = a.element.strip().upper()
         n = a.name.strip().upper()
@@ -81,7 +173,7 @@ class get_hydrogen_bonds(object):
         if e == "O":
           if a.parent().resname == "HOH": continue
           atom_A.append(a)
-        if e in Accepter_H_pair:
+        if e in acceptors:
           if a.parent().resname == "HOH": continue
           atom_D.append(a)
         if e == "C":
