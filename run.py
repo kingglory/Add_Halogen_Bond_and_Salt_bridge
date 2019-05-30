@@ -73,7 +73,7 @@ class get_hydrogen_bonds(object):
                     ideal_angle_AHD = 153.30,eps_dist_A_D= 0.8,
                     ideal_angle_YAH = 120, protein_only = True,
                     max_cutoff=4.0,min_cutoff=1.5,
-                    angle_AHD_cutoff=120,select_within_radius=13):
+                    angle_AHD_cutoff=120,select_within_radius=6):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
       # The define of angle and bond is all from left to right in atoms order
       #pdb_inp = iotbx.pdb.input(file_name=self.pdb_file_name)
@@ -187,6 +187,7 @@ class get_hydrogen_bonds(object):
           if n == "CA":
             if a in atom_CA: continue
             atom_CA.append(a)
+
       for res in c.residue_groups():
         for atom_group in res.atom_groups():
           for a in atom_group.atoms():
