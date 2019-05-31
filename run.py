@@ -58,8 +58,8 @@ class get_hydrogen_bonds(object):
   def __init__(self,model):
     self.model = model
     self.results = self.get_hydrogen_bonds_pairs()
-  def get_hydrogen_bonds_pairs(self, ideal_angle_ADCA = 111.03,
-                    ideal_angle_ADC=123.72,ideal_angle_YAD = 147.15,
+  def get_hydrogen_bonds_pairs(self,
+                    ideal_angle_YAD = 147.15,
                     angle_AHD_cutoff = 120,eps_angle_AHD = 30,
                     angle_YAH_min = 90,angle_YAH_max = 180,
                     eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
@@ -122,53 +122,71 @@ class get_hydrogen_bonds(object):
         ### get the pairs atoms
         ai = atoms[i]
         aj = atoms[j]
-        residues = []
+
         residue_i = atoms[i].parent().parent()
         residue_j = atoms[j].parent().parent()
+        residues = []
         # get the whole residues, symmetry operator or not
         if(str(rt_mx_ji) == "x,y,z"):
-          if residue_i in residues :
-            if residue_i is None: continue
-            residues.append(residue_i)
+
+          if residue_i not in residues :
+            if residue_i is not None:
+              residues.append(residue_i)
+
           if residue_j not in residues:
-            if residue_i is None: continue
-            residues.append(residue_j)
+            if residue_i is not None:
+              residues.append(residue_j)
+
         else:
+
           for a in residue_i.atoms():
             t1 = fm * flex.vec3_double([a.xyz])
             t2 = rt_mx_ji * t1[0]
             t3 = om * flex.vec3_double([t2])
             a.set_xyz(t3[0])
-          if residue_i in residues :
-            if residue_i is None: continue
-            residues.append(residue_i)
+          if residue_i not in residues :
+            if residue_i is not None:
+              residues.append(residue_i)
+
+          for a in residue_j.atoms():
+            t1 = fm * flex.vec3_double([a.xyz])
+            t2 = rt_mx_ji * t1[0]
+            t3 = om * flex.vec3_double([t2])
+            a.set_xyz(t3[0])
           if residue_j not in residues:
-            if residue_i is None: continue
-            residues.append(residue_j)
+            if residue_j is not None:
+              residues.append(residue_j)
+
+        # here make sure which is H atoms ,which is accepter
+        if ai.element == "H":
+          if aj.element in acceptors:
+            a_H = ai
+            a_A = aj
+        if aj.element == "H":
+          if ai.element in acceptors:
+            a_H = aj
+            a_A = ai
 
         # get atoms from residues ,then calculate
         for re in residues:
-          if ai.element.strip().upper() == "H":
-            if aj.element.strip().upper() in acceptors:
-              a_H = ai
-              a_A = aj
-          if aj.element.strip().upper() == "H":
-            if ai.element.strip().upper() in acceptors:
-              a_H = aj
-              a_A = ai
+          # here prepare other atoms
           for a in re.atoms():
             e = a.element.strip().upper()
             n = a.name.strip().upper()
             if e == "N":
               if a.parent().resname == "HOH": continue
+              if a in atom_D: continue
               atom_D.append(a)
             if e == "C":
+              if a in atom_Y: continue
               atom_Y.append(a)
               if n == "C":
+                if a in atom_C: continue
                 atom_C.append(a)
               if n == "CA":
+                if a in atom_CA: continue
                 atom_CA.append(a)
-        # so far the special atoms has been prepared!
+          # so far the special atoms has been prepared!
         res = None
         diff_best = 1.e+9
         for a_D in atom_D:
@@ -180,14 +198,12 @@ class get_hydrogen_bonds(object):
           if (not is_bonded(a_H, a_D, bps_dict)): continue
           if (is_bonded(a_H, a_A, bps_dict)): continue
           if (a_A.parent().parent().resseq ==
-              a_D.parent().parent().resseq): continue
-
+            a_D.parent().parent().resseq): continue
           d_A_H = a_A.distance(a_H)
           d_A_D = a_D.distance(a_A)
           if (ideal_dist_A_D - eps_dist_A_D <
-              d_A_D < ideal_dist_A_D + eps_dist_A_D):
+            d_A_D < ideal_dist_A_D + eps_dist_A_D):
             angle_AHD = a_H.angle(a_A, a_D, deg=True)
-
             if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
               diff = abs(ideal_dist_A_D - d_A_D)
               if (diff < diff_best):
@@ -203,19 +219,19 @@ class get_hydrogen_bonds(object):
         if (res in ress): continue
         if (res is not None): ress.append(res)
 
-        resu = None
-        for r in ress:
-          a_H = r.a_H
-          a_A = r.a_A
-          a_D = r.a_D
 
-          for a_Y in atom_Y:
-            if (not is_bonded(a_A, a_Y, bps_dict)): continue
-            angle_YAD = a_A.angle(a_Y, a_D, deg=True)
-            angle_YAH = a_A.angle(a_H, a_Y, deg=True)
-            if (angle_YAH_min - eps_angle_YAH < angle_YAH <
-                angle_YAH_max + eps_angle_YAH):
-              resu = group_args(
+      resu = None
+      for r in ress:
+        a_H = r.a_H
+        a_A = r.a_A
+        a_D = r.a_D
+        for a_Y in atom_Y:
+          if (not is_bonded(a_A, a_Y, bps_dict)): continue
+          angle_YAD = a_A.angle(a_Y, a_D, deg=True)
+          angle_YAH = a_A.angle(a_H, a_Y, deg=True)
+          if (angle_YAH_min - eps_angle_YAH < angle_YAH <
+            angle_YAH_max + eps_angle_YAH):
+            resu = group_args(
                 a_H=a_H,
                 a_A=a_A,
                 a_D=a_D,
@@ -228,44 +244,38 @@ class get_hydrogen_bonds(object):
               )
         if (resu in resus): continue
         if (resu is not None): resus.append(resu)
-        result = None
-        for r in resus:
-          a_A = r.a_A
-          a_D = r.a_D
-          for a_C in atom_C:
-            if (not is_bonded(a_C, a_D, bps_dict)): continue
-            for a_CA in atom_CA:
-              if (not is_bonded(a_CA, a_D, bps_dict)): continue
-              angle_ADC = a_D.angle(a_C, a_A, deg=True)
-              angle_ADCA = a_D.angle(a_CA, a_A, deg=True)
-              result = group_args(
+      result = None
+      for r in resus:
+        a_A = r.a_A
+        a_D = r.a_D
+        for a_C in atom_C:
+          if (not is_bonded(a_C, a_D, bps_dict)): continue
+          angle_ADC = a_D.angle(a_C, a_A, deg=True)
+          result = group_args(
                 a_H=a_H,
                 a_A=a_A,
                 a_D=a_D,
                 a_Y=r.a_Y,
                 a_C=a_C,
-                a_CA=a_CA,
                 d_A_D=r.d_A_D,
                 d_A_H=r.d_A_H,
                 angle_YAH=r.angle_YAH,
                 angle_AHD=r.angle_AHD,
                 angle_YAD=r.angle_YAD,
                 angle_ADC=angle_ADC,
-                angle_ADCA=angle_ADCA,
                 ideal_dist_A_D=ideal_dist_A_D,
                 sigma_for_bond=sigma_for_bond,
                 sigma_for_angle=sigma_for_angle,
                 ideal_angle_YAH=ideal_angle_YAH,
                 ideal_angle_YAD=ideal_angle_YAD,
-                ideal_angle_ADC=ideal_angle_ADC,
+                ideal_angle_ADC=angle_ADC,
                 ideal_angle_AHD=ideal_angle_AHD,
-                ideal_angle_ADCA=ideal_angle_ADCA
               )
         if (result in results): continue
         if (result is not None): results.append(result)
 
 
-      '''
+
       # just keep the more possiable situation for N atom
       for i, ri in enumerate(results):
         for j, rj in enumerate(results):
@@ -286,7 +296,7 @@ class get_hydrogen_bonds(object):
                 if ri in results:
                   results.remove(ri)
 
-      '''
+
       return results
 
 
@@ -355,10 +365,6 @@ class get_hydrogen_bonds(object):
         r.a_C.chain().id,
         r.a_C.parent().parent().resid(),
         r.a_C.name)
-      a_CA_str = "chain %s and resseq %s and name %s" % (
-        r.a_CA.chain().id,
-        r.a_CA.parent().parent().resid(),
-        r.a_CA.name)
       if (use_defaul_parameters):
         d_ideal = r.ideal_dist_A_D
       else:
@@ -369,13 +375,11 @@ class get_hydrogen_bonds(object):
         angle_AHD_ideal = r.ideal_angle_AHD
         angle_YAH_ideal = r.ideal_angle_YAH
         angle_ADC_ideal = r.ideal_angle_ADC
-        angle_ADCA_ideal = r.ideal_angle_ADCA
       else:
         angle_YAD_ideal = r.angle_YAD
         angle_AHD_ideal = r.angle_AHD
         angle_YAH_ideal = r.angle_YAH
         angle_ADC_ideal = r.angle_ADC
-        angle_ADCA_ideal = r.angle_ADCA
       sigma_angle = r.sigma_for_angle
       sigma_bond = r.sigma_for_bond
       bond_str = str_bond % (a_A_str, a_D_str, d_ideal,sigma_bond)
@@ -387,11 +391,10 @@ class get_hydrogen_bonds(object):
                                angle_YAH_ideal, sigma_angle)
       angle_ADC = str_angle % (a_A_str, a_D_str, a_C_str,
                                angle_ADC_ideal, sigma_angle)
-      angle_ADCA = str_angle % (a_A_str, a_D_str, a_CA_str,
-                               angle_ADCA_ideal, sigma_angle)
+
 
       sub_fin_str = ( sub_fin_str + bond_str + angle_YAD +
-        angle_AHD + angle_YAH + angle_ADC + angle_ADCA)
+        angle_AHD + angle_YAH + angle_ADC )
     s_f_str = sub_fin_str[1:]
     str_final = str_2 % (s_f_str)
     file_name = pdb_file_name
