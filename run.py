@@ -1,5 +1,6 @@
 from __future__ import division
 import scitbx
+import operator
 from libtbx import group_args
 import math, time
 import scitbx.matrix
@@ -134,13 +135,14 @@ class get_hydrogen_bonds(object):
           new_xyz = flex.vec3_double()
           for xyz_ in xyz:
             t1 = fm * flex.vec3_double([xyz_])
-            t2 = rt_mx_ji  * t1[0]
+            t2 = rt_mx_ji * t1[0]
             t3 = om * flex.vec3_double([t2])
             new_xyz.append(t3[0])
           rg_.atoms().set_xyz(new_xyz)
           rg_.link_to_previous = True
-          if atoms[i] in rg_.atoms():
-            print"6"*90
+          print operator.eq(rg,rg_)
+          if atoms[i] not in rg_.atoms():
+            print"pairs atoms not in symmetry copy, "*3
 
 
           c_list = []
