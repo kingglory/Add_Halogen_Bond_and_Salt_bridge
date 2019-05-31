@@ -3,6 +3,7 @@ import iotbx.pdb
 import mmtbx.model
 import math
 from libtbx import group_args
+from scitbx.array_family import flex
 
 import boost.python
 ext = boost.python.import_ext("cctbx_geometry_restraints_ext")
@@ -27,12 +28,14 @@ def get_pair_generator(crystal_symmetry, buffer_thickness, sites_cart):
 def run(model,
         max_cutoff   = 4.0, 
         min_cutoff   = 1.5,
-        hd           = ["H"],
+        hd           = ["H", "D"],
         acceptors    = ["O","N","S","F","CL"],
         protein_only = True):
   atoms = list(model.get_hierarchy().atoms())
   sites_cart = model.get_sites_cart()
   crystal_symmetry = model.crystal_symmetry()
+  fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+  om = crystal_symmetry.unit_cell().orthogonalization_matrix()
   pg = get_pair_generator(
     crystal_symmetry = crystal_symmetry, 
     buffer_thickness = max_cutoff, 
@@ -56,7 +59,7 @@ def run(model,
       for it in [i,j]:
         resname = atoms[it].parent().resname
         is_candidate &= get_class(name=resname) == "common_amino_acid"
-
+    if(not is_candidate): continue
     # pre-screen candidates end
     rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
     rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
@@ -64,10 +67,27 @@ def run(model,
     print "%5.3f"%math.sqrt(p.dist_sq), \
       "<", atoms[i].parent().resname, resseq_i, ei, atoms[i].name, ">", \
       "<", atoms[j].parent().resname, resseq_j, ej, atoms[j].name, ">", \
-      rt_mx_ji, i, j
+      rt_mx_ji, i, j,
+    ### re-confirm distance between pairs
+    ai = atoms[i]
+    aj = atoms[j]
+    if(str(rt_mx_ji) == "x,y,z"):
+      d = math.sqrt(
+        (ai.xyz[0]-aj.xyz[0])**2 + 
+        (ai.xyz[1]-aj.xyz[1])**2 + 
+        (ai.xyz[2]-aj.xyz[2])**2)
+    else:
+      t1 = fm*flex.vec3_double([aj.xyz])
+      t2 = rt_mx_ji*t1[0]
+      t3 = om*flex.vec3_double([t2])
+      d = math.sqrt(
+        (ai.xyz[0]-t3[0][0])**2 + 
+        (ai.xyz[1]-t3[0][1])**2 + 
+        (ai.xyz[2]-t3[0][2])**2)
+    print "dist=%5.3f"%d
+    ###
 
 if(__name__ == "__main__"):
   pdb_inp = iotbx.pdb.input(file_name="4gif_part.pdb")
   model = mmtbx.model.manager(model_input = pdb_inp, build_grm = True)
   run(model = model)
-
