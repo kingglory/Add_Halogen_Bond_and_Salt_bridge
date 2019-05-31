@@ -58,6 +58,52 @@ class get_hydrogen_bonds(object):
   def __init__(self,model):
     self.model = model
     self.results = self.get_hydrogen_bonds_pairs()
+
+  def symmetry_operator_residue(self,residue_i,max_cutoff=4.0,
+                        protein_only = True,
+                        min_cutoff   = 1.5,
+                       hd     = ["H", "D"],
+                       acceptors = ["O","N","S","F","CL"]):
+    residues = []
+    atoms = list(self.model.get_hierarchy().atoms())
+    sites_cart = self.model.get_sites_cart()
+    crystal_symmetry = self.model.crystal_symmetry()
+    fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+    om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+    pg = get_pair_generator(
+      crystal_symmetry=crystal_symmetry,
+      buffer_thickness=max_cutoff,
+      sites_cart=sites_cart)
+    get_class = iotbx.pdb.common_residue_names_get_class
+    for p in pg.pair_generator:
+      i, j = p.i_seq, p.j_seq
+      ei, ej = atoms[i].element, atoms[j].element
+      altloc_i = atoms[i].parent().altloc
+      altloc_j = atoms[j].parent().altloc
+      resseq_i = atoms[i].parent().parent().resseq
+      resseq_j = atoms[j].parent().parent().resseq
+      # pre-screen candidates begin
+      one_is_hd = ei in hd or ej in hd
+      other_is_acceptor = ei in acceptors or ej in acceptors
+      dist = math.sqrt(p.dist_sq)
+      assert dist <= max_cutoff
+      is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
+                     altloc_i == altloc_j and resseq_i != resseq_j
+      if (protein_only):
+        for it in [i, j]:
+          resname = atoms[it].parent().resname
+          is_candidate &= get_class(name=resname) == "common_amino_acid"
+      if (not is_candidate): continue
+      # pre-screen candidates end
+      rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
+      rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
+      rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+    for a in residue_i.atoms():
+      t1 = fm * flex.vec3_double([a.xyz])
+      t2 = rt_mx_ji * t1[0]
+      t3 = om * flex.vec3_double([t2])
+      a.set_xyz(t3[0])
+    return residue_i
   def get_hydrogen_bonds_pairs(self,
                     ideal_angle_YAD = 147.15,
                     angle_AHD_cutoff = 120,eps_angle_AHD = 30,
@@ -94,6 +140,7 @@ class get_hydrogen_bonds(object):
            sites_cart=sites_cart)
       get_class = iotbx.pdb.common_residue_names_get_class
       for p in pg.pair_generator:
+        residues = []
         i, j = p.i_seq, p.j_seq
         ei, ej = atoms[i].element, atoms[j].element
         altloc_i = atoms[i].parent().altloc
@@ -116,43 +163,33 @@ class get_hydrogen_bonds(object):
         rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
         rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-
         ### get the pairs atoms
         ai = atoms[i]
         aj = atoms[j]
         residue_i = atoms[i].parent().parent()
         residue_j = atoms[j].parent().parent()
-        residues = []
+
+
         # get the whole residues, symmetry operator or not
         if(str(rt_mx_ji) == "x,y,z"):
+          if residue_i in residues: continue
+          if residue_i is  None: continue
+          if residue_j in residues: continue
+          if residue_i is None: continue
+          residues.append(residue_i)
+          residues.append(residue_j)
 
-          if residue_i not in residues :
-            if residue_i is not None:
-              residues.append(residue_i)
 
-          if residue_j not in residues:
-            if residue_i is not None:
-              residues.append(residue_j)
+
 
         else:
+          residues.append(residue_i)
+          residues.append(residue_j)
+          residuei = self.symmetry_operator_residue(residue_i)
+          residues.append(residuei)
+          residuej = self.symmetry_operator_residue(residue_j)
+          residues.append(residuej)
 
-          for a in residue_i.atoms():
-            t1 = fm * flex.vec3_double([a.xyz])
-            t2 = rt_mx_ji * t1[0]
-            t3 = om * flex.vec3_double([t2])
-            a.set_xyz(t3[0])
-          if residue_i not in residues :
-            if residue_i is not None:
-              residues.append(residue_i)
-
-          for a in residue_j.atoms():
-            t1 = fm * flex.vec3_double([a.xyz])
-            t2 = rt_mx_ji * t1[0]
-            t3 = om * flex.vec3_double([t2])
-            a.set_xyz(t3[0])
-          if residue_j not in residues:
-            if residue_j is not None:
-              residues.append(residue_j)
 
         # here make sure which is H atoms ,which is accepter
         if ai.element == "H":
