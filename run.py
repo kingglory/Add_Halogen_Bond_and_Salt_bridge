@@ -216,7 +216,7 @@ class get_hydrogen_bonds(object):
       resus   = []
       results = []
       pair_atom = []
-      hd = ["H", "D"]
+      hd = ["H"]
       acceptors = ["O", "N", "S", "F", "CL"]
       r = {}
       atoms = list(self.model.get_hierarchy().atoms())
@@ -374,6 +374,126 @@ class get_hydrogen_bonds(object):
               if ri in results:
                 results.remove(ri)
 
+
+      atoms = list(self.model.get_hierarchy().atoms())
+      sites_cart = self.model.get_sites_cart()
+      crystal_symmetry = self.model.crystal_symmetry()
+      fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+      om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+      pg = get_pair_generator(
+           crystal_symmetry=crystal_symmetry,
+           buffer_thickness=max_cutoff,
+           sites_cart=sites_cart)
+      get_class = iotbx.pdb.common_residue_names_get_class
+      for p in pg.pair_generator:
+        i, j = p.i_seq, p.j_seq
+        ei, ej = atoms[i].element, atoms[j].element
+        altloc_i = atoms[i].parent().altloc
+        altloc_j = atoms[j].parent().altloc
+        resseq_i = atoms[i].parent().parent().resseq
+        resseq_j = atoms[j].parent().parent().resseq
+        # pre-screen candidates begin
+        one_is_hd = ei in hd or ej in hd
+        other_is_acceptor = ei in acceptors or ej in acceptors
+        dist = math.sqrt(p.dist_sq)
+        assert dist <= max_cutoff
+        is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
+                        altloc_i == altloc_j and resseq_i != resseq_j
+        if (protein_only):
+          for it in [i, j]:
+            resname = atoms[it].parent().resname
+            is_candidate &= get_class(name=resname) == "common_amino_acid"
+        if (not is_candidate): continue
+        # pre-screen candidates end
+        rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
+        rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
+        rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+
+        ### re-confirm distance between pairs
+        ai = atoms[i]
+        aj = atoms[j]
+        for a in hierarchy.atoms():
+          if ei == "H":
+            if a.element == "N":
+              if (not is_bonded(a, ai, bps_dict)): continue
+              if (is_bonded(a, aj, bps_dict)): continue
+              if (str(rt_mx_ji) == "x,y,z"):
+                d = math.sqrt(
+                (ai.xyz[0] - aj.xyz[0]) ** 2 +
+                (ai.xyz[1] - aj.xyz[1]) ** 2 +
+                (ai.xyz[2] - aj.xyz[2]) ** 2)
+                angle = ai.angle(a,aj,deg=True)
+                if angle < 90 : continue
+                if not (1.5 < d < 3): continue
+                print "dist=%5.3f" % d, angle
+                print "%5.3f" % math.sqrt(p.dist_sq), \
+                  "<", atoms[i].parent().resname, resseq_i, \
+                  ei, atoms[i].name, ">", \
+                  "<", atoms[j].parent().resname, \
+                  resseq_j, ej, atoms[j].name, ">", \
+                  rt_mx_ji, i, j,rt_mx_j
+              else:
+                t1 = fm * flex.vec3_double([aj.xyz])
+                t2 = rt_mx_ji * t1[0]
+                t3 = om * flex.vec3_double([t2])
+                d = math.sqrt(
+                (ai.xyz[0] - t3[0][0]) ** 2 +
+                (ai.xyz[1] - t3[0][1]) ** 2 +
+                (ai.xyz[2] - t3[0][2]) ** 2)
+                angle = ai.angle(a, aj, deg=True)
+                if angle < 90: continue
+                if not (1.5 < d < 3): continue
+                print "dist=%5.3f" % d ,angle
+                print "%5.3f" % math.sqrt(p.dist_sq), \
+                "<", atoms[i].parent().resname, resseq_i, \
+                ei, atoms[i].name, ">", \
+               "<", atoms[j].parent().resname, \
+                resseq_j, ej, atoms[j].name, ">", \
+                rt_mx_ji, i, j,rt_mx_j
+          if ei == "O":
+            if a.element == "C":
+              if (not is_bonded(a, ai, bps_dict)): continue
+              if (is_bonded(a, aj, bps_dict)): continue
+              if (str(rt_mx_ji) == "x,y,z"):
+                d = math.sqrt(
+                (ai.xyz[0] - aj.xyz[0]) ** 2 +
+                (ai.xyz[1] - aj.xyz[1]) ** 2 +
+                (ai.xyz[2] - aj.xyz[2]) ** 2)
+                angle = ai.angle(a, aj, deg=True)
+                if angle < 90: continue
+                if not (1.5 < d < 2.5): continue
+                print "dist=%5.3f" % d, angle
+                print "%5.3f" % math.sqrt(p.dist_sq), \
+                  "<", atoms[i].parent().resname, resseq_i, \
+                  ei, atoms[i].name, ">", \
+                  "<", atoms[j].parent().resname, \
+                  resseq_j, ej, atoms[j].name, ">", \
+                  rt_mx_ji, i, j,rt_mx_j
+              else:
+                t1 = fm * flex.vec3_double([aj.xyz])
+                t2 = rt_mx_ji * t1[0]
+                t3 = om * flex.vec3_double([t2])
+                d = math.sqrt(
+                (ai.xyz[0] - t3[0][0]) ** 2 +
+                (ai.xyz[1] - t3[0][1]) ** 2 +
+                (ai.xyz[2] - t3[0][2]) ** 2)
+                angle = ai.angle(a, aj, deg=True)
+                if angle < 90: continue
+                if not (1.5 < d < 3): continue
+                print "dist=%5.3f" % d,angle
+                print "%5.3f" % math.sqrt(p.dist_sq), \
+                "<", atoms[i].parent().resname, resseq_i, \
+                ei, atoms[i].name, ">", \
+               "<", atoms[j].parent().resname, \
+                resseq_j, ej, atoms[j].name, ">", \
+                rt_mx_ji, i, j,rt_mx_j
+
+
+
+
+
+
+      '''
       # select hydrogen bonds after symmetry operator
       # select hydrogen bonds after symmetry operator
       # select hydrogen bonds after symmetry operator
@@ -383,6 +503,7 @@ class get_hydrogen_bonds(object):
         buffer_thickness=max_cutoff,
         sites_cart=sites_cart)
       get_class = iotbx.pdb.common_residue_names_get_class
+
       for p in pg.pair_generator:
         i, j = p.i_seq, p.j_seq
         ei, ej = atoms[i].element, atoms[j].element
@@ -408,8 +529,9 @@ class get_hydrogen_bonds(object):
         rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
         rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-        #print rt_mx_ji,rt_mx_j ,rt_mx_i
         if str(rt_mx_ji) == "x,y,z": continue
+        r.setdefault(p.j_seq, []).append(rt_mx_ji)
+
         fm = crystal_symmetry.unit_cell().fractionalization_matrix()
         om = crystal_symmetry.unit_cell().orthogonalization_matrix()
         for rg in hierarchy.residue_groups():
@@ -432,7 +554,6 @@ class get_hydrogen_bonds(object):
           # try first way
           c_list = []
           n_list = []
-
           if atoms[i].element.upper().strip() in hd:
             a_h_p = atoms[i]
             if atoms[j].element.upper().strip() in acceptors:
@@ -472,7 +593,7 @@ class get_hydrogen_bonds(object):
                   pass
 
 
-
+          
           # try second way
           # try second way
           # try second way
@@ -502,36 +623,61 @@ class get_hydrogen_bonds(object):
                           d_A_D < ideal_dist_A_D + eps_dist_A_D):
                       angle_AHD = a_h.angle(a_o, a_n, deg=True)
                       print angle_AHD ,d_A_D,d_A_H
+          
+      
+      # try third way
+      # try third way
+      # try third way
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      r = {}
+      for p in pg.pair_generator:
+        i, j = p.i_seq, p.j_seq
+        ei, ej = atoms[i].element, atoms[j].element
+        altloc_i = atoms[i].parent().altloc
+        altloc_j = atoms[j].parent().altloc
+        resseq_i = atoms[i].parent().parent().resseq
+        resseq_j = atoms[j].parent().parent().resseq
+        # pre-screen candidates begin
+        one_is_hd = ei in hd or ej in hd
+        other_is_acceptor = ei in acceptors or ej in acceptors
+        dist = math.sqrt(p.dist_sq)
+        assert dist <= max_cutoff
+        is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
+                       altloc_i == altloc_j and resseq_i != resseq_j
+        rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
+        rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
+        rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+        if str(rt_mx_ji) == "x,y,z": continue
+        r.setdefault(p.j_seq, []).append(rt_mx_ji)
+      for k, v in zip(r.keys(), r.values()):  # remove duplicates!
+        r[k] = list(set(v))
+      c = iotbx.pdb.hierarchy.chain(id="SS")  # all symmetry related full residues
+      fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+      om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+      selection = r.keys()
+      for rg in hierarchy.residue_groups():
+        keep = False
+        for i in rg.atoms().extract_i_seq():
+          if (i in selection):
+            keep = True
+            break
+        if (keep):
+          ops = r[i]
+          for op in ops:
+            rg_ = rg.detached_copy()
+            xyz = rg_.atoms().extract_xyz()
+            new_xyz = flex.vec3_double()
+            for xyz_ in xyz:
+              t1 = fm * flex.vec3_double([xyz_])
+              t2 = op * t1[0]
+              t3 = om * flex.vec3_double([t2])
+              new_xyz.append(t3[0])
+            rg_.atoms().set_xyz(new_xyz)
+            rg_.link_to_previous = True
+            if atoms[i] or atoms[j]  in rg_.atoms():
+              print"pairs atoms in symmetry copy, " * 3
+              print atoms[i].id_str(),atoms[j].id_str()
+      '''
       return results
 
 

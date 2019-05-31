@@ -51,7 +51,7 @@ def exercise():
     #get_h_bonds.get_hydrogen_bonds_from_pair_atoms()
 
     for r in results:
-      print r
+      print r.a_H.id_str(),r.a_A.id_str()
 
 
 if __name__ == '__main__':
