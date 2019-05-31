@@ -140,8 +140,8 @@ class get_hydrogen_bonds(object):
             new_xyz.append(t3[0])
           rg_.atoms().set_xyz(new_xyz)
           rg_.link_to_previous = True
-          print operator.eq(rg,rg_)
-          if atoms[i] not in rg_.atoms():
+          #print operator.eq(rg,rg_)
+          if atoms[i] or atoms[j] not in rg_.atoms():
             print"pairs atoms not in symmetry copy, "*3
 
 
