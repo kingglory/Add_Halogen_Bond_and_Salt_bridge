@@ -28,14 +28,13 @@ def exercise():
   files = [
            #["m-helix.updated.pdb",None],
             ["4gif_part.pdb",None]
-           #["1kych.pdb", None]
           ]
 
 
 
   for (pdb_file_name, cif_file_name) in files:
     print (pdb_file_name, "-"*50)
-    #pdb_inp = iotbx.pdb.input(file_name=pdb_file_name)
+
 
     model = get_model(pdb_file_name=pdb_file_name,
                       cif_file_name=cif_file_name,
@@ -43,12 +42,10 @@ def exercise():
 
 
     get_h_bonds = get_hydrogen_bonds(model=model)
+    results = get_h_bonds.get_hydrogen_bonds_pairs()
 
     get_h_bonds.write_restrains_file(pdb_file_name=pdb_file_name[:-4]+'.eff',
                                      use_defaul_parameters=True)
-
-    results = get_h_bonds.get_hydrogen_bonds_pairs()
-    #get_h_bonds.get_hydrogen_bonds_from_pair_atoms()
 
     for r in results:
       print r.a_H.id_str(),r.a_A.id_str()

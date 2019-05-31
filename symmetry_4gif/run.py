@@ -31,7 +31,6 @@ def run(model,
         hd           = ["H", "D"],
         acceptors    = ["O","N","S","F","CL"],
         protein_only = True):
-  hierarchy = model.get_hierarchy()
   atoms = list(model.get_hierarchy().atoms())
   sites_cart = model.get_sites_cart()
   crystal_symmetry = model.crystal_symmetry()
@@ -65,32 +64,27 @@ def run(model,
     rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
     rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
     rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-
+    print "%5.3f"%math.sqrt(p.dist_sq), \
+      "<", atoms[i].parent().resname, resseq_i, ei, atoms[i].name, ">", \
+      "<", atoms[j].parent().resname, resseq_j, ej, atoms[j].name, ">", \
+      rt_mx_ji, i, j,
     ### re-confirm distance between pairs
     ai = atoms[i]
     aj = atoms[j]
-    for a in hierarchy.atoms():
-
-      if(str(rt_mx_ji) == "x,y,z"):
-        d = math.sqrt(
-          (ai.xyz[0]-aj.xyz[0])**2 +
-          (ai.xyz[1]-aj.xyz[1])**2 +
-          (ai.xyz[2]-aj.xyz[2])**2)
-      else:
-        t1 = fm*flex.vec3_double([aj.xyz])
-        t2 = rt_mx_ji*t1[0]
-        t3 = om*flex.vec3_double([t2])
-        d = math.sqrt(
-          (ai.xyz[0]-t3[0][0])**2 +
-          (ai.xyz[1]-t3[0][1])**2 +
-          (ai.xyz[2]-t3[0][2])**2)
-      if not (1.5<d<3): continue
-
-      print "dist=%5.3f"%d
-      print "%5.3f" % math.sqrt(p.dist_sq), \
-        "<", atoms[i].parent().resname, resseq_i, ei, atoms[i].name, ">", \
-        "<", atoms[j].parent().resname, resseq_j, ej, atoms[j].name, ">", \
-        rt_mx_ji, i, j,
+    if(str(rt_mx_ji) == "x,y,z"):
+      d = math.sqrt(
+        (ai.xyz[0]-aj.xyz[0])**2 + 
+        (ai.xyz[1]-aj.xyz[1])**2 + 
+        (ai.xyz[2]-aj.xyz[2])**2)
+    else:
+      t1 = fm*flex.vec3_double([aj.xyz])
+      t2 = rt_mx_ji*t1[0]
+      t3 = om*flex.vec3_double([t2])
+      d = math.sqrt(
+        (ai.xyz[0]-t3[0][0])**2 + 
+        (ai.xyz[1]-t3[0][1])**2 + 
+        (ai.xyz[2]-t3[0][2])**2)
+    print "dist=%5.3f"%d
     ###
 
 if(__name__ == "__main__"):
