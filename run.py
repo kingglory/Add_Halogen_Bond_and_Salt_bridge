@@ -179,7 +179,8 @@ class get_hydrogen_bonds(object):
 
         # so far the special atoms has been prepared!
         # Hydrogen bond  model : Y-A...H-D-C/CA ;
-        # belowing is selecting D atoms
+        # belowing is selecting D(N) atoms that
+        #  make covalent bond with H atoms
         res = None
         diff_best = 1.e+9
         for a_D in atom_D:
@@ -213,7 +214,8 @@ class get_hydrogen_bonds(object):
         if (res is not None): ress.append(res)
 
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
-      #below is selecting Y atoms
+      #below is selecting Y atoms that
+      # make covalent bond with A(O) atom
       resu = None
       for r in ress:
         a_H = r.a_H
@@ -240,7 +242,8 @@ class get_hydrogen_bonds(object):
         if (resu is not None): resus.append(resu)
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
       # besause we not sure if there is CA,
-      # so just keep one C atom
+      # so just keep one C atom that
+      # make covalent bond with D(N) atoms
       result = None
       for r in resus:
         a_A = r.a_A
@@ -274,7 +277,8 @@ class get_hydrogen_bonds(object):
 
 
 
-      # just keep the more possiable situation for N atom
+      # just keep the more possiable situation
+      # for O(accepter) atom
       for i, ri in enumerate(results):
         for j, rj in enumerate(results):
           if (j <= i): continue
@@ -284,15 +288,15 @@ class get_hydrogen_bonds(object):
           a_D_j = rj.a_D
           if ri == rj:
             results.remove(rj)
-            if a_D_i == a_D_j:
-              di = a_A_i.distance(a_D_i)
-              dj = a_A_j.distance(a_D_j)
-              if di < dj:
-                if rj in results:
-                  results.remove(rj)
-              else:
-                if ri in results:
-                  results.remove(ri)
+          if a_A_i == a_A_j:
+            di = a_A_i.distance(a_D_i)
+            dj = a_A_j.distance(a_D_j)
+            if di < dj:
+              if rj in results:
+                results.remove(rj)
+            else:
+              if ri in results:
+                 results.remove(ri)
 
 
       return results
