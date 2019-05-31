@@ -227,7 +227,11 @@ class get_hydrogen_bonds(object):
       om = cs.unit_cell().orthogonalization_matrix()
       sites_fm = fm*hierarchy.atoms().extract_xyz()
       hierarchies = [hierarchy]
+
       # select hydrogen bonds before symmetry operator
+      # select hydrogen bonds before symmetry operator
+      # select hydrogen bonds before symmetry operator
+
       for a in hierarchy.atoms():
         e = a.element.strip().upper()
         n = a.name.strip().upper()
@@ -370,13 +374,9 @@ class get_hydrogen_bonds(object):
               if ri in results:
                 results.remove(ri)
 
-
-
-
-
-
-
-
+      # select hydrogen bonds after symmetry operator
+      # select hydrogen bonds after symmetry operator
+      # select hydrogen bonds after symmetry operator
       crystal_symmetry=self.model.crystal_symmetry()
       pg = get_pair_generator(
         crystal_symmetry=crystal_symmetry,
@@ -408,7 +408,7 @@ class get_hydrogen_bonds(object):
         rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
         rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-        print rt_mx_ji,rt_mx_j ,rt_mx_i
+        #print rt_mx_ji,rt_mx_j ,rt_mx_i
         if str(rt_mx_ji) == "x,y,z": continue
         fm = crystal_symmetry.unit_cell().fractionalization_matrix()
         om = crystal_symmetry.unit_cell().orthogonalization_matrix()
@@ -422,21 +422,26 @@ class get_hydrogen_bonds(object):
             t3 = om * flex.vec3_double([t2])
             new_xyz.append(t3[0])
           rg_.atoms().set_xyz(new_xyz)
-          #rg_.link_to_previous = True
+          rg_.link_to_previous = True
           #print operator.eq(rg,rg_)
           if atoms[i] or atoms[j] not in rg_.atoms():
             print"pairs atoms not in symmetry copy, "*3
 
-
+          # try first way
+          # try first way
+          # try first way
           c_list = []
           n_list = []
 
           if atoms[i].element.upper().strip() in hd:
-              a_h_p = atoms[i]
+            a_h_p = atoms[i]
+            if atoms[j].element.upper().strip() in acceptors:
               a_a_p = atoms[j]
-          else:
-              a_h_p = atoms[j]
-              a_a_p = atoms[i]
+          if atoms[i].element.upper().strip() in acceptors:
+            a_h_p = atoms[i]
+            if atoms[j].element.upper().strip() in hd:
+              a_a_p = atoms[j]
+
 
           for a in rg.atoms():
             if a.element == "C":
@@ -458,12 +463,47 @@ class get_hydrogen_bonds(object):
               if (not is_bonded(a_h_p, a_n, bps_dict)):
                 continue
               d_A_D = a_a_p.distance(a_n)
-              d_A_H = a_a_p.distance(a_a_p)
+              d_A_H = a_a_p.distance(a_h_p)
               if (ideal_dist_A_D - eps_dist_A_D  <
                 d_A_D  < ideal_dist_A_D + eps_dist_A_D ):
                 angle_AHD = a_h_p.angle(a_a_p, a_n, deg=True)
                 if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
-                  print d_A_D,d_A_H,angle_AHD,a_h_p.id_str(),a_a_p.id_str()
+                  #print d_A_D,d_A_H,angle_AHD,a_h_p.id_str(),a_a_p.id_str()
+                  pass
+
+
+
+          # try second way
+          # try second way
+          # try second way
+          for a in rg.atoms():
+            if a.element == "C":
+              c_list.append(a)
+            if a.element == "N":
+              n_list.append(a)
+
+          for a in rg_.atoms():
+            if a.element == "C":
+              c_list.append(a)
+            if a.element == "N":
+              n_list.append(a)
+          for a_o in rg.atoms():
+            if a_o.element == "H":
+              a_h = a_o
+              for a_s in rg_.atoms():
+                if a_s.element == "O":
+                  a_o = a_s
+                  for a_n in n_list:
+                    if (not is_bonded(a_n, a_h, bps_dict)):continue
+                    if (is_bonded(a_o, a_h, bps_dict)): continue
+                    d_A_D = a_o.distance(a_n)
+                    d_A_H = a_h.distance(a_o)
+                    if (ideal_dist_A_D - eps_dist_A_D <
+                          d_A_D < ideal_dist_A_D + eps_dist_A_D):
+                      angle_AHD = a_h.angle(a_o, a_n, deg=True)
+                      print angle_AHD ,d_A_D,d_A_H
+
+
 
 
 
