@@ -509,6 +509,8 @@ class get_hydrogen_bonds(object):
       # select hydrogen bonds after symmetry operator
       # select hydrogen bonds after symmetry operator
       # select hydrogen bonds after symmetry operator
+      
+      
       crystal_symmetry=self.model.crystal_symmetry()
       pg = get_pair_generator(
         crystal_symmetry=crystal_symmetry,
@@ -561,9 +563,11 @@ class get_hydrogen_bonds(object):
           if atoms[i] or atoms[j] not in rg_.atoms():
             print"pairs atoms not in symmetry copy, "*3
 
-          # try first way
-          # try first way
-          # try first way
+          # try first way!!!!!!
+          # try first way!!!!!!!
+          # try first way!!!!!!!!
+          
+          
           c_list = []
           n_list = []
           if atoms[i].element.upper().strip() in hd:
@@ -606,9 +610,9 @@ class get_hydrogen_bonds(object):
 
 
           
-          # try second way
-          # try second way
-          # try second way
+          # try second way!!!!!!
+          # try second way!!!!!!!
+          # try second way!!!!!!!!
           for a in rg.atoms():
             if a.element == "C":
               c_list.append(a)
@@ -637,9 +641,9 @@ class get_hydrogen_bonds(object):
                       print angle_AHD ,d_A_D,d_A_H
           
       
-      # try third way
-      # try third way
-      # try third way
+      # try third way!!!!!!
+      # try third way!!!!!!!
+      # try third way!!!!!!!!
 
       r = {}
       for p in pg.pair_generator:
