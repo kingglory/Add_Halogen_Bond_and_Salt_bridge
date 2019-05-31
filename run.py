@@ -533,8 +533,7 @@ class get_hydrogen_bonds(object):
         is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
                        altloc_i == altloc_j and resseq_i != resseq_j
         if (not is_candidate): continue
-        #print atoms[i].id_str(),atoms[j].id_str()
-
+     
         if (protein_only):
           for it in [i, j]:
             resname = atoms[it].parent().resname
@@ -566,7 +565,6 @@ class get_hydrogen_bonds(object):
           # try first way!!!!!!
           # try first way!!!!!!!
           # try first way!!!!!!!!
-          
           
           c_list = []
           n_list = []
