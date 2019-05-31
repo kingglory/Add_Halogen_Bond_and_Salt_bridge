@@ -74,11 +74,8 @@ class get_hydrogen_bonds(object):
                                   sites_cart=self.model.get_sites_cart())
       bps_dict = {}
       [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-      hierarchy = self.model.get_hierarchy()
       atom_D = []
       atom_Y = []
-      atom_C = []
-      atom_CA = []
       ress    = []
       resus   = []
       results = []
@@ -119,10 +116,10 @@ class get_hydrogen_bonds(object):
         rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
         rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+
         ### get the pairs atoms
         ai = atoms[i]
         aj = atoms[j]
-
         residue_i = atoms[i].parent().parent()
         residue_j = atoms[j].parent().parent()
         residues = []
@@ -172,7 +169,6 @@ class get_hydrogen_bonds(object):
           # here prepare other atoms
           for a in re.atoms():
             e = a.element.strip().upper()
-            n = a.name.strip().upper()
             if e == "N":
               if a.parent().resname == "HOH": continue
               if a in atom_D: continue
@@ -180,12 +176,7 @@ class get_hydrogen_bonds(object):
             if e == "C":
               if a in atom_Y: continue
               atom_Y.append(a)
-              if n == "C":
-                if a in atom_C: continue
-                atom_C.append(a)
-              if n == "CA":
-                if a in atom_CA: continue
-                atom_CA.append(a)
+
         # so far the special atoms has been prepared!
         # Hydrogen bond  model : Y-A...H-D-C/CA ;
         # belowing is selecting D atoms
@@ -254,6 +245,7 @@ class get_hydrogen_bonds(object):
       for r in resus:
         a_A = r.a_A
         a_D = r.a_D
+        atom_C = atom_Y
         for a_C in atom_C:
           if (not is_bonded(a_C, a_D, bps_dict)): continue
           angle_ADC = a_D.angle(a_C, a_A, deg=True)
