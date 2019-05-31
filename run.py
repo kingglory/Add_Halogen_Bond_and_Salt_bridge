@@ -64,7 +64,7 @@ class get_hydrogen_bonds(object):
                     angle_YAH_min = 90,angle_YAH_max = 180,
                     eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
                     sigma_for_angle = 5.0, sigma_for_bond = 0.1,
-                    ideal_angle_AHD = 153.30,eps_dist_A_D= 0.5,
+                    ideal_angle_AHD = 153.30,eps_dist_A_D= 0.75,
                     ideal_angle_YAH = 120, max_cutoff   = 4.0,
                     min_cutoff   = 1.5,protein_only = True):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
@@ -113,7 +113,7 @@ class get_hydrogen_bonds(object):
                        altloc_i == altloc_j and resseq_i != resseq_j
         if (not is_candidate): continue
         #print atoms[i].id_str(),atoms[j].id_str()
-        pair_atom.append((atoms[i],atoms[j]))
+
         if (protein_only):
           for it in [i, j]:
             resname = atoms[it].parent().resname
@@ -124,39 +124,66 @@ class get_hydrogen_bonds(object):
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
         if str(rt_mx_ji) == "x,y,z": continue
         r.setdefault(p.j_seq, []).append(rt_mx_ji)
-      for k, v in zip(r.keys(), r.values()):  # remove duplicates!
-        r[k] = list(set(v))
+        for k, v in zip(r.keys(), r.values()):  # remove duplicates!
+          r[k] = list(set(v))
+        fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+        om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+        for rg in hierarchy.residue_groups():
+          rg_ = rg.detached_copy()
+          xyz = rg_.atoms().extract_xyz()
+          new_xyz = flex.vec3_double()
+          for xyz_ in xyz:
+            t1 = fm * flex.vec3_double([xyz_])
+            t2 = rt_mx_ji  * t1[0]
+            t3 = om * flex.vec3_double([t2])
+            new_xyz.append(t3[0])
+          rg_.atoms().set_xyz(new_xyz)
+          rg_.link_to_previous = True
+          if atoms[i] in rg_.atoms():
+            print"6"*90
 
-      fm = crystal_symmetry.unit_cell().fractionalization_matrix()
-      om = crystal_symmetry.unit_cell().orthogonalization_matrix()
-      selection = r.keys()
-      for rg in hierarchy.residue_groups():
-        keep = False
-        for i in rg.atoms().extract_i_seq():
-          if (i in selection):
-            keep = True
-            break
-        if (keep):
-          ops = r[i]
-          for op in ops:
-            rg_ = rg.detached_copy()
-            xyz = rg_.atoms().extract_xyz()
-            new_xyz = flex.vec3_double()
-            for xyz_ in xyz:
-              t1 = fm * flex.vec3_double([xyz_])
-              t2 = op * t1[0]
-              t3 = om * flex.vec3_double([t2])
-              new_xyz.append(t3[0])
-            rg_.atoms().set_xyz(new_xyz)
-            rg_.link_to_previous = True
-      for p in pair_atom:
-        if p[0].element.upper().strip() in hd:
-          a_h_p = p[0]
-          a_a_p = p[1]
-        else:
-          a_h_p = p[1]
-          a_a_p = p[0]
-        print a_h_p.id_str(),a_a_p.id_str()
+
+          c_list = []
+          n_list = []
+
+          if atoms[i].element.upper().strip() in hd:
+              a_h_p = atoms[i]
+              a_a_p = atoms[j]
+          else:
+              a_h_p = atoms[j]
+              a_a_p = atoms[i]
+
+          for a in rg.atoms():
+            if a.element == "C":
+              c_list.append(a)
+            if a.element == "N":
+               n_list.append(a)
+
+          for a in rg_.atoms():
+            if a.element == "C":
+              c_list.append(a)
+            if a.element == "N":
+              n_list.append(a)
+
+          for a_c in c_list:
+            #if (not a_h_p.is_in_same_conformer_as(a_a_p)): continue
+            if (not is_bonded(a_c, a_a_p, bps_dict)):
+              continue
+            for a_n in n_list:
+              if (not is_bonded(a_h_p, a_n, bps_dict)):
+                continue
+              d_A_D = a_a_p.distance(a_n)
+              d_A_H = a_a_p.distance(a_a_p)
+              if (ideal_dist_A_D - eps_dist_A_D  <
+                d_A_D  < ideal_dist_A_D + eps_dist_A_D ):
+                angle_AHD = a_h_p.angle(a_a_p, a_n, deg=True)
+                if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
+                  print d_A_D,d_A_H,angle_AHD,a_h_p.id_str(),a_a_p.id_str()
+
+
+
+
+
 
 
 
