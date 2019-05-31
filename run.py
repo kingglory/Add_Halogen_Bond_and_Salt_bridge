@@ -228,9 +228,9 @@ class get_hydrogen_bonds(object):
       sites_fm = fm*hierarchy.atoms().extract_xyz()
       hierarchies = [hierarchy]
 
-      # select hydrogen bonds before symmetry operator
-      # select hydrogen bonds before symmetry operator
-      # select hydrogen bonds before symmetry operator
+      # select hydrogen bonds before symmetry operator!!!!
+      # select hydrogen bonds before symmetry operator!!!!
+      # select hydrogen bonds before symmetry operator!!!!
 
       for a in hierarchy.atoms():
         e = a.element.strip().upper()
