@@ -48,6 +48,7 @@ def exercise():
                                      use_defaul_parameters=True)
 
     results = get_h_bonds.get_hydrogen_bonds_pairs()
+    #get_h_bonds.get_hydrogen_bonds_from_pair_atoms()
 
     for r in results:
       print r

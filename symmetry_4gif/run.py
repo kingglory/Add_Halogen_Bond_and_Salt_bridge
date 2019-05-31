@@ -27,7 +27,7 @@ def get_pair_generator(crystal_symmetry, buffer_thickness, sites_cart):
 def run(model,
         max_cutoff   = 4.0, 
         min_cutoff   = 1.5,
-        hd           = ["H", "D"],
+        hd           = ["H"],
         acceptors    = ["O","N","S","F","CL"],
         protein_only = True):
   atoms = list(model.get_hierarchy().atoms())
