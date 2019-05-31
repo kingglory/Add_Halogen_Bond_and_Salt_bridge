@@ -408,10 +408,10 @@ class get_hydrogen_bonds(object):
         rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
         rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
         rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-
         ### re-confirm distance between pairs
         ai = atoms[i]
         aj = atoms[j]
+        final_list = []
         for a in hierarchy.atoms():
           if ei == "H":
             if a.element == "N":
@@ -423,15 +423,19 @@ class get_hydrogen_bonds(object):
                 (ai.xyz[1] - aj.xyz[1]) ** 2 +
                 (ai.xyz[2] - aj.xyz[2]) ** 2)
                 angle = ai.angle(a,aj,deg=True)
-                if angle < 90 : continue
-                if not (1.5 < d < 3): continue
-                print "dist=%5.3f" % d, angle
-                print "%5.3f" % math.sqrt(p.dist_sq), \
+                if angle < 80 : continue
+                if not (1.5 < d < 2.5): continue
+                ss = ("dist=%5.3f" % d, angle,\
+                "%5.3f" % math.sqrt(p.dist_sq), \
                   "<", atoms[i].parent().resname, resseq_i, \
                   ei, atoms[i].name, ">", \
                   "<", atoms[j].parent().resname, \
                   resseq_j, ej, atoms[j].name, ">", \
-                  rt_mx_ji, i, j,rt_mx_j
+                  rt_mx_ji, i, j,rt_mx_i,rt_mx_j)
+                if ss in final_list:continue
+                final_list.append(ss)
+
+
               else:
                 t1 = fm * flex.vec3_double([aj.xyz])
                 t2 = rt_mx_ji * t1[0]
@@ -441,15 +445,18 @@ class get_hydrogen_bonds(object):
                 (ai.xyz[1] - t3[0][1]) ** 2 +
                 (ai.xyz[2] - t3[0][2]) ** 2)
                 angle = ai.angle(a, aj, deg=True)
-                if angle < 90: continue
+                if angle < 80: continue
                 if not (1.5 < d < 3): continue
-                print "dist=%5.3f" % d ,angle
-                print "%5.3f" % math.sqrt(p.dist_sq), \
-                "<", atoms[i].parent().resname, resseq_i, \
-                ei, atoms[i].name, ">", \
-               "<", atoms[j].parent().resname, \
-                resseq_j, ej, atoms[j].name, ">", \
-                rt_mx_ji, i, j,rt_mx_j
+                ss = ("dist=%5.3f" % d, angle, \
+                      "%5.3f" % math.sqrt(p.dist_sq), \
+                      "<", atoms[i].parent().resname, resseq_i, \
+                      ei, atoms[i].name, ">", \
+                      "<", atoms[j].parent().resname, \
+                      resseq_j, ej, atoms[j].name, ">", \
+                      rt_mx_ji, i, j, rt_mx_i, rt_mx_j)
+                if ss in final_list: continue
+                final_list.append(ss)
+
           if ei == "O":
             if a.element == "C":
               if (not is_bonded(a, ai, bps_dict)): continue
@@ -460,15 +467,17 @@ class get_hydrogen_bonds(object):
                 (ai.xyz[1] - aj.xyz[1]) ** 2 +
                 (ai.xyz[2] - aj.xyz[2]) ** 2)
                 angle = ai.angle(a, aj, deg=True)
-                if angle < 90: continue
+                if angle < 80: continue
                 if not (1.5 < d < 2.5): continue
-                print "dist=%5.3f" % d, angle
-                print "%5.3f" % math.sqrt(p.dist_sq), \
-                  "<", atoms[i].parent().resname, resseq_i, \
-                  ei, atoms[i].name, ">", \
-                  "<", atoms[j].parent().resname, \
-                  resseq_j, ej, atoms[j].name, ">", \
-                  rt_mx_ji, i, j,rt_mx_j
+                ss = ("dist=%5.3f" % d, angle, \
+                      "%5.3f" % math.sqrt(p.dist_sq), \
+                      "<", atoms[i].parent().resname, resseq_i, \
+                      ei, atoms[i].name, ">", \
+                      "<", atoms[j].parent().resname, \
+                      resseq_j, ej, atoms[j].name, ">", \
+                      rt_mx_ji, i, j, rt_mx_i, rt_mx_j)
+                if ss in final_list: continue
+                final_list.append(ss)
               else:
                 t1 = fm * flex.vec3_double([aj.xyz])
                 t2 = rt_mx_ji * t1[0]
@@ -478,16 +487,19 @@ class get_hydrogen_bonds(object):
                 (ai.xyz[1] - t3[0][1]) ** 2 +
                 (ai.xyz[2] - t3[0][2]) ** 2)
                 angle = ai.angle(a, aj, deg=True)
-                if angle < 90: continue
+                if angle < 80: continue
                 if not (1.5 < d < 3): continue
-                print "dist=%5.3f" % d,angle
-                print "%5.3f" % math.sqrt(p.dist_sq), \
-                "<", atoms[i].parent().resname, resseq_i, \
-                ei, atoms[i].name, ">", \
-               "<", atoms[j].parent().resname, \
-                resseq_j, ej, atoms[j].name, ">", \
-                rt_mx_ji, i, j,rt_mx_j
-
+                ss = ("dist=%5.3f" % d, angle, \
+                      "%5.3f" % math.sqrt(p.dist_sq), \
+                      "<", atoms[i].parent().resname, resseq_i, \
+                      ei, atoms[i].name, ">", \
+                      "<", atoms[j].parent().resname, \
+                      resseq_j, ej, atoms[j].name, ">", \
+                      rt_mx_ji, i, j, rt_mx_i, rt_mx_j)
+                if ss in final_list: continue
+                final_list.append(ss)
+        for ss in final_list:
+          print ss
 
 
 
@@ -678,6 +690,7 @@ class get_hydrogen_bonds(object):
               print"pairs atoms in symmetry copy, " * 3
               print atoms[i].id_str(),atoms[j].id_str()
       '''
+
       return results
 
 
