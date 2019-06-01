@@ -98,13 +98,15 @@ class get_hydrogen_bonds(object):
       rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
       rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
       rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-      if (str(rt_mx_ji) == "x,y,z"):continue
-      for a in residue_i.atoms():
-        t1 = fm * flex.vec3_double([a.xyz])
-        t2 = rt_mx_ji * t1[0]
-        t3 = om * flex.vec3_double([t2])
-        a.set_xyz(t3[0])
-      residue_s.append(residue_i)
+      if (str(rt_mx_ji) == "x,y,z"):
+        residue_s.append(residue_i)
+      if (str(rt_mx_ji) != "x,y,z"):
+        for a in residue_i.atoms():
+          t1 = fm * flex.vec3_double([a.xyz])
+          t2 = rt_mx_ji * t1[0]
+          t3 = om * flex.vec3_double([t2])
+          a.set_xyz(t3[0])
+        residue_s.append(residue_i)
     return residue_s
   def get_hydrogen_bonds_pairs(self,
                     ideal_angle_YAD = 147.15,
@@ -112,7 +114,7 @@ class get_hydrogen_bonds(object):
                     angle_YAH_min = 90,angle_YAH_max = 180,
                     eps_angle_YAH = 10,ideal_dist_A_D = 2.90,
                     sigma_for_angle = 5.0, sigma_for_bond = 0.1,
-                    ideal_angle_AHD = 153.30,eps_dist_A_D= 0.5,
+                    ideal_angle_AHD = 153.30,eps_dist_A_D= 0.75,
                     ideal_angle_YAH = 120,min_cutoff   = 1.5,
                     max_cutoff=4.0,protein_only = True):
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
@@ -181,16 +183,15 @@ class get_hydrogen_bonds(object):
           residues.append(residue_i)
           residues.append(residue_j)
 
-        else:
 
+        else:
           residues.append(residue_j)
           residue_s = self.symmetry_operator_residue(residue_i)
           residues.extend(residue_s)
 
           residues.append(residue_i)
-          residuej = self.symmetry_operator_residue(residue_j)
-          residues.extend(residuej)
-
+          residue_s = self.symmetry_operator_residue(residue_j)
+          residues.extend(residue_s)
 
 
         # here make sure which is H atoms ,which is accepter
@@ -209,7 +210,6 @@ class get_hydrogen_bonds(object):
           for a in re.atoms():
             e = a.element.strip().upper()
             if e == "N":
-              if a.parent().resname == "HOH": continue
               if a in atom_D: continue
               atom_D.append(a)
             if e == "C":
@@ -253,6 +253,7 @@ class get_hydrogen_bonds(object):
         if (res is not None): ress.append(res)
 
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
+      # so far we got all possiable A...H-D
       #below is selecting Y atoms that
       # make covalent bond with A(O) atom
       resu = None
@@ -322,20 +323,15 @@ class get_hydrogen_bonds(object):
         for j, rj in enumerate(results):
           if (j <= i): continue
           a_A_i = ri.a_A
-          a_D_i = ri.a_D
           a_A_j = rj.a_A
-          a_D_j = rj.a_D
           if ri == rj:
             results.remove(rj)
-          if a_A_i == a_A_j:
-            di = a_A_i.distance(a_D_i)
-            dj = a_A_j.distance(a_D_j)
-            if di < dj:
-              if rj in results:
+          if ri != rj:
+            if a_A_i == a_A_j:
+              if ri.d_A_D < rj.d_A_D:
                 results.remove(rj)
-            else:
-              if ri in results:
-                 results.remove(ri)
+              else:
+                results.remove(ri)
 
 
       return results
