@@ -381,19 +381,6 @@ class get_hydrogen_bonds(object):
     return results
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   def write_restrains_file(self, pdb_file_name,
                            for_phenix_refine=True,
                            use_defaul_parameters=True):
