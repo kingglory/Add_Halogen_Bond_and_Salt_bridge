@@ -356,9 +356,11 @@ class get_hydrogen_bonds(object):
             )
           if (result in results): continue
           if (result is not None): results.append(result)
+    # remove the same item
+    results = list(set(results))
     # just keep the more possiable situation
     # for O(accepter) atom
-    results = list(set(results))
+
     for i, ri in enumerate(results):
       for j, rj in enumerate(results):
         if (j <= i): continue
