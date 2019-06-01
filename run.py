@@ -64,7 +64,7 @@ class get_hydrogen_bonds(object):
                         min_cutoff   = 1.5,
                        hd     = ["H", "D"],
                        acceptors = ["O","N","S","F","CL"]):
-    residues = []
+    residue_s = []
     atoms = list(self.model.get_hierarchy().atoms())
     sites_cart = self.model.get_sites_cart()
     crystal_symmetry = self.model.crystal_symmetry()
@@ -98,12 +98,14 @@ class get_hydrogen_bonds(object):
       rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
       rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
       rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-    for a in residue_i.atoms():
-      t1 = fm * flex.vec3_double([a.xyz])
-      t2 = rt_mx_ji * t1[0]
-      t3 = om * flex.vec3_double([t2])
-      a.set_xyz(t3[0])
-    return residue_i
+      if (str(rt_mx_ji) == "x,y,z"):continue
+      for a in residue_i.atoms():
+        t1 = fm * flex.vec3_double([a.xyz])
+        t2 = rt_mx_ji * t1[0]
+        t3 = om * flex.vec3_double([t2])
+        a.set_xyz(t3[0])
+      residue_s.append(residue_i)
+    return residue_s
   def get_hydrogen_bonds_pairs(self,
                     ideal_angle_YAD = 147.15,
                     angle_AHD_cutoff = 120,eps_angle_AHD = 30,
@@ -180,14 +182,15 @@ class get_hydrogen_bonds(object):
           residues.append(residue_j)
 
         else:
-          residues.append(residue_i)
+
           residues.append(residue_j)
-          residuei = self.symmetry_operator_residue(residue_i)
-          '''
-          residues.append(residuei)
+          residue_s = self.symmetry_operator_residue(residue_i)
+          residues.extend(residue_s)
+
+          residues.append(residue_i)
           residuej = self.symmetry_operator_residue(residue_j)
-          residues.append(residuej)
-          '''
+          residues.extend(residuej)
+
 
 
         # here make sure which is H atoms ,which is accepter

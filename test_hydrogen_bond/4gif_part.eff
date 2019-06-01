@@ -19,7 +19,7 @@ refinement{
     }
     angle {
       atom_selection_1 = chain A and resseq  726  and name  O  
-      atom_selection_2 = chain A and resseq  740  and name HH21
+      atom_selection_2 = chain A and resseq  729  and name  H  
       atom_selection_3 = chain A and resseq  730  and name  N  
       angle_ideal = 153.300000
       sigma = 5.000000
@@ -27,7 +27,7 @@ refinement{
     angle {
       atom_selection_1 = chain A and resseq  726  and name  C  
       atom_selection_2 = chain A and resseq  726  and name  O  
-      atom_selection_3 = chain A and resseq  740  and name HH21
+      atom_selection_3 = chain A and resseq  729  and name  H  
       angle_ideal = 120.000000
       sigma = 5.000000
     }
@@ -36,44 +36,6 @@ refinement{
       atom_selection_2 = chain A and resseq  730  and name  N  
       atom_selection_3 = chain A and resseq  729  and name  C  
       angle_ideal = 116.399048
-      sigma = 5.000000
-    }
-    bond{
-      atom_selection_1 = chain A and resseq  729  and name  OD1
-      atom_selection_2 = chain A and resseq  740  and name  NH2
-      symmetry_operation = None
-      distance_ideal = 2.900000
-      sigma = 0.100000
-      slack = None
-      limit = -0.1
-      top_out = False
-    }
-    angle {
-      atom_selection_1 = chain A and resseq  729  and name  CG 
-      atom_selection_2 = chain A and resseq  729  and name  OD1
-      atom_selection_3 = chain A and resseq  740  and name  NH2
-      angle_ideal = 147.150000
-      sigma = 5.000000
-    }
-    angle {
-      atom_selection_1 = chain A and resseq  729  and name  OD1
-      atom_selection_2 = chain A and resseq  740  and name HH21
-      atom_selection_3 = chain A and resseq  740  and name  NH2
-      angle_ideal = 153.300000
-      sigma = 5.000000
-    }
-    angle {
-      atom_selection_1 = chain A and resseq  729  and name  CG 
-      atom_selection_2 = chain A and resseq  729  and name  OD1
-      atom_selection_3 = chain A and resseq  740  and name HH21
-      angle_ideal = 120.000000
-      sigma = 5.000000
-    }
-    angle {
-      atom_selection_1 = chain A and resseq  729  and name  OD1
-      atom_selection_2 = chain A and resseq  740  and name  NH2
-      atom_selection_3 = chain A and resseq  740  and name  CZ 
-      angle_ideal = 155.858067
       sigma = 5.000000
     }
     
