@@ -179,16 +179,15 @@ class get_hydrogen_bonds(object):
           residues.append(residue_i)
           residues.append(residue_j)
 
-
-
-
         else:
           residues.append(residue_i)
           residues.append(residue_j)
           residuei = self.symmetry_operator_residue(residue_i)
+          '''
           residues.append(residuei)
           residuej = self.symmetry_operator_residue(residue_j)
           residues.append(residuej)
+          '''
 
 
         # here make sure which is H atoms ,which is accepter

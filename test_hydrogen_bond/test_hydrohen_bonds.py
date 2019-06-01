@@ -26,8 +26,8 @@ def get_model(pdb_file_name, cif_file_name):
 
 def exercise():
   files = [
-           #["m-helix.updated.pdb",None],
-            ["4gif_part.pdb",None]
+           ["m-helix.updated.pdb",None],
+           ["4gif_part.pdb",None]
           ]
 
 
