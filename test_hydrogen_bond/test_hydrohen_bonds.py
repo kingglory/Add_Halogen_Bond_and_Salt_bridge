@@ -48,7 +48,7 @@ def exercise():
                                      use_defaul_parameters=True)
 
     for r in results:
-      print r.a_H.id_str(),r.a_A.id_str()
+      print r.a_H.id_str(),r.a_A.id_str(),r.rt_mx_ji
 
 
 if __name__ == '__main__':
