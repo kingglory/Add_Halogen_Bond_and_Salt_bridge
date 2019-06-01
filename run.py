@@ -131,9 +131,9 @@ class get_hydrogen_bonds(object):
       ai = atoms[i]
       aj = atoms[j]
       # get the whole residues, symmetry operator or not
+      residue_i = atoms[i].parent().parent()
+      residue_j = atoms[j].parent().parent()
       if (str(rt_mx_ji) == "x,y,z"):
-        residue_i = atoms[i].parent().parent()
-        residue_j = atoms[j].parent().parent()
         if ai.element == "H":
           if aj.element in acceptors:
             a_H = ai
@@ -247,8 +247,6 @@ class get_hydrogen_bonds(object):
           if (result is not None): results.append(result)
 
       else:
-        residue_i = atoms[i].parent().parent()
-        residue_j = atoms[j].parent().parent()
         residue_j_= self.apply_symmetry(residue_j,rt_mx_ji,crystal_symmetry)
         if ai.element == "H":
           a_H = ai
