@@ -60,10 +60,10 @@ class get_hydrogen_bonds(object):
     self.results = self.get_hydrogen_bonds_pairs()
 
   def symmetry_operator_residue(self,residue_i,max_cutoff=4.0,
-                        protein_only = True,
-                        min_cutoff   = 1.5,
-                       hd     = ["H", "D"],
-                       acceptors = ["O","N","S","F","CL"]):
+                                protein_only=True,
+                                min_cutoff=1.5,
+                                hd=["H", "D"],
+                                acceptors=["O", "N", "S", "F", "CL"]):
     residue_s = []
     atoms = list(self.model.get_hierarchy().atoms())
     sites_cart = self.model.get_sites_cart()
@@ -117,224 +117,220 @@ class get_hydrogen_bonds(object):
                     ideal_angle_AHD = 153.30,eps_dist_A_D= 0.75,
                     ideal_angle_YAH = 120,min_cutoff   = 1.5,
                     max_cutoff=4.0,protein_only = True):
+    # Hydrogen bond  model : Y-A...H-D-C/CA ;
+    # The define of angle and bond is all from left to right in atoms order
+    geometry = self.model.get_restraints_manager()
+    bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
+      sites_cart=self.model.get_sites_cart())
+    bps_dict = {}
+    [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
+    atom_D = []
+    atom_Y = []
+    ress = []
+    resus = []
+    results = []
+    hd = ["H", "D"]
+    acceptors = ["O", "N", "S", "F", "CL"]
+
+    # get the possiable apir first
+    atoms = list(self.model.get_hierarchy().atoms())
+    sites_cart = self.model.get_sites_cart()
+    crystal_symmetry = self.model.crystal_symmetry()
+    fm = crystal_symmetry.unit_cell().fractionalization_matrix()
+    om = crystal_symmetry.unit_cell().orthogonalization_matrix()
+    pg = get_pair_generator(
+      crystal_symmetry=crystal_symmetry,
+      buffer_thickness=max_cutoff,
+      sites_cart=sites_cart)
+    get_class = iotbx.pdb.common_residue_names_get_class
+    for p in pg.pair_generator:
+      residues = []
+      i, j = p.i_seq, p.j_seq
+      ei, ej = atoms[i].element, atoms[j].element
+      altloc_i = atoms[i].parent().altloc
+      altloc_j = atoms[j].parent().altloc
+      resseq_i = atoms[i].parent().parent().resseq
+      resseq_j = atoms[j].parent().parent().resseq
+      # pre-screen candidates begin
+      one_is_hd = ei in hd or ej in hd
+      other_is_acceptor = ei in acceptors or ej in acceptors
+      dist = math.sqrt(p.dist_sq)
+      assert dist <= max_cutoff
+      is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
+                     altloc_i == altloc_j and resseq_i != resseq_j
+      if (protein_only):
+        for it in [i, j]:
+          resname = atoms[it].parent().resname
+          is_candidate &= get_class(name=resname) == "common_amino_acid"
+      if (not is_candidate): continue
+      # pre-screen candidates end
+      rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
+      rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
+      rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
+      ### get the pairs atoms
+      ai = atoms[i]
+      aj = atoms[j]
+      residue_i = atoms[i].parent().parent()
+      residue_j = atoms[j].parent().parent()
+
+      # get the whole residues, symmetry operator or not
+      if (str(rt_mx_ji) == "x,y,z"):
+        if residue_i in residues: continue
+        if residue_i is None: continue
+        if residue_j in residues: continue
+        if residue_i is None: continue
+        residues.append(residue_i)
+        residues.append(residue_j)
+
+      else:
+        residues.append(residue_j)
+        residue_s = self.symmetry_operator_residue(residue_i)
+        residues.extend(residue_s)
+
+        residues.append(residue_i)
+        residue_s = self.symmetry_operator_residue(residue_j)
+        residues.extend(residue_s)
+
+      # here make sure which is H atoms ,which is accepter
+      if ai.element == "H":
+        if aj.element in acceptors:
+          a_H = ai
+          a_A = aj
+      if aj.element == "H":
+        if ai.element in acceptors:
+          a_H = aj
+          a_A = ai
+
+      # get atoms from residues ,then calculate
+      for re in residues:
+        # here prepare other atoms
+        for a in re.atoms():
+          e = a.element.strip().upper()
+          if e == "N":
+            if a in atom_D: continue
+            atom_D.append(a)
+          if e == "C":
+            if a in atom_Y: continue
+            atom_Y.append(a)
+
+      # so far the special atoms has been prepared!
       # Hydrogen bond  model : Y-A...H-D-C/CA ;
-      # The define of angle and bond is all from left to right in atoms order
-      geometry = self.model.get_restraints_manager()
-      bond_proxies_simple, asu = geometry.geometry.get_all_bond_proxies(
-                                  sites_cart=self.model.get_sites_cart())
-      bps_dict = {}
-      [bps_dict.setdefault(p.i_seqs, True) for p in bond_proxies_simple]
-      atom_D = []
-      atom_Y = []
-      ress    = []
-      resus   = []
-      results = []
-      hd = ["H","D"]
-      acceptors = ["O", "N", "S", "F", "CL"]
-
-      # get the possiable apir first
-      atoms = list(self.model.get_hierarchy().atoms())
-      sites_cart = self.model.get_sites_cart()
-      crystal_symmetry = self.model.crystal_symmetry()
-      fm = crystal_symmetry.unit_cell().fractionalization_matrix()
-      om = crystal_symmetry.unit_cell().orthogonalization_matrix()
-      pg = get_pair_generator(
-           crystal_symmetry=crystal_symmetry,
-           buffer_thickness=max_cutoff,
-           sites_cart=sites_cart)
-      get_class = iotbx.pdb.common_residue_names_get_class
-      for p in pg.pair_generator:
-        residues = []
-        i, j = p.i_seq, p.j_seq
-        ei, ej = atoms[i].element, atoms[j].element
-        altloc_i = atoms[i].parent().altloc
-        altloc_j = atoms[j].parent().altloc
-        resseq_i = atoms[i].parent().parent().resseq
-        resseq_j = atoms[j].parent().parent().resseq
-        # pre-screen candidates begin
-        one_is_hd = ei in hd or ej in hd
-        other_is_acceptor = ei in acceptors or ej in acceptors
-        dist = math.sqrt(p.dist_sq)
-        assert dist <= max_cutoff
-        is_candidate = one_is_hd and other_is_acceptor and dist >= min_cutoff and \
-                        altloc_i == altloc_j and resseq_i != resseq_j
-        if (protein_only):
-          for it in [i, j]:
-            resname = atoms[it].parent().resname
-            is_candidate &= get_class(name=resname) == "common_amino_acid"
-        if (not is_candidate): continue
-        # pre-screen candidates end
-        rt_mx_i = pg.conn_asu_mappings.get_rt_mx_i(p)
-        rt_mx_j = pg.conn_asu_mappings.get_rt_mx_j(p)
-        rt_mx_ji = rt_mx_i.inverse().multiply(rt_mx_j)
-        ### get the pairs atoms
-        ai = atoms[i]
-        aj = atoms[j]
-        residue_i = atoms[i].parent().parent()
-        residue_j = atoms[j].parent().parent()
-
-
-        # get the whole residues, symmetry operator or not
-        if(str(rt_mx_ji) == "x,y,z"):
-          if residue_i in residues: continue
-          if residue_i is  None: continue
-          if residue_j in residues: continue
-          if residue_i is None: continue
-          residues.append(residue_i)
-          residues.append(residue_j)
-
-
-        else:
-          residues.append(residue_j)
-          residue_s = self.symmetry_operator_residue(residue_i)
-          residues.extend(residue_s)
-
-          residues.append(residue_i)
-          residue_s = self.symmetry_operator_residue(residue_j)
-          residues.extend(residue_s)
-
-
-        # here make sure which is H atoms ,which is accepter
-        if ai.element == "H":
-          if aj.element in acceptors:
-            a_H = ai
-            a_A = aj
-        if aj.element == "H":
-          if ai.element in acceptors:
-            a_H = aj
-            a_A = ai
-
-        # get atoms from residues ,then calculate
-        for re in residues:
-          # here prepare other atoms
-          for a in re.atoms():
-            e = a.element.strip().upper()
-            if e == "N":
-              if a in atom_D: continue
-              atom_D.append(a)
-            if e == "C":
-              if a in atom_Y: continue
-              atom_Y.append(a)
-
-        # so far the special atoms has been prepared!
-        # Hydrogen bond  model : Y-A...H-D-C/CA ;
-        # belowing is selecting D(N) atoms that
-        #  make covalent bond with H atoms
-        res = None
-        diff_best = 1.e+9
-        for a_D in atom_D:
-          resid_A = a_A.parent().parent().resid()
-          resid_D = a_D.parent().parent().resid()
-          diff_r_r = abs(int(resid_A) - int(resid_D))
-          if diff_r_r < 2: continue
-          if (not a_H.is_in_same_conformer_as(a_A)): continue
-          if (not is_bonded(a_H, a_D, bps_dict)): continue
-          if (is_bonded(a_H, a_A, bps_dict)): continue
-          if (a_A.parent().parent().resseq ==
-            a_D.parent().parent().resseq): continue
-          d_A_H = a_A.distance(a_H)
-          d_A_D = a_D.distance(a_A)
-          if (ideal_dist_A_D - eps_dist_A_D <
-            d_A_D < ideal_dist_A_D + eps_dist_A_D):
-            angle_AHD = a_H.angle(a_A, a_D, deg=True)
-            if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
-              diff = abs(ideal_dist_A_D - d_A_D)
-              if (diff < diff_best):
-                diff_best = diff
-                res = group_args(
-                  a_H=a_H,
-                  a_A=a_A,
-                  a_D=a_D,
-                  d_A_D=d_A_D,
-                  d_A_H=d_A_H,
-                  angle_AHD=angle_AHD
-                )
-        if (res in ress): continue
-        if (res is not None): ress.append(res)
-
-      # Hydrogen bond  model : Y-A...H-D-C/CA ;
-      # so far we got all possiable A...H-D
-      #below is selecting Y atoms that
-      # make covalent bond with A(O) atom
-      resu = None
-      for r in ress:
-        a_H = r.a_H
-        a_A = r.a_A
-        a_D = r.a_D
-        for a_Y in atom_Y:
-          if (not is_bonded(a_A, a_Y, bps_dict)): continue
-          angle_YAD = a_A.angle(a_Y, a_D, deg=True)
-          angle_YAH = a_A.angle(a_H, a_Y, deg=True)
-          if (angle_YAH_min - eps_angle_YAH < angle_YAH <
-            angle_YAH_max + eps_angle_YAH):
-            resu = group_args(
+      # belowing is selecting D(N) atoms that
+      #  make covalent bond with H atoms
+      res = None
+      diff_best = 1.e+9
+      for a_D in atom_D:
+        resid_A = a_A.parent().parent().resid()
+        resid_D = a_D.parent().parent().resid()
+        diff_r_r = abs(int(resid_A) - int(resid_D))
+        if diff_r_r < 2: continue
+        if (not a_H.is_in_same_conformer_as(a_A)): continue
+        if (not is_bonded(a_H, a_D, bps_dict)): continue
+        if (is_bonded(a_H, a_A, bps_dict)): continue
+        if (a_A.parent().parent().resseq ==
+              a_D.parent().parent().resseq): continue
+        d_A_H = a_A.distance(a_H)
+        d_A_D = a_D.distance(a_A)
+        if (ideal_dist_A_D - eps_dist_A_D <
+              d_A_D < ideal_dist_A_D + eps_dist_A_D):
+          angle_AHD = a_H.angle(a_A, a_D, deg=True)
+          if (angle_AHD_cutoff - eps_angle_AHD < angle_AHD):
+            diff = abs(ideal_dist_A_D - d_A_D)
+            if (diff < diff_best):
+              diff_best = diff
+              res = group_args(
                 a_H=a_H,
                 a_A=a_A,
                 a_D=a_D,
-                a_Y=a_Y,
-                d_A_D=r.d_A_D,
-                d_A_H=r.d_A_H,
-                angle_YAH=angle_YAH,
-                angle_AHD=r.angle_AHD,
-                angle_YAD=angle_YAD,
+                d_A_D=d_A_D,
+                d_A_H=d_A_H,
+                angle_AHD=angle_AHD
               )
-        if (resu in resus): continue
-        if (resu is not None): resus.append(resu)
-      # Hydrogen bond  model : Y-A...H-D-C/CA ;
-      # besause we not sure if there is CA,
-      # so just keep one C atom that
-      # make covalent bond with D(N) atoms
-      result = None
-      for r in resus:
-        a_A = r.a_A
-        a_D = r.a_D
-        atom_C = atom_Y
-        for a_C in atom_C:
-          if (not is_bonded(a_C, a_D, bps_dict)): continue
-          angle_ADC = a_D.angle(a_C, a_A, deg=True)
-          result = group_args(
-                a_H=a_H,
-                a_A=a_A,
-                a_D=a_D,
-                a_Y=r.a_Y,
-                a_C=a_C,
-                d_A_D=r.d_A_D,
-                d_A_H=r.d_A_H,
-                angle_YAH=r.angle_YAH,
-                angle_AHD=r.angle_AHD,
-                angle_YAD=r.angle_YAD,
-                angle_ADC=angle_ADC,
-                ideal_dist_A_D=ideal_dist_A_D,
-                sigma_for_bond=sigma_for_bond,
-                sigma_for_angle=sigma_for_angle,
-                ideal_angle_YAH=ideal_angle_YAH,
-                ideal_angle_YAD=ideal_angle_YAD,
-                ideal_angle_ADC=angle_ADC,
-                ideal_angle_AHD=ideal_angle_AHD,
-              )
-        if (result in results): continue
-        if (result is not None): results.append(result)
+      if (res in ress): continue
+      if (res is not None): ress.append(res)
+
+    # Hydrogen bond  model : Y-A...H-D-C/CA ;
+    # so far we got all possiable A...H-D
+    # below is selecting Y atoms that
+    # make covalent bond with A(O) atom
+    resu = None
+    for r in ress:
+      a_H = r.a_H
+      a_A = r.a_A
+      a_D = r.a_D
+      for a_Y in atom_Y:
+        if (not is_bonded(a_A, a_Y, bps_dict)): continue
+        angle_YAD = a_A.angle(a_Y, a_D, deg=True)
+        angle_YAH = a_A.angle(a_H, a_Y, deg=True)
+        if (angle_YAH_min - eps_angle_YAH < angle_YAH <
+                angle_YAH_max + eps_angle_YAH):
+          resu = group_args(
+            a_H=a_H,
+            a_A=a_A,
+            a_D=a_D,
+            a_Y=a_Y,
+            d_A_D=r.d_A_D,
+            d_A_H=r.d_A_H,
+            angle_YAH=angle_YAH,
+            angle_AHD=r.angle_AHD,
+            angle_YAD=angle_YAD,
+          )
+      if (resu in resus): continue
+      if (resu is not None): resus.append(resu)
+
+    # Hydrogen bond  model : Y-A...H-D-C/CA ;
+    # besause we not sure if there is CA,
+    # so just keep one C atom that
+    # make covalent bond with D(N) atoms
+    result = None
+    for r in resus:
+      a_A = r.a_A
+      a_D = r.a_D
+      atom_C = atom_Y
+      for a_C in atom_C:
+        if (not is_bonded(a_C, a_D, bps_dict)): continue
+        angle_ADC = a_D.angle(a_C, a_A, deg=True)
+        result = group_args(
+          a_H=a_H,
+          a_A=a_A,
+          a_D=a_D,
+          a_Y=r.a_Y,
+          a_C=a_C,
+          d_A_D=r.d_A_D,
+          d_A_H=r.d_A_H,
+          angle_YAH=r.angle_YAH,
+          angle_AHD=r.angle_AHD,
+          angle_YAD=r.angle_YAD,
+          angle_ADC=angle_ADC,
+          ideal_dist_A_D=ideal_dist_A_D,
+          sigma_for_bond=sigma_for_bond,
+          sigma_for_angle=sigma_for_angle,
+          ideal_angle_YAH=ideal_angle_YAH,
+          ideal_angle_YAD=ideal_angle_YAD,
+          ideal_angle_ADC=angle_ADC,
+          ideal_angle_AHD=ideal_angle_AHD,
+        )
+      if (result in results): continue
+      if (result is not None): results.append(result)
+
+    # just keep the more possiable situation
+    # for O(accepter) atom
+    for i, ri in enumerate(results):
+      for j, rj in enumerate(results):
+        if (j <= i): continue
+        a_A_i = ri.a_A
+        a_A_j = rj.a_A
+        if ri == rj:
+          results.remove(rj)
+        if ri != rj:
+          if a_A_i == a_A_j:
+            if ri.d_A_D < rj.d_A_D:
+              results.remove(rj)
+            else:
+              results.remove(ri)
 
 
-
-      # just keep the more possiable situation
-      # for O(accepter) atom
-      for i, ri in enumerate(results):
-        for j, rj in enumerate(results):
-          if (j <= i): continue
-          a_A_i = ri.a_A
-          a_A_j = rj.a_A
-          if ri == rj:
-            results.remove(rj)
-          if ri != rj:
-            if a_A_i == a_A_j:
-              if ri.d_A_D < rj.d_A_D:
-                results.remove(rj)
-              else:
-                results.remove(ri)
-
-
-      return results
+    return results
 
 
 
