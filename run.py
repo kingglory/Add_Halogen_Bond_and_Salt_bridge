@@ -245,7 +245,6 @@ class get_hydrogen_bonds(object):
             )
           if (result in results): continue
           if (result is not None): results.append(result)
-
       else:
         residue_j_= self.apply_symmetry(residue_j,rt_mx_ji,crystal_symmetry)
         if ai.element == "H":
@@ -253,15 +252,13 @@ class get_hydrogen_bonds(object):
           a_A = aj
           residue_H = residue_i
           residue_A = residue_j_
-          resid_A = a_A.parent().parent().resid()
-          resid_H = a_H.parent().parent().resid()
         if aj.element == "H":
           a_H = aj
           a_A = ai
           residue_H = residue_j_
           residue_A = residue_i
-          resid_A = a_A.parent().parent().resid()
-          resid_H = a_H.parent().parent().resid()
+        resid_A = a_A.parent().parent().resid()
+        resid_H = a_H.parent().parent().resid()
         res = None
         diff_best = 1.e+9
         for a_D in residue_H.atoms():
@@ -356,7 +353,7 @@ class get_hydrogen_bonds(object):
               ideal_angle_ADC=angle_ADC,
               ideal_angle_AHD=ideal_angle_AHD,
               rt_mx_ji=rt_mx_ji
-             )
+            )
           if (result in results): continue
           if (result is not None): results.append(result)
     # just keep the more possiable situation
@@ -377,7 +374,6 @@ class get_hydrogen_bonds(object):
             else:
               if ri in results:
                 results.remove(ri)
-
     return results
 
 
