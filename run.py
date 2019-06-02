@@ -71,6 +71,8 @@ class get_hydrogen_bonds(object):
       t3 = om*flex.vec3_double([t2])
       new_xyz.append(t3[0])
     residue_i_.atoms().set_xyz(new_xyz)
+    residue_i_.link_to_previous = True
+
     return residue_i_
 
   def get_hydrogen_bonds_pairs(self,

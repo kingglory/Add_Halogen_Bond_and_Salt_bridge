@@ -110,8 +110,8 @@ refinement{
     angle {
       atom_selection_1 = chain A and resseq  726  and name  O  
       atom_selection_2 = chain A and resseq  730  and name  N  
-      atom_selection_3 = chain A and resseq  730  and name  CA 
-      angle_ideal = 120.020203
+      atom_selection_3 = chain A and resseq  729  and name  C  
+      angle_ideal = 116.399048
       sigma = 5.000000
     }
     bond{
@@ -148,8 +148,8 @@ refinement{
     angle {
       atom_selection_1 = chain A and resseq  726  and name  O  
       atom_selection_2 = chain A and resseq  730  and name  N  
-      atom_selection_3 = chain A and resseq  729  and name  C  
-      angle_ideal = 116.399048
+      atom_selection_3 = chain A and resseq  730  and name  CA 
+      angle_ideal = 120.020203
       sigma = 5.000000
     }
     
