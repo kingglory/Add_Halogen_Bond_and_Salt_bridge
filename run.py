@@ -442,7 +442,7 @@ class get_hydrogen_bonds(object):
         angle_YAD_ideal = r.ideal_angle_YAD
         angle_AHD_ideal = r.ideal_angle_AHD
         angle_YAH_ideal = r.ideal_angle_YAH
-        angle_ADC_ideal = r.ideal_angle_ADC
+        angle_ADC_ideal = r.angle_ADC
       else:
         angle_YAD_ideal = r.angle_YAD
         angle_AHD_ideal = r.angle_AHD
